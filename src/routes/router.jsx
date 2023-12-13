@@ -1,11 +1,18 @@
 import { createBrowserRouter } from "react-router-dom";
 
-import OnlyTest from "@/pages/OnlyTest";
+import LayOut from "@/pages/LayOut";
+import OnlyTest from "@/pages/OnlyTest/OnlyTest";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <OnlyTest />,
+    element: <LayOut />,
+    children: [
+      {
+        path: "/test",
+        element: <OnlyTest />,
+      },
+    ],
   },
 ]);
 
