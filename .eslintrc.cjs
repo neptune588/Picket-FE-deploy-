@@ -16,6 +16,7 @@ module.exports = {
       "warn",
       { allowConstantExport: true },
     ],
+    "react/prop-types": "off", //타입스크립트가 아니므로
     "react/react-in-jsx-scope": "off",
     "react/jsx-uses-react": "off",
     /*     "prettier/prettier": [
