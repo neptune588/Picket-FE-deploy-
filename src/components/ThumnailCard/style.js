@@ -5,12 +5,12 @@ const Container = styled.div`
   user-select: none;
 `;
 
-const ThumnailImgWrapper = styled.div`
+const ThumnailImgBox = styled.div`
   position: relative;
   height: 290px;
   overflow: hidden;
   border-radius: 15px;
-  > p {
+  > h2 {
     position: absolute;
     left: 20px;
     bottom: 20px;
@@ -19,7 +19,7 @@ const ThumnailImgWrapper = styled.div`
       return typo.size.lg;
     }};
     font-weight: ${({ theme: { typo } }) => {
-      return typo.weight.bold;
+      return typo.weight.semiBold;
     }};
     z-index: 10;
   }
@@ -51,4 +51,4 @@ const ButtonBox = styled.div`
   }
 `;
 
-export { Container, ThumnailImgWrapper, ProfileWrapper, ButtonBox };
+export { Container, ThumnailImgBox, ProfileWrapper, ButtonBox };

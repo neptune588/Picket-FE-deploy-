@@ -23,7 +23,12 @@ const GlobalStyle = createGlobalStyle`
     cursor: pointer;
     outline: inherit;
   }
-  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: inherit;
+    font-weight: normal;
+    font-size: inherit;
+    margin: 0;
+  }
   @media only ${({ theme: { deviceSize } }) => {
     return deviceSize.mobile;
   }} {

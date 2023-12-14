@@ -7,7 +7,7 @@ import ScrapButton from "@/components/ScrapButton/ScrapButton";
 
 import {
   Container,
-  ThumnailImgWrapper,
+  ThumnailImgBox,
   ProfileWrapper,
   ButtonBox,
 } from "@/components/ThumnailCard/style";
@@ -18,10 +18,10 @@ export default function ThumnailCard() {
 
   return (
     <Container>
-      <ThumnailImgWrapper>
+      <ThumnailImgBox>
         <ThumnailImg thumnailSrc={"/images/test_thumnail.jpg"} />
-        <p>여행의 순간들 기록하기</p>
-      </ThumnailImgWrapper>
+        <h2>여행의 순간들 기록하기</h2>
+      </ThumnailImgBox>
       <ProfileWrapper>
         <ProfileAvatar
           nickName={"테스트용 아바타"}
