@@ -67,7 +67,7 @@ const CateStyle = styled(NavLink)`
 export default function Categories({cateCode}) {
     const nav = useNavigate();
     const OnClickCate = ()=>{
-        nav(`/cate/${cateCode}`)
+        nav(`/cate=${cateCode}`)
     }
     return (
         <CategoriesBox onClick={OnClickCate}>

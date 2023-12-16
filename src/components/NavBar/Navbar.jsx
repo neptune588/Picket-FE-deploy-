@@ -30,14 +30,12 @@ const NavStyle = styled(NavLink)`
     outline: none;
     border-radius: 2em;
     cursor: pointer; 
-
     &:hover {
         background: ${({ theme: { colors } }) => {
             return colors.gray["80"]
         }};
         color: white;
     }
-
     &.active {
         background: ${({ theme: { colors } }) => {
             return colors.gray["80"]
@@ -86,10 +84,10 @@ export default function NavBar() {
     const nav = useNavigate();
     const OnClickAlarm = ()=>{
         nav(`/alarm`)
-    }
+    };
     const OnClickMypage = ()=>{
         nav(`/mypage`)
-    }
+    };
 
     return (
         <NavBarWrapper>
