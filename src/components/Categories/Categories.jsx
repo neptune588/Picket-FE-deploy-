@@ -1,8 +1,15 @@
 import styled from "styled-components";
+import { useNavigate, NavLink } from "react-router-dom";
 
-// 카테고리 변경을 한다면 url이 ?cate=family 등으로 변경되는지 의문.
-// 만약 변경된다면 NavLink를 사용하여 링크에 알맞은 스타일을 적용하는 게 좋다고 생각합니다.
-// https://velog.io/@jm1225/styled-components-NavLink-active-styled-input
+// useNavigate를 사용하여 카테고리 버튼 클릭할 경우 카테고리 페이지로 이동하도록 했습니다.
+// 다만 카테고리 코드가 필요하여,
+// 백엔드에게 api 추가 요청해야합니다.
+// [전체: 코드없음, 일상: everyday, 여행: travel, 건강:health, 자기계발:improvement, 가족: family, 커플: couple]
+
+const CategoriesBox = styled.div`
+    margin: 5px 0px;
+    display: flex;
+`
 
 const CategoriesBtn = styled.button`
     width: 60px;
@@ -24,31 +31,53 @@ const CategoriesBtn = styled.button`
     }
 `;
 
-const WholeBtn = styled(CategoriesBtn)``;
+const CateStyle = styled(NavLink)`
+    width: 60px;
+    height: 40px;
+    margin: 4px;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    font-size: 14px;
+    background: ${({ theme: { colors } }) => {
+        return colors.gray["20"]
+    }};
+    color: ${({ theme: { colors } }) => {
+        return colors.gray["80"]
+    }};
+    outline: none;
+    border-radius: 2em;
+    cursor: pointer; 
 
-const EverydayBtn = styled(CategoriesBtn)``;
+    &:hover {
+        background: ${({ theme: { colors } }) => {
+            return colors.gray["80"]
+        }};
+        color: white;
+    }
 
-const TravelBtn = styled(CategoriesBtn)``;
+    &.active {
+        background: ${({ theme: { colors } }) => {
+            return colors.gray["80"]
+        }};
+        color: white;
+    }
+`
 
-const HealthBtn = styled(CategoriesBtn)``;
-
-const FamilyBtn = styled(CategoriesBtn)``;
-
-const ImprovementBtn = styled(CategoriesBtn)``;
-
-const CoupleBtn = styled(CategoriesBtn)``;
-
-
-export default function Categories() {
+export default function Categories({cateCode}) {
+    const nav = useNavigate();
+    const OnClickCate = ()=>{
+        nav(`/cate/${cateCode}`)
+    }
     return (
-        <div>
-            <WholeBtn>전체</WholeBtn>
-            <EverydayBtn>일상</EverydayBtn>
-            <TravelBtn>여행</TravelBtn>
-            <HealthBtn>건강</HealthBtn>
-            <ImprovementBtn>자기계발</ImprovementBtn>
-            <FamilyBtn>가족</FamilyBtn>
-            <CoupleBtn>커플</CoupleBtn>
-        </div>
+        <CategoriesBox onClick={OnClickCate}>
+            <CateStyle to="/cate">전체</CateStyle>
+            <CateStyle to="/cate=everyday">일상</CateStyle>
+            <CateStyle to="/cate=travel">여행</CateStyle>
+            <CateStyle to="/cate=health">건강</CateStyle>
+            <CateStyle to="/cate=improvement">자기계발</CateStyle>
+            <CateStyle to="/cate=family">가족</CateStyle>
+            <CateStyle to="/cate=couple">커플</CateStyle>
+        </CategoriesBox>
     )
 };
