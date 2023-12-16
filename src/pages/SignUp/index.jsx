@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
 import {
-  Container,
   InputBox,
   Title,
   InputCheckWrapper,
@@ -25,7 +24,7 @@ export default function SignUp() {
     emailInput.current.focus();
   }, []);
   return (
-    <Container>
+    <>
       <Title>회원가입</Title>
       <form>
         <InputBox>
@@ -73,6 +72,6 @@ export default function SignUp() {
         </InputCheckWrapper>
         <NextButton disabled>회원가입</NextButton>
       </form>
-    </Container>
+    </>
   );
 }

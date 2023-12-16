@@ -1,17 +1,5 @@
 import styled from "styled-components";
 
-const Container = styled.div`
-  display: flex;
-  width: 400px;
-  height: 100vh;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin: 0 auto;
-  input {
-    user-select: none;
-  }
-`;
 const InputBox = styled.div`
   display: flex;
   margin-bottom: 15px;
@@ -62,11 +50,4 @@ const NextButton = styled.button`
   border-radius: 15px;
   user-select: none;
 `;
-export {
-  Container,
-  InputBox,
-  Title,
-  InputCheckWrapper,
-  DoubleCheckButton,
-  NextButton,
-};
+export { InputBox, Title, InputCheckWrapper, DoubleCheckButton, NextButton };
