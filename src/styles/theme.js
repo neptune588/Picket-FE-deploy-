@@ -18,7 +18,7 @@ const deviceSize = {
 
 const colors = {
   primary: "#6EdCC8",
-  secondary: "110,220,200",
+  secondary: "#19D4B2",
   black: "#000000",
   white: "#FFFFFF",
   gray: {
