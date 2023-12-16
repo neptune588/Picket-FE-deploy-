@@ -5,6 +5,7 @@ import AuthPageLayOut from "@/pages/AuthPageLayOut";
 
 import OnlyTest from "@/pages/OnlyTest/OnlyTest";
 import SignUp from "@/pages/SignUp";
+import SignIn from "@/pages/SignIn";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
       {
         path: "/auth/signup",
         element: <SignUp />,
+      },
+      {
+        path: "/auth/signin",
+        element: <SignIn />,
       },
     ],
   },

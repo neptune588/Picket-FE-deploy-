@@ -25,6 +25,9 @@ const InputCheckWrapper = styled.div`
 const DoubleCheckButton = styled.button`
   width: 110px;
   height: 60px;
+  font-weight: ${({ theme: { typo } }) => {
+    return typo.weight.bold;
+  }};
   color: ${({ theme: { colors } }) => {
     return colors.white;
   }};
