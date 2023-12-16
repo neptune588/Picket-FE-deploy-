@@ -3,6 +3,9 @@ import styled from "styled-components";
 const InputBox = styled.div`
   display: flex;
   margin-bottom: 15px;
+  &:last-child {
+    margin-bottom: 0px;
+  }
 `;
 
 const Title = styled.h2`
