@@ -7,6 +7,7 @@ const AddBucketTitleBar = styled.div`
     align-items: center;
     font-weight: bold;
     font-size: 1.5rem;
+    text-indent: 1em;
     border-bottom: solid 1px ${({ theme: { colors } }) => {
         return colors.gray["40"]
     }};
@@ -14,6 +15,6 @@ const AddBucketTitleBar = styled.div`
 
 export default function AddBucketTitle(){
     return (
-        <AddBucketTitleBar> &lt; 버킷추가 </AddBucketTitleBar>
+        <AddBucketTitleBar>&lt; 버킷추가 </AddBucketTitleBar>
     )
 };
