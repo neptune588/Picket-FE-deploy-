@@ -6,6 +6,7 @@ import TestMain from "../pages/TestMain/TestMain";
 import TestSearch from "../pages/TestSearch/TestSearch";
 import TestAlarm from "../pages/TestAlarm/TestAlarm";
 import TestMypage from "../pages/TestMypage/TestMypage";
+import TestAddBucket from "../pages/TestAddBucket/TestAddBucket";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,11 @@ const router = createBrowserRouter([
         path: "/mypage",
         element: <TestMypage/>,
         label: 'mypage'
+      },
+      {
+        path: "/add",
+        element: <TestAddBucket/>,
+        label: 'add'
       },
       {
         path: "/test",
