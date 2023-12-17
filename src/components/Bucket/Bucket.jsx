@@ -23,12 +23,12 @@ const ThreeDotIcon = styled(ThreeDot)`
 
 const BucketTitle = styled.div`
     margin: 10px 0px;
-    font-size: 24px;
+    font-size: 1.5rem;
     font-weight: bold;
 `;
 
 const Content = styled.div`
-    height: 60%;
+    height: 55%;
     background: white;
     font-size: 12pt;
 `;
@@ -38,10 +38,8 @@ const ReplyIcon = styled(Reply)`
 `
 
 const ReplyBar = styled.input`
-    width: 90%;
+    width: 100%;
     height: 24px;
-    margin: 5px 0px;
-    bottom: 0;
     background: ${({ theme: { colors } }) => {
         return colors.gray["20"]
     }};
@@ -49,7 +47,7 @@ const ReplyBar = styled.input`
         return colors.black;
     }};
     text-indent: 1em;
-    font-size: 16px;
+    font-size: 1rem;
     outline: none;
     border: none;
     border-radius: 1em;

@@ -31,7 +31,7 @@ const Wrapper = styled.div`
 const WriterBox = styled.div`
   display: flex;
   > span {
-    font-size: 12pt;
+    font-size: 1rem;
     height: 30px;
     justify-content: center;
   }
@@ -46,8 +46,11 @@ const ButtonBox = styled.div`
 `;
 
 const ReplyBox = styled.div`
+  width: 90%;
   display: flex;
   align-items: center;
+  position: absolute;
+  bottom: 0px;
 `;
 
 export { Container, ImgBox, Wrapper, WriterBox, ButtonBox, ReplyBox };
