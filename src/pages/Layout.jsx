@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 
 import styled from "styled-components";
+import NavBar from "../components/Navbar/Navbar";
 
 const CenterdContainer = styled.div`
   width: 1440px;
@@ -8,8 +9,12 @@ const CenterdContainer = styled.div`
 `;
 export default function LayOut() {
   return (
-    <CenterdContainer>
-      <Outlet />
-    </CenterdContainer>
+    <>
+      <NavBar />
+      <CenterdContainer>
+        <Outlet />
+      </CenterdContainer>
+    </>
+    
   );
 }
