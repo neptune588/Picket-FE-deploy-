@@ -24,18 +24,24 @@ const InputBox = styled.input`
 `;
 
 export default function Input({
+  name,
+  value = "",
   width,
   type,
   inputRef = null,
   placeholder,
+  autoComplete = null,
   onChange,
 }) {
   return (
     <InputBox
       $width={width}
+      name={name}
+      value={value}
       type={type}
       ref={inputRef || undefined}
       placeholder={placeholder}
+      autoComplete={autoComplete || undefined}
       onChange={onChange}
     />
   );

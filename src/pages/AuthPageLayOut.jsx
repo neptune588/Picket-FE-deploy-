@@ -1,5 +1,8 @@
 import { Outlet } from "react-router-dom";
+
 import styled from "styled-components";
+
+import NavBar from "@/components/NavBar/NavBar";
 
 const CenterdContaier = styled.div`
   display: flex;
@@ -15,8 +18,11 @@ const CenterdContaier = styled.div`
 `;
 export default function AuthPageLayOut() {
   return (
-    <CenterdContaier>
-      <Outlet />
-    </CenterdContaier>
+    <>
+      <NavBar />
+      <CenterdContaier>
+        <Outlet />
+      </CenterdContaier>
+    </>
   );
 }

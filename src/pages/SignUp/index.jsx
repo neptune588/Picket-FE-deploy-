@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
+import useForm from "@/hooks/useForm";
+
 import {
   InputBox,
   Title,
@@ -12,11 +14,15 @@ import Input from "@/components/Input/Input";
 import CheckBox from "@/components/CheckBox";
 import SubmitButton from "@/components/SubmitButton/SubmitButton";
 
+import {
+  emailDefaultData,
+  pwDefaultData,
+  pwReconfirmDefaultData,
+  nickNameDefaultData,
+} from "@/pages/SignUp/inputData";
+
 export default function SignUp() {
-  const [emailValue, setEmailValue] = useState("");
-  const [pwValue, setPwValue] = useState("");
-  const [pwReplyValue, setPwReplyValue] = useState("");
-  const [nickNameValue, setNickNameValue] = useState("");
+  const { values, handleChange } = useForm();
 
   const [isChecked, setIsChecked] = useState(false);
 
@@ -32,16 +38,6 @@ export default function SignUp() {
     nickNameInput.current && nickNameInput.current.focus();
   }, [nextPage]);
 
-  //2단계 회원가입
-
-  //store에 form 데이터 담고
-  //뒤로가기 누를시 데이터 지우고
-  //닉네입 입력완료까지 되면 submit하자.
-
-  //error
-
-  //useEffect안에 조건부로 나타나는 컴포넌트의 ref를 넣었더니 인식하지 못했음.
-  //true(not undifend)일때 포커스 주는걸로 변경
   return (
     <>
       <Title>{nextPage ? "닉네임을 입력 해주세요." : "회원가입"}</Title>
@@ -50,13 +46,10 @@ export default function SignUp() {
           <>
             <InputBox>
               <Input
-                width={"400px"}
-                type={"text"}
+                {...nickNameDefaultData}
+                value={values.userNickname}
                 inputRef={nickNameInput}
-                placeholder={"2~6자의 한글만 입력 가능합니다."}
-                onChange={(e) => {
-                  setNickNameValue(e.target.value);
-                }}
+                onChange={handleChange}
               />
             </InputBox>
             <SubmitButton width={"400px"} value={"완료"} disabled />
@@ -65,34 +58,25 @@ export default function SignUp() {
           <>
             <InputBox>
               <Input
-                width={"275px"}
-                type={"text"}
+                {...emailDefaultData}
+                value={values.userEmail}
                 inputRef={emailInput}
-                placeholder={"이메일"}
-                onChange={(e) => {
-                  setEmailValue(e.target.value);
-                }}
+                onChange={handleChange}
               />
               <DoubleCheckButton disabled>중복 확인</DoubleCheckButton>
             </InputBox>
             <InputBox>
               <Input
-                width={"400px"}
-                type={"password"}
-                placeholder={"비밀번호"}
-                onChange={(e) => {
-                  setPwValue(e.target.value);
-                }}
+                {...pwDefaultData}
+                value={values.userPassword}
+                onChange={handleChange}
               />
             </InputBox>
             <InputBox>
               <Input
-                width={"400px"}
-                type={"password"}
-                placeholder={"비밀번호 확인"}
-                onChange={(e) => {
-                  setPwReplyValue(e.target.value);
-                }}
+                {...pwReconfirmDefaultData}
+                value={values.userPasswordConfirmation}
+                onChange={handleChange}
               />
             </InputBox>
             <InputCheckWrapper>
