@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 import Categories from "../../components/Categories/Categories";
-import AddBucket from "../../components/AddBucket.jsx/AddBucket";
+import AddBucketIcon from "../../components/AddBucket/AddBucketIcon";
 
 const Empty = styled.div`
     margin: 40px;
@@ -36,7 +36,7 @@ export default function TestMain(){
             </CateBox>
             <MainBucket src="/images/main_bucket.png" />
             <AddBucketBox>
-                <AddBucket />
+                <AddBucketIcon />
             </AddBucketBox>
         </>
     )

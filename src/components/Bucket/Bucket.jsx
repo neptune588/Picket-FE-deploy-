@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 
 import styled from "styled-components";
-
 import { Container, ImgBox, Wrapper, WriterBox, ButtonBox, ReplyBox } from "@/components/Bucket/style";
+
 import LikeButton from "../LikeButton/LikeButton";
 import ScrapButton from "../ScrapButton/ScrapButton";
 import CardBirthView from "../CardBirthView/CardBirthView";
@@ -23,7 +23,9 @@ const ThreeDotIcon = styled(ThreeDot)`
 
 const BucketTitle = styled.div`
     margin: 10px 0px;
-    font-size: 1.5rem;
+    font-size: ${({ theme: { typo } }) => {
+        return typo.size.xl
+    }};
     font-weight: bold;
 `;
 
@@ -47,7 +49,9 @@ const ReplyBar = styled.input`
         return colors.black;
     }};
     text-indent: 1em;
-    font-size: 1rem;
+    font-size: ${({ theme: { typo } }) => {
+        return typo.size.md
+    }};
     outline: none;
     border: none;
     border-radius: 1em;
