@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components"
 
 const ButtonBox = styled.div`
@@ -22,11 +21,10 @@ const NextBtn = styled.button`
     border-radius: 1em;
 `;
 
-export default function NextButton(){
-    const navigate = useNavigate();
+export default function NextButton({onClick}){
     return (
         <ButtonBox>
-            <NextBtn onClick={()=>{navigate(`/add-alarm`)}}>다음</NextBtn>
+            <NextBtn onClick={onClick}>다음</NextBtn>
         </ButtonBox>
     )
 };

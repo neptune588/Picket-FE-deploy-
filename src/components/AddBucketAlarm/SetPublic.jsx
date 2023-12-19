@@ -9,7 +9,7 @@ const SetPublicTitle = styled.div`
     font-weight: bold;
 `;
 
-const TitleInput = styled.input`
+const SetPublicBtn = styled.input`
     width: 400px;
     height: 40px;
     margin: 10px 0px;
@@ -27,6 +27,7 @@ export default function SetPublic(){
     return (
         <>
             <SetPublicTitle>공개 설정</SetPublicTitle>
+            <SetPublicBtn/>
         </>
     )
 };

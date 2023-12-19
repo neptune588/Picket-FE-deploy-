@@ -7,7 +7,6 @@ import TestSearch from "../pages/TestSearch/TestSearch";
 import TestAlarm from "../pages/TestAlarm/TestAlarm";
 import TestMypage from "../pages/TestMypage/TestMypage";
 import TestAddBucket from "../pages/TestAddBucket/TestAddBucket";
-import TestAddBucketAlarm from "../pages/TestAddBucketAlarm/TestAddBucketAlarm";
 
 const router = createBrowserRouter([
   {
@@ -38,11 +37,6 @@ const router = createBrowserRouter([
         path: "/add",
         element: <TestAddBucket/>,
         label: 'add'
-      },
-      {
-        path: "/add-alarm",
-        element: <TestAddBucketAlarm/>,
-        label: 'add-alarm'
       },
       {
         path: "/test",
