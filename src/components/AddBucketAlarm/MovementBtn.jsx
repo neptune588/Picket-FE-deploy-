@@ -41,7 +41,11 @@ export default function MovementBtn(){
     return (
         <ButtonBox>
             <PrevBtn onClick={()=>{navigate(-1)}}>이전</PrevBtn>
+<<<<<<< HEAD
             <NextBtn>완료</NextBtn>
+=======
+            <NextBtn onClick={()=>{navigate(`/mybucket`)}}>완료</NextBtn>
+>>>>>>> fdeef096d1790f0eeac7f3e333fa89fa31fe236e
         </ButtonBox>
     )
 };

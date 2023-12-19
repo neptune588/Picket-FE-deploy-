@@ -9,7 +9,11 @@ const SetAlarmTitle = styled.div`
     font-weight: bold;
 `;
 
+<<<<<<< HEAD
 const AlarmInput = styled.input`
+=======
+const TitleInput = styled.input`
+>>>>>>> fdeef096d1790f0eeac7f3e333fa89fa31fe236e
     width: 400px;
     height: 40px;
     margin: 10px 0px;
@@ -27,7 +31,10 @@ export default function SetAlarm(){
     return (
         <>
             <SetAlarmTitle>알림 설정</SetAlarmTitle>
+<<<<<<< HEAD
             <AlarmInput />
+=======
+>>>>>>> fdeef096d1790f0eeac7f3e333fa89fa31fe236e
         </>
     )
 };
