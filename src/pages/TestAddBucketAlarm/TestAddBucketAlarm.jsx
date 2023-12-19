@@ -1,19 +1,18 @@
 import styled from "styled-components";
 
 import AddBucketTitle from "../../components/AddBucket/AddBucketTitle";
-import AddImg from "../../components/AddBucketImage/AddImg";
+import AddBucketAlarm from "../../components/AddBucketAlarm/AddBucketAlarm";
 
 const AddWrapper = styled.div`
     display: flex;
 `;
 
-
-export default function TestAddBucket(){
+export default function TestAddBucketAlarm(){
     return(
         <>
             <AddBucketTitle/>
             <AddWrapper>
-                <AddImg />
+                <AddBucketAlarm />
             </AddWrapper>
         </>
     )

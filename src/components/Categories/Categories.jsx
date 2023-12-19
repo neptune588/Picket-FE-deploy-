@@ -18,7 +18,9 @@ const CateStyle = styled(NavLink)`
     display: grid;
     place-content: center;
     text-align: center;
-    font-size: 1rem;
+    font-size: ${({ theme: { typo } }) => {
+        return typo.size.md
+    }};
     background: ${({ theme: { colors } }) => {
         return colors.gray["20"]
     }};

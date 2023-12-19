@@ -27,7 +27,9 @@ const NavStyle = styled(NavLink)`
     display: grid;
     place-content: center;
     text-align: center;
-    font-size: 1rem;
+    font-size: ${({ theme: { typo } }) => {
+        return typo.size.md
+    }};
     outline: none;
     border-radius: 2em;
     cursor: pointer; 
@@ -52,13 +54,15 @@ const SearchBar = styled.input`
     margin: 5px;
     padding: 1px;
     background: ${({ theme: { colors } }) => {
-        return colors.gray["20"]
+        return colors.gray["20"];
     }};
     color: ${({ theme: { colors } }) => {
         return colors.black;
     }};
     text-indent: 1em;
-    font-size: 1rem;
+    font-size: ${({ theme: { typo } }) => {
+        return typo.size.md;
+    }};
     outline: none;
     border: none;
     border-radius: 1em;

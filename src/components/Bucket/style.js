@@ -31,7 +31,9 @@ const Wrapper = styled.div`
 const WriterBox = styled.div`
   display: flex;
   > span {
-    font-size: 1rem;
+    font-size: ${({ theme: { typo } }) => {
+      return typo.size.md
+    }};;
     height: 30px;
     justify-content: center;
   }

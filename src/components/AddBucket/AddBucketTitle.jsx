@@ -6,7 +6,9 @@ const AddBucketTitleBar = styled.div`
     display: flex;
     align-items: center;
     font-weight: bold;
-    font-size: 1.5rem;
+    font-size: ${({ theme: { typo } }) => {
+        return typo.size.xl
+    }};
     text-indent: 1em;
     border-bottom: solid 1px ${({ theme: { colors } }) => {
         return colors.gray["40"]
