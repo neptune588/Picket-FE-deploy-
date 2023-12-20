@@ -7,29 +7,9 @@ import { useNavigate, NavLink } from "react-router-dom";
 // [전체: 코드없음, 일상: everyday, 여행: travel, 건강:health, 자기계발:improvement, 가족: family, 커플: couple]
 
 const CategoriesBox = styled.div`
-    margin: 5px 0px;
+    margin: 0px 20px;
     display: flex;
 `
-
-const CategoriesBtn = styled.button`
-    width: 60px;
-    height: 40px;
-    margin: 4px;
-    background: ${({ theme: { colors } }) => {
-        return colors.gray["20"]
-    }};
-    color: ${({ theme: { colors } }) => {
-        return colors.gray["80"]
-    }};
-    border-radius: 2em;
-    cursor: pointer;
-    &:hover {
-        background: ${({ theme: { colors } }) => {
-            return colors.gray["80"]
-        }};
-        color: white;
-    }
-`;
 
 const CateStyle = styled(NavLink)`
     width: 60px;
@@ -38,7 +18,7 @@ const CateStyle = styled(NavLink)`
     display: grid;
     place-content: center;
     text-align: center;
-    font-size: 14px;
+    font-size: 1rem;
     background: ${({ theme: { colors } }) => {
         return colors.gray["20"]
     }};

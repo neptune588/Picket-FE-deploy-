@@ -1,10 +1,22 @@
 import styled from "styled-components";
 
 const InputBox = styled.div`
-  display: flex;
   margin-bottom: 15px;
   &:last-child {
     margin-bottom: 0px;
+  }
+  > div {
+    display: flex;
+  }
+  > p {
+    color: ${({ theme: { colors } }) => {
+      return colors.gray["60"];
+    }};
+    font-weight: ${({ theme: { typo } }) => {
+      return typo.weight.medium;
+    }};
+    margin-top: 10px;
+    text-align: right;
   }
 `;
 
@@ -41,6 +53,17 @@ const DoubleCheckButton = styled.button`
   margin-left: 15px;
 `;
 
+const ButtonBox = styled(InputBox)`
+  > p {
+    color: red;
+    font-weight: ${({ theme: { typo } }) => {
+      return typo.weight.medium;
+    }};
+    margin-top: 10px;
+    text-align: center;
+  }
+`;
+
 const NextButton = styled.button`
   width: 400px;
   height: 60px;
@@ -56,4 +79,11 @@ const NextButton = styled.button`
   border-radius: 15px;
   user-select: none;
 `;
-export { InputBox, Title, InputCheckWrapper, DoubleCheckButton, NextButton };
+export {
+  InputBox,
+  Title,
+  InputCheckWrapper,
+  DoubleCheckButton,
+  NextButton,
+  ButtonBox,
+};

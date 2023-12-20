@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -11,44 +11,32 @@ import {
 import Input from "@/components/Input/Input";
 import SubmitButton from "@/components/SubmitButton/SubmitButton";
 
+import {
+  emailDefaultData,
+  pwDefaultData,
+  vaildTotalData,
+} from "@/pages/Signin/InputData";
+
 export default function SignIn() {
   const navigate = useNavigate();
-
-  const [emailValue, setEmailValue] = useState("");
-  const [pwValue, setPwValue] = useState("");
 
   const emailInput = useRef();
 
   useEffect(() => {
-    emailInput.current.focus();
+    emailInput.current && emailInput.current.focus();
   }, []);
   return (
     <>
       <Title>로그인</Title>
       <form>
         <InputBox>
-          <Input
-            width={"400px"}
-            type={"text"}
-            inputRef={emailInput}
-            placeholder={"이메일"}
-            onChange={(e) => {
-              setEmailValue(e.target.value);
-            }}
-          />
+          <Input {...emailDefaultData} inputRef={emailInput} />
         </InputBox>
         <InputBox>
-          <Input
-            width={"400px"}
-            type={"password"}
-            placeholder={"비밀번호"}
-            onChange={(e) => {
-              setPwValue(e.target.value);
-            }}
-          />
+          <Input {...pwDefaultData} />
         </InputBox>
         <InputBox>
-          <SubmitButton width={"400px"} value={"로그인"} />
+          <SubmitButton width={"400px"} value={"로그인"} disabled />
         </InputBox>
         <InputBox>
           <SocialLogin disabled>Google 로그인</SocialLogin>

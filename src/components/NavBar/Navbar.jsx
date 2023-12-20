@@ -8,6 +8,7 @@ import Circle from "@/assets/icons/ellipse.svg?react";
 const NavBarWrapper = styled.div`
     width: 100%
     height: 10%;
+    margin: 0px 20px;
     padding: 5px;
     display: flex;
     border-bottom: solid 1px ${({ theme: { colors } }) => {
@@ -26,7 +27,7 @@ const NavStyle = styled(NavLink)`
     display: grid;
     place-content: center;
     text-align: center;
-    font-size: 14px;
+    font-size: 1rem;
     outline: none;
     border-radius: 2em;
     cursor: pointer; 
@@ -57,7 +58,7 @@ const SearchBar = styled.input`
         return colors.black;
     }};
     text-indent: 1em;
-    font-size: 16px;
+    font-size: 1rem;
     outline: none;
     border: none;
     border-radius: 1em;

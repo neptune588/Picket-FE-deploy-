@@ -9,7 +9,7 @@ const pwDefaultData = {
   name: "userPassword",
   width: "400px",
   type: "password",
-  placeholder: "비밀번호",
+  placeholder: "비밀번호 (8자~15자의 영소문자,숫자 조합)",
   autoComplete: "new-password",
 };
 const pwReconfirmDefaultData = {
@@ -25,17 +25,38 @@ const nickNameDefaultData = {
   type: "text",
   placeholder: "2~6자의 한글만 입력 가능합니다.",
 };
+const vaildTotalData = {
+  checkData: {
+    emailVaild: false,
+    pwVaild: false,
+    pwReConfirmVaild: false,
+    isChecked: false,
+    nickNameVaild: false,
+    stepOneVaild: false,
+  },
+  inspectionData: {
+    emailVaild: false,
+    pwVaild: false,
+    nickNameVaild: false,
+  },
+  errorData: {
+    userEmailMsg: "",
+    userPwMsg: "",
+    userPwReConfirmMsg: "",
+    userNickNameMsg: "",
+    nextButtonMsg: "",
 
-/* const emailErrorMsg = "유효한 형식의 이메일이 아닙니다.";
-const emailConfirmMsg = "이미 가입 되어있는 이메일 입니다.";
-const pwErrorMsg = "유효한 형식의 이메일이 아닙니다.";
-const pwReconfirmErrorMsg = "비밀번호가 같지 않습니다.";
-const checkConfirmErrorMsg = "개인정보 수집 및 이용에 동의 해주세요.";
-const nickNameErrorMsg = "이미 존재하는 닉네임 입니다."; */
+    emailInvaildNotice: false,
+    pwInvaildNotice: false,
+    pwReConfirmInvaildNotice: false,
+    nickNameInvaildNotice: false,
+  },
+};
 
 export {
   emailDefaultData,
   pwDefaultData,
   pwReconfirmDefaultData,
   nickNameDefaultData,
+  vaildTotalData,
 };

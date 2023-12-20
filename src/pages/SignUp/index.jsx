@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 import useForm from "@/hooks/useForm";
 
@@ -8,6 +8,7 @@ import {
   InputCheckWrapper,
   DoubleCheckButton,
   NextButton,
+  ButtonBox,
 } from "@/pages/SignUp/style";
 
 import Input from "@/components/Input/Input";
@@ -19,14 +20,22 @@ import {
   pwDefaultData,
   pwReconfirmDefaultData,
   nickNameDefaultData,
+  vaildTotalData,
 } from "@/pages/SignUp/inputData";
 
+import vaildCheck from "@/pages/SignUp/vaildCheck";
+import dataSend from "@/pages/SignUp/dataSend";
+
 export default function SignUp() {
-  const { values, handleChange } = useForm();
-
-  const [isChecked, setIsChecked] = useState(false);
-
-  const [nextPage, setNextPage] = useState(false);
+  const {
+    values,
+    errors,
+    checks,
+    handleChange,
+    handleTermsCheck,
+    handleErrorCheck,
+    handleTotalCheck,
+  } = useForm(vaildCheck, vaildTotalData, dataSend);
 
   const emailInput = useRef();
   const nickNameInput = useRef();
@@ -36,68 +45,94 @@ export default function SignUp() {
   }, []);
   useEffect(() => {
     nickNameInput.current && nickNameInput.current.focus();
-  }, [nextPage]);
+  }, [checks.stepOneVaild]);
 
   return (
     <>
-      <Title>{nextPage ? "닉네임을 입력 해주세요." : "회원가입"}</Title>
-      <form>
-        {nextPage ? (
+      <Title>
+        {checks.stepOneVaild ? "닉네임을 입력 해주세요." : "회원가입"}
+      </Title>
+      <form onSubmit={handleTotalCheck}>
+        {checks.stepOneVaild ? (
           <>
             <InputBox>
-              <Input
-                {...nickNameDefaultData}
-                value={values.userNickname}
-                inputRef={nickNameInput}
-                onChange={handleChange}
-              />
+              <div>
+                <Input
+                  {...nickNameDefaultData}
+                  value={values.userNickname}
+                  inputRef={nickNameInput}
+                  onChange={handleChange}
+                  onBlur={handleErrorCheck}
+                  inVaild={errors.nickNameInvaildNotice}
+                />
+              </div>
+              {!checks.nickNameVaild && errors.userNickNameMsg && (
+                <p>{errors.userNickNameMsg}</p>
+              )}
             </InputBox>
-            <SubmitButton width={"400px"} value={"완료"} disabled />
+            <SubmitButton width={"400px"} value={"완료"} />
           </>
         ) : (
           <>
             <InputBox>
-              <Input
-                {...emailDefaultData}
-                value={values.userEmail}
-                inputRef={emailInput}
-                onChange={handleChange}
-              />
-              <DoubleCheckButton disabled>중복 확인</DoubleCheckButton>
+              <div>
+                <Input
+                  {...emailDefaultData}
+                  value={values.userEmail}
+                  inputRef={emailInput}
+                  onChange={handleChange}
+                  onBlur={handleErrorCheck}
+                  inVaild={errors.emailInvaildNotice}
+                />
+                <DoubleCheckButton disabled>중복 확인</DoubleCheckButton>
+              </div>
+              {!checks.emailVaild && errors.userEmailMsg && (
+                <p>{errors.userEmailMsg}</p>
+              )}
             </InputBox>
             <InputBox>
-              <Input
-                {...pwDefaultData}
-                value={values.userPassword}
-                onChange={handleChange}
-              />
+              <div>
+                <Input
+                  {...pwDefaultData}
+                  value={values.userPassword}
+                  onChange={handleChange}
+                  onBlur={handleErrorCheck}
+                  inVaild={errors.pwInvaildNotice}
+                />
+              </div>
+              {!checks.pwVaild && errors.userPwMsg && <p>{errors.userPwMsg}</p>}
             </InputBox>
             <InputBox>
-              <Input
-                {...pwReconfirmDefaultData}
-                value={values.userPasswordConfirmation}
-                onChange={handleChange}
-              />
+              <div>
+                <Input
+                  {...pwReconfirmDefaultData}
+                  value={values.userPasswordConfirmation}
+                  onChange={handleChange}
+                  onBlur={handleErrorCheck}
+                  inVaild={errors.pwReConfirmInvaildNotice}
+                />
+              </div>
+              {!checks.pwReConfirmVaild && errors.userPwReConfirmMsg && (
+                <p>{errors.userPwReConfirmMsg}</p>
+              )}
             </InputBox>
             <InputCheckWrapper>
               <CheckBox
                 inputId={"termsCheck"}
                 inputType={"checkbox"}
-                onChange={() => {
-                  setIsChecked((prev) => !prev);
-                }}
-                checked={isChecked}
+                onChange={handleTermsCheck}
+                checked={checks.isChecked}
                 ChkContent={"개인정보 수집 및 이용에 동의합니다."}
               />
             </InputCheckWrapper>
-            <NextButton
-              onClick={(e) => {
-                e.preventDefault();
-                setNextPage((prev) => !prev);
-              }}
-            >
-              회원가입
-            </NextButton>
+            <ButtonBox>
+              <NextButton name={"nextButton"} onClick={handleErrorCheck}>
+                회원가입
+              </NextButton>
+              {!checks.stepOneVaild && errors.nextButtonMsg && (
+                <p>{errors.nextButtonMsg}</p>
+              )}
+            </ButtonBox>
           </>
         )}
       </form>

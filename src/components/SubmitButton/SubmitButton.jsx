@@ -24,5 +24,5 @@ const Submit = styled.input`
 `;
 
 export default function SubmitButton({ width, value }) {
-  return <Submit $width={width} type="submit" value={value} disabled />;
+  return <Submit $width={width} type="submit" value={value} />;
 }
