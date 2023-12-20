@@ -1,40 +1,73 @@
+import { forwardRef, useState } from "react";
+import ReactDatePicker from "react-datepicker";
+import { ko } from "date-fns/locale/ko";
+
 import styled from "styled-components";
+import "react-datepicker/dist/react-datepicker.css";
+import { Calender, DateCustomHeader } from "./calender_style";
+import ColoredBell from "@/assets/icons/coloredbell.svg?react";
 
 const SetAlarmTitle = styled.div`
     margin-top: 20px;
     color: black;
     font-size: ${({ theme: { typo } }) => {
-        return typo.size.xl
+        return typo.size.xl;
     }};
     font-weight: bold;
 `;
 
-<<<<<<< HEAD
-const AlarmInput = styled.input`
-=======
-const TitleInput = styled.input`
->>>>>>> fdeef096d1790f0eeac7f3e333fa89fa31fe236e
-    width: 400px;
-    height: 40px;
-    margin: 10px 0px;
-    padding: 15px;
+const InputBtn = styled.div`
+    width: 370px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     font-size: ${({ theme: { typo } }) => {
-        return typo.size.md
+        return typo.size.md;
     }};
-    border: 1px solid  ${({ theme: { colors } }) => {
-        return colors.gray["40"];
-    }};;
-    border-radius: 1em;
 `;
 
 export default function SetAlarm(){
+    const [DDay, setDDay] = useState(new Date());
+    const CustomInput = forwardRef(({ value, onClick }, ref) => (
+        <InputBtn onClick={onClick} ref={ref}>
+            {value}
+            <ColoredBell/>
+        </InputBtn>
+    ));
+
+    const years = Array.from({length: (new Date().getFullYear()-2000+1)}, (_, i) => i+2000);
+    const months = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12",];
+    
     return (
         <>
             <SetAlarmTitle>알림 설정</SetAlarmTitle>
-<<<<<<< HEAD
-            <AlarmInput />
-=======
->>>>>>> fdeef096d1790f0eeac7f3e333fa89fa31fe236e
+            <Calender>
+                <ReactDatePicker
+                    locale={ko}
+                    dateFormat="yyyy.MM.dd"
+                    selected={DDay}
+                    onChange={(date) => setDDay(date)}
+                    customInput = {<CustomInput/>}
+                    showPopperArrow = {false}
+                    withPortal
+                    renderCustomHeader={({
+                        date,
+                        decreaseMonth,
+                        increaseMonth,
+                        prevMonthButtonDisabled,
+                        nextMonthButtonDisabled
+                        }) =>(
+                        <DateCustomHeader>
+                            <button onClick={decreaseMonth} disabled={prevMonthButtonDisabled}>{"<"}</button>
+                            <div>
+                                <span>{date.getFullYear()}. </span>
+                                <span>{months[date.getMonth()]}</span>
+                            </div>
+                            <button onClick={increaseMonth} disabled={nextMonthButtonDisabled}>{">"}</button>
+                        </DateCustomHeader>
+                    )}
+                />
+            </Calender>
         </>
     )
 };

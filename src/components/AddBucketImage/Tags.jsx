@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styled from "styled-components";
 
 const TagTitle = styled.div`
@@ -22,11 +23,11 @@ const TagStyle = styled.button`
     font-size: ${({ theme: { typo } }) => {
         return typo.size.md
     }};
-    background: ${({ theme: { colors } }) => {
-        return colors.gray["20"]
+    background: ${({ $isCliked, theme: { colors } }) => {
+        return $isCliked ? colors.gray["80"] : colors.gray["20"];
     }};
-    color: ${({ theme: { colors } }) => {
-        return colors.gray["80"]
+    color: ${({ $isCliked, theme: { colors } }) => {
+        return $isCliked ? colors.white : colors.gray["80"];
     }};
     outline: none;
     border-radius: 2em;
@@ -40,18 +41,26 @@ const TagStyle = styled.button`
 `;
 
 export default function Tags(){
+    const [selectedTags, setSelectedTags] = useState({});
+
+    const handleClick = (tag) => {
+        setSelectedTags(prevTags => ({
+            ...prevTags,
+            [tag]: !prevTags[tag],
+        }));
+    };
+
     return (
         <>
             <TagTitle>태그</TagTitle>
             <TagBox>
-                <TagStyle>일상</TagStyle>
-                <TagStyle>여행</TagStyle>
-                <TagStyle>건강</TagStyle>
-                <TagStyle>자기계발</TagStyle>
-                <TagStyle>가족</TagStyle>
-                <TagStyle>커플</TagStyle>
+                <TagStyle $isCliked={selectedTags['일상']} onClick={() => handleClick('일상')}>일상</TagStyle>
+                <TagStyle $isCliked={selectedTags['여행']} onClick={() => handleClick('여행')}>여행</TagStyle>
+                <TagStyle $isCliked={selectedTags['건강']} onClick={() => handleClick('건강')}>건강</TagStyle>
+                <TagStyle $isCliked={selectedTags['자기계발']} onClick={() => handleClick('자기계발')}>자기계발</TagStyle>
+                <TagStyle $isCliked={selectedTags['가족']} onClick={() => handleClick('가족')}>가족</TagStyle>
+                <TagStyle $isCliked={selectedTags['커플']} onClick={() => handleClick('커플')}>커플</TagStyle>
             </TagBox>
         </>
     )
-    
 };

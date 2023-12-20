@@ -36,16 +36,12 @@ const NextBtn = styled.button`
     border-radius: 1em;
 `;
 
-export default function MovementBtn(){
+export default function MovementBtn( {setDetailToAlarm} ){
     const navigate = useNavigate();
     return (
         <ButtonBox>
-            <PrevBtn onClick={()=>{navigate(-1)}}>이전</PrevBtn>
-<<<<<<< HEAD
-            <NextBtn>완료</NextBtn>
-=======
-            <NextBtn onClick={()=>{navigate(`/mybucket`)}}>완료</NextBtn>
->>>>>>> fdeef096d1790f0eeac7f3e333fa89fa31fe236e
+            <PrevBtn onClick={()=>{setDetailToAlarm(false)}}>이전</PrevBtn>
+            <NextBtn onClick={()=>{navigate('/mybucket')}}>완료</NextBtn>
         </ButtonBox>
     )
 };

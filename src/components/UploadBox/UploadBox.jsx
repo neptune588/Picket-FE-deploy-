@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import React, { useState, useEffect, useCallback } from 'react';
-=======
-import React, { useState, useEffect, useRef, useCallback } from 'react';
->>>>>>> fdeef096d1790f0eeac7f3e333fa89fa31fe236e
 import { useDropzone } from 'react-dropzone';
 
 import styled from 'styled-components';

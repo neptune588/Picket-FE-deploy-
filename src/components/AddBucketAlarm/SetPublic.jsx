@@ -1,7 +1,15 @@
 import styled from "styled-components";
+import ToggleBtn from "../ToggleBtn/ToggleBtn";
+
+const PublicBox = styled.div`
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+`;
 
 const SetPublicTitle = styled.div`
-    margin-top: 20px;
+    margin: 20px 0;
     color: black;
     font-size: ${({ theme: { typo } }) => {
         return typo.size.xl
@@ -9,25 +17,11 @@ const SetPublicTitle = styled.div`
     font-weight: bold;
 `;
 
-const SetPublicBtn = styled.input`
-    width: 400px;
-    height: 40px;
-    margin: 10px 0px;
-    padding: 15px;
-    font-size: ${({ theme: { typo } }) => {
-        return typo.size.md
-    }};
-    border: 1px solid  ${({ theme: { colors } }) => {
-        return colors.gray["40"];
-    }};;
-    border-radius: 1em;
-`;
-
 export default function SetPublic(){
     return (
-        <>
+        <PublicBox>
             <SetPublicTitle>공개 설정</SetPublicTitle>
-            <SetPublicBtn/>
-        </>
+            <ToggleBtn />
+        </PublicBox>
     )
 };

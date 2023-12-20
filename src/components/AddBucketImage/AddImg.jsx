@@ -6,6 +6,7 @@ import MyDropzone from "../UploadBox/UploadBox";
 import AlarmBox from "../AddBucketAlarm/AlarmBox";
 import DetailBox from "./DetailBox";
 import NextButton from "./NextBtn";
+import MovementBtn from "../AddBucketAlarm/MovementBtn";
 
 const Container = styled.div`
     margin: 0 auto;
@@ -27,7 +28,7 @@ export default function AddImg(){
                 {DetailToAlarm ? <AlarmBox />:<DetailBox />
                 }
             </AddImageWrapper>
-            <NextButton onClick={()=>{setDetailToAlarm(true)}} />
+            {DetailToAlarm? <MovementBtn setDetailToAlarm={setDetailToAlarm}/> : <NextButton onClick={()=>{setDetailToAlarm(true)}} />}
         </Container>
     )
 };
