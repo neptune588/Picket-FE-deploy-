@@ -3,7 +3,8 @@ export default function dataSend(data) {
     email: data.userEmail,
     password: data.userPassword,
     nickName: data.userNickname,
+    imageUrl: "test",
   };
 
-  console.log(JSON.stringify(refineData));
+  return refineData;
 }

@@ -24,7 +24,7 @@ import {
 } from "@/pages/SignUp/inputData";
 
 import vaildCheck from "@/pages/SignUp/vaildCheck";
-import dataSend from "@/pages/SignUp/dataSend";
+import dataRefine from "@/pages/SignUp/dataRefine";
 
 export default function SignUp() {
   const {
@@ -35,7 +35,7 @@ export default function SignUp() {
     handleTermsCheck,
     handleErrorCheck,
     handleTotalCheck,
-  } = useForm(vaildCheck, vaildTotalData, dataSend);
+  } = useForm(vaildCheck, vaildTotalData, dataRefine);
 
   const emailInput = useRef();
   const nickNameInput = useRef();

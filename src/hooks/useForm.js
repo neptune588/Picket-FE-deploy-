@@ -1,15 +1,26 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { postData } from "@/services/api";
 
-export default function useForm(vaildSearch, defaultVaildData, onSubmit) {
+export default function useForm(vaildSearch, defaultVaildData, dataRefineFnc) {
+  //useNavigate
+  const navigate = useNavigate("test");
+
   const { checkData, errorData, inspectionData } = defaultVaildData;
 
+  //state
   const [values, setValues] = useState({});
   const [checks, setChecks] = useState({ checkData });
   const [errors, setErrors] = useState({ errorData });
   const [inspection, setInspection] = useState({ inspectionData });
   const [vaildData, setVaildData] = useState(defaultVaildData);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoaidng, setIsLoading] = useState(false);
 
+  //mutatation
+  const { mutate, isError, error, isSuccess } = useMutation(postData);
+
+  //handlerFnc
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
@@ -41,12 +52,25 @@ export default function useForm(vaildSearch, defaultVaildData, onSubmit) {
     e.preventDefault();
     setIsLoading(true);
 
-    if (isLoading) {
-      Object.keys(inspection).every((key) => {
+    if (isLoaidng) {
+      const inspect = Object.keys(inspection).every((key) => {
         return inspection[key];
-      }) && onSubmit(values);
+      });
 
-      setValues("");
+      if (inspect) {
+        mutate("auth/signup", dataRefineFnc(values));
+
+        if (isError) {
+          console.log(error);
+        }
+
+        if (isSuccess) {
+          console.log(error);
+          setValues("");
+          navigate("/auth/signin");
+        }
+      }
+
       setIsLoading(false);
     }
   };
