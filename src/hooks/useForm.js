@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
+import { instance } from "@/services/api";
 import { postData } from "@/services/api";
 
 export default function useForm(vaildSearch, defaultVaildData, dataRefineFnc) {
@@ -17,14 +17,11 @@ export default function useForm(vaildSearch, defaultVaildData, dataRefineFnc) {
   const [vaildData, setVaildData] = useState(defaultVaildData);
   const [isLoaidng, setIsLoading] = useState(false);
 
-  //mutatation
-  const { mutate, isError, error, isSuccess } = useMutation(postData);
-
-  //handlerFnc
+  //ChangeFnc
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
-
+  //termsCheckFnc
   const handleTermsCheck = () => {
     setVaildData((prev) => {
       return {
@@ -37,7 +34,7 @@ export default function useForm(vaildSearch, defaultVaildData, dataRefineFnc) {
     });
     setChecks(vaildData.checkData);
   };
-
+  //errorCheckFnc
   const handleErrorCheck = (e) => {
     e.preventDefault();
     setVaildData((prev) => {
@@ -46,6 +43,39 @@ export default function useForm(vaildSearch, defaultVaildData, dataRefineFnc) {
     setChecks(vaildData.checkData);
     setInspection(vaildData.inspectionData);
     setErrors(vaildData.errorData);
+  };
+
+  //emailRepeatCheckFnc
+  const handleEmailRepeatCheck = async (e) => {
+    e.preventDefault();
+
+    if (checks.emailVaild) {
+      console.log(values.userEmail);
+      const result = await instance.post(
+        "auth/signup/check-email",
+        values.userEmail
+      );
+
+      try {
+        if (result.status === 200) {
+          setVaildData((prev) => {
+            return {
+              ...prev,
+              checkData: {
+                ...prev.checkData,
+                emailRepeatVaild: true,
+              },
+            };
+          });
+          setChecks(vaildData.checkData);
+          console.log(result.data);
+        } else {
+          console.log("중복된 이메일입니다.");
+        }
+      } catch (error) {
+        console.error("error:", error);
+      }
+    }
   };
 
   const handleTotalCheck = (e) => {
@@ -58,17 +88,9 @@ export default function useForm(vaildSearch, defaultVaildData, dataRefineFnc) {
       });
 
       if (inspect) {
-        mutate("auth/signup", dataRefineFnc(values));
-
-        if (isError) {
-          console.log(error);
-        }
-
-        if (isSuccess) {
-          console.log(error);
-          setValues("");
-          navigate("/auth/signin");
-        }
+        dataRefineFnc(values);
+        setValues("");
+        navigate("/auth/signin");
       }
 
       setIsLoading(false);
@@ -82,6 +104,7 @@ export default function useForm(vaildSearch, defaultVaildData, dataRefineFnc) {
     handleChange,
     handleTermsCheck,
     handleErrorCheck,
+    handleEmailRepeatCheck,
     handleTotalCheck,
   };
 }

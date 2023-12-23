@@ -28,6 +28,7 @@ const nickNameDefaultData = {
 const vaildTotalData = {
   checkData: {
     emailVaild: false,
+    emailRepeatVaild: false,
     pwVaild: false,
     pwReConfirmVaild: false,
     isChecked: false,

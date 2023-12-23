@@ -34,6 +34,7 @@ export default function SignUp() {
     handleChange,
     handleTermsCheck,
     handleErrorCheck,
+    handleEmailRepeatCheck,
     handleTotalCheck,
   } = useForm(vaildCheck, vaildTotalData, dataRefine);
 
@@ -84,7 +85,9 @@ export default function SignUp() {
                   onBlur={handleErrorCheck}
                   inVaild={errors.emailInvaildNotice}
                 />
-                <DoubleCheckButton disabled>중복 확인</DoubleCheckButton>
+                <DoubleCheckButton onClick={handleEmailRepeatCheck}>
+                  중복 확인
+                </DoubleCheckButton>
               </div>
               {!checks.emailVaild && errors.userEmailMsg && (
                 <p>{errors.userEmailMsg}</p>

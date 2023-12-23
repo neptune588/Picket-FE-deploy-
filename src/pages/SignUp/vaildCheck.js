@@ -67,6 +67,7 @@ export default function vaildCheck(
   if (currentName === "nextButton") {
     if (
       checkData.emailVaild &&
+      checkData.emailRepeatVaild &&
       checkData.pwVaild &&
       checkData.pwReConfirmVaild &&
       checkData.isChecked
