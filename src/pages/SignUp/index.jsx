@@ -1,7 +1,10 @@
+//react default hooks
 import { useEffect, useRef } from "react";
 
-import useForm from "@/hooks/useForm";
+//custom hooks
+import useSignUp from "@/hooks/useSignUp";
 
+//styled-components
 import {
   InputBox,
   Title,
@@ -11,32 +14,36 @@ import {
   ButtonBox,
 } from "@/pages/SignUp/style";
 
+//native styled-components
 import Input from "@/components/Input/Input";
 import CheckBox from "@/components/CheckBox";
 import SubmitButton from "@/components/SubmitButton/SubmitButton";
 
+//inputdata
 import {
   emailDefaultData,
   pwDefaultData,
-  pwReconfirmDefaultData,
+  pwConfirmDefaultData,
   nickNameDefaultData,
   vaildTotalData,
 } from "@/pages/SignUp/inputData";
 
+//fnc
 import vaildCheck from "@/pages/SignUp/vaildCheck";
 import dataRefine from "@/pages/SignUp/dataRefine";
 
 export default function SignUp() {
   const {
     values,
-    errors,
     checks,
+    errors,
     handleChange,
     handleTermsCheck,
     handleErrorCheck,
     handleEmailRepeatCheck,
+    handleNickNameRepeatCheck,
     handleTotalCheck,
-  } = useForm(vaildCheck, vaildTotalData, dataRefine);
+  } = useSignUp(vaildCheck, vaildTotalData, dataRefine);
 
   const emailInput = useRef();
   const nickNameInput = useRef();
@@ -64,14 +71,25 @@ export default function SignUp() {
                   inputRef={nickNameInput}
                   onChange={handleChange}
                   onBlur={handleErrorCheck}
-                  inVaild={errors.nickNameInvaildNotice}
+                  vaildState={errors.nickNameInvaildNotice}
                 />
+                <DoubleCheckButton onClick={handleNickNameRepeatCheck}>
+                  중복 확인
+                </DoubleCheckButton>
               </div>
-              {!checks.nickNameVaild && errors.userNickNameMsg && (
+              {(!checks.nickNameVaild ||
+                checks.nickNameRepeatVaild === "inVaild") && (
                 <p>{errors.userNickNameMsg}</p>
               )}
             </InputBox>
-            <SubmitButton width={"400px"} value={"완료"} />
+            <ButtonBox>
+              <SubmitButton
+                name={"submitButton"}
+                width={"400px"}
+                value={"완료"}
+              />
+              {errors.lastPageMsg && <p>{errors.lastPageMsg}</p>}
+            </ButtonBox>
           </>
         ) : (
           <>
@@ -83,13 +101,14 @@ export default function SignUp() {
                   inputRef={emailInput}
                   onChange={handleChange}
                   onBlur={handleErrorCheck}
-                  inVaild={errors.emailInvaildNotice}
+                  vaildState={errors.emailInvaildNotice}
                 />
                 <DoubleCheckButton onClick={handleEmailRepeatCheck}>
                   중복 확인
                 </DoubleCheckButton>
               </div>
-              {!checks.emailVaild && errors.userEmailMsg && (
+              {(!checks.emailVaild ||
+                checks.emailRepeatVaild === "inVaild") && (
                 <p>{errors.userEmailMsg}</p>
               )}
             </InputBox>
@@ -100,24 +119,22 @@ export default function SignUp() {
                   value={values.userPassword}
                   onChange={handleChange}
                   onBlur={handleErrorCheck}
-                  inVaild={errors.pwInvaildNotice}
+                  vaildState={errors.pwInvaildNotice}
                 />
               </div>
-              {!checks.pwVaild && errors.userPwMsg && <p>{errors.userPwMsg}</p>}
+              {!checks.pwVaild && <p>{errors.userPwMsg}</p>}
             </InputBox>
             <InputBox>
               <div>
                 <Input
-                  {...pwReconfirmDefaultData}
-                  value={values.userPasswordConfirmation}
+                  {...pwConfirmDefaultData}
+                  value={values.userPasswordConfirm}
                   onChange={handleChange}
                   onBlur={handleErrorCheck}
-                  inVaild={errors.pwReConfirmInvaildNotice}
+                  vaildState={errors.pwConfirmInvaildNotice}
                 />
               </div>
-              {!checks.pwReConfirmVaild && errors.userPwReConfirmMsg && (
-                <p>{errors.userPwReConfirmMsg}</p>
-              )}
+              {!checks.pwConfirmVaild && <p>{errors.userPwConfirmMsg}</p>}
             </InputBox>
             <InputCheckWrapper>
               <CheckBox
@@ -132,9 +149,7 @@ export default function SignUp() {
               <NextButton name={"nextButton"} onClick={handleErrorCheck}>
                 회원가입
               </NextButton>
-              {!checks.stepOneVaild && errors.nextButtonMsg && (
-                <p>{errors.nextButtonMsg}</p>
-              )}
+              {!checks.stepOneVaild && <p>{errors.nextButtonMsg}</p>}
             </ButtonBox>
           </>
         )}

@@ -12,8 +12,8 @@ const pwDefaultData = {
   placeholder: "비밀번호 (8자~15자의 영소문자,숫자 조합)",
   autoComplete: "new-password",
 };
-const pwReconfirmDefaultData = {
-  name: "userPasswordConfirmation",
+const pwConfirmDefaultData = {
+  name: "userPasswordConfirm",
   width: "400px",
   type: "password",
   placeholder: "비밀번호 확인",
@@ -21,21 +21,22 @@ const pwReconfirmDefaultData = {
 };
 const nickNameDefaultData = {
   name: "userNickname",
-  width: "400px",
+  width: "275px",
   type: "text",
   placeholder: "2~6자의 한글만 입력 가능합니다.",
 };
 const vaildTotalData = {
   checkData: {
     emailVaild: false,
-    emailRepeatVaild: false,
+    emailRepeatVaild: "default",
     pwVaild: false,
-    pwReConfirmVaild: false,
+    pwConfirmVaild: false,
     isChecked: false,
     nickNameVaild: false,
+    nickNameRepeatVaild: "default",
     stepOneVaild: false,
   },
-  inspectionData: {
+  finalCheckData: {
     emailVaild: false,
     pwVaild: false,
     nickNameVaild: false,
@@ -43,21 +44,22 @@ const vaildTotalData = {
   errorData: {
     userEmailMsg: "",
     userPwMsg: "",
-    userPwReConfirmMsg: "",
+    userPwConfirmMsg: "",
     userNickNameMsg: "",
     nextButtonMsg: "",
+    lastPageMsg: "",
 
-    emailInvaildNotice: false,
-    pwInvaildNotice: false,
-    pwReConfirmInvaildNotice: false,
-    nickNameInvaildNotice: false,
+    emailInvaildNotice: "default",
+    pwInvaildNotice: "default",
+    pwConfirmInvaildNotice: "default",
+    nickNameInvaildNotice: "default",
   },
 };
 
 export {
   emailDefaultData,
   pwDefaultData,
-  pwReconfirmDefaultData,
+  pwConfirmDefaultData,
   nickNameDefaultData,
   vaildTotalData,
 };

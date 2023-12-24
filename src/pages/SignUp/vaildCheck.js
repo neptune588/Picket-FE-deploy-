@@ -1,89 +1,111 @@
 import { emailReg, pwReg, nickNameReg } from "@/utils/userAuthRegex";
 
 export default function vaildCheck(
-  prevData,
+  currentName,
   {
     userEmail = "",
     userPassword = "",
-    userPasswordConfirmation = "",
+    userPasswordConfirm = "",
     userNickname = "",
   },
-  currentName
+  { errors, checks, finalChecks }
 ) {
-  const vaildData = { ...prevData };
-  const { checkData, inspectionData, errorData } = vaildData;
+  const checkList = { ...checks };
+  const errorList = { ...errors };
+  const finalCheckList = { ...finalChecks };
 
   if (currentName === "userEmail") {
     if (userEmail !== "" && emailReg.test(userEmail)) {
-      checkData.emailVaild = true;
-      inspectionData.emailVaild = true;
-      errorData.emailInvaildNotice = false;
+      checkList.emailVaild = true;
+      finalCheckList.emailVaild = true;
+      errorList.emailInvaildNotice = "default";
     } else {
-      checkData.emailVaild = false;
-      inspectionData.emailVaild = false;
-      errorData.emailInvaildNotice = true;
-      errorData.userEmailMsg = "유효한 형식의 이메일이 아닙니다.";
+      checkList.emailVaild = false;
+      finalCheckList.emailVaild = false;
+      errorList.userEmailMsg = "유효한 형식의 이메일이 아닙니다.";
+      errorList.emailInvaildNotice = "inVaild";
     }
   }
 
   if (currentName === "userPassword") {
     if (userPassword !== "" && pwReg.test(userPassword)) {
-      checkData.pwVaild = true;
-      inspectionData.pwVaild = true;
-      errorData.pwInvaildNotice = false;
+      checkList.pwVaild = true;
+      finalCheckList.pwVaild = true;
+      errorList.pwInvaildNotice = "vaild";
     } else {
-      checkData.pwVaild = false;
-      inspectionData.pwVaild = false;
-      errorData.pwInvaildNotice = true;
-      errorData.userPwMsg =
+      checkList.pwVaild = false;
+      finalCheckList.pwVaild = false;
+      errorList.userPwMsg =
         "비밀번호는 8자 ~ 15자 사이의 소문자+숫자 형식만 가능합니다.";
+      errorList.pwInvaildNotice = "inVaild";
     }
   }
 
-  if (currentName === "userPasswordConfirmation") {
-    if (userPassword === userPasswordConfirmation) {
-      checkData.pwReConfirmVaild = true;
-      errorData.pwReConfirmInvaildNotice = false;
+  if (currentName === "userPasswordConfirm") {
+    if (userPassword === userPasswordConfirm) {
+      checkList.pwConfirmVaild = true;
+      errorList.pwConfirmInvaildNotice = "vaild";
     } else {
-      checkData.pwReConfirmVaild = false;
-      errorData.pwReConfirmInvaildNotice = true;
-      errorData.userPwReConfirmMsg = "입력하신 비밀번호와 일치하지 않습니다.";
-    }
-  }
-
-  if (currentName === "userNickname") {
-    if (userNickname !== "" && nickNameReg.test(userNickname)) {
-      checkData.nickNameVaild = true;
-      inspectionData.nickNameVaild = true;
-      errorData.nickNameInvaildNotice = false;
-    } else {
-      checkData.nickNameVaild = false;
-      inspectionData.nickNameVaild = false;
-      errorData.userNickNameMsg = "이미 존재하는 닉네임 입니다.";
-      errorData.nickNameInvaildNotice = true;
+      checkList.pwConfirmVaild = false;
+      errorList.userPwConfirmMsg = "입력하신 비밀번호와 일치하지 않습니다.";
+      errorList.pwConfirmInvaildNotice = "inVaild";
     }
   }
 
   if (currentName === "nextButton") {
     if (
-      checkData.emailVaild &&
-      checkData.emailRepeatVaild &&
-      checkData.pwVaild &&
-      checkData.pwReConfirmVaild &&
-      checkData.isChecked
+      checkList.emailVaild &&
+      checkList.emailRepeatVaild === "vaild" &&
+      checkList.pwVaild &&
+      checkList.pwConfirmVaild &&
+      checkList.isChecked
     ) {
-      checkData.stepOneVaild = true;
+      checkList.stepOneVaild = true;
     } else if (
-      checkData.emailVaild &&
-      checkData.pwVaild &&
-      checkData.pwReConfirmVaild &&
-      !checkData.isChecked
+      checkList.emailVaild &&
+      checkList.pwVaild &&
+      checkList.pwConfirmVaild &&
+      !checkList.isChecked
     ) {
-      errorData.nextButtonMsg = "개인정보 제공 약관에 동의를 해주세요!";
+      errorList.nextButtonMsg = "개인정보 제공 약관에 동의를 해주세요!";
+    } else if (
+      checkList.emailVaild &&
+      checkList.pwVaild &&
+      checkList.pwConfirmVaild &&
+      checkList.isChecked &&
+      checkList.emailRepeatVaild !== "vaild"
+    ) {
+      errorList.nextButtonMsg = "이메일 중복 확인을 해주세요!";
     } else {
-      errorData.nextButtonMsg = "필수 입력란에 유효한 내용을 작성 해주세요!";
+      errorList.nextButtonMsg = "필수 입력란에 유효한 내용을 작성 해주세요!";
     }
   }
 
-  return vaildData;
+  if (currentName === "userNickname") {
+    if (userNickname !== "" && nickNameReg.test(userNickname)) {
+      checkList.nickNameVaild = true;
+      finalCheckList.nickNameVaild = true;
+      errorList.nickNameInvaildNotice = "default";
+    } else {
+      checkList.nickNameVaild = false;
+      finalCheckList.nickNameVaild = false;
+      errorList.userNickNameMsg = "닉네임은 한글로 2~6자 사이만 가능합니다.";
+      errorList.nickNameInvaildNotice = "inVaild";
+    }
+  }
+
+  /*   if (currentName === "submitButton") {
+    if (!checkList.nickNameVaild) {
+      errorList.lastPageMsg =
+        "유효한 닉네임이 아닙니다. 다시 한번 확인 해주세요!";
+      checkList.lastCheckVaild = false;
+    } else if (checks.nickNameRepeatVaild !== "vaild") {
+      errorList.lastPageMsg = "닉네임 중복확인을 해주세요!";
+      checkList.lastCheckVaild = false;
+    } else {
+      checkList.lastCheckVaild = true;
+    }
+  } */
+
+  return { errorList, checkList, finalCheckList };
 }

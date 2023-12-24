@@ -6,6 +6,7 @@ import AuthPageLayOut from "@/pages/AuthPageLayOut";
 import OnlyTest from "@/pages/OnlyTest/OnlyTest";
 import SignUp from "@/pages/SignUp";
 import SignIn from "@/pages/SignIn";
+import RegisterSuccess from "@/pages/RegisterSuccess/RegisterSuccess";
 import TestMain from "../pages/TestMain/TestMain";
 import TestSearch from "../pages/TestSearch/TestSearch";
 import TestAlarm from "../pages/TestAlarm/TestAlarm";
@@ -53,6 +54,10 @@ const router = createBrowserRouter([
       {
         path: "/auth/signin",
         element: <SignIn />,
+      },
+      {
+        path: "/auth/registerSuccess/:message",
+        element: <RegisterSuccess />,
       },
     ],
   },

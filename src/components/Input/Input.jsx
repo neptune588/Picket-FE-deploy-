@@ -11,8 +11,14 @@ const InputBox = styled.input`
   }};
   padding: 20px 25px;
   border: 1px solid
-    ${({ $inVaild, theme: { colors } }) => {
-      return $inVaild ? "red" : colors.gray["40"];
+    ${({ $vaildState, theme: { colors } }) => {
+      if ($vaildState === "vaild") {
+        return colors.primary;
+      } else if ($vaildState === "inVaild") {
+        return colors.inVaild;
+      } else {
+        return colors.gray["40"];
+      }
     }};
   border-radius: 15px;
   &:focus {
@@ -33,7 +39,7 @@ export default function Input({
   autoComplete = null,
   onChange,
   onBlur,
-  inVaild = null,
+  vaildState = null,
 }) {
   return (
     <InputBox
@@ -46,7 +52,7 @@ export default function Input({
       autoComplete={autoComplete || undefined}
       onChange={onChange}
       onBlur={onBlur}
-      $inVaild={inVaild || undefined}
+      $vaildState={vaildState || undefined}
     />
   );
 }

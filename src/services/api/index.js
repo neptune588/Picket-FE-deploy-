@@ -5,21 +5,18 @@ const instance = axios.create({
   timeout: 5000,
 });
 
-const getData = async (...args) => {
-  const res = await instance.get(...args);
+const getData = (...args) => {
+  const res = instance.get(...args);
   return res.json();
 };
-const postData = async (...args) => {
-  const res = await instance.post(...args);
-  return res;
+const postData = (...args) => {
+  return instance.post(...args);
 };
-const putData = async (...args) => {
-  const res = await instance.put(...args);
-  return res;
+const putData = (...args) => {
+  return instance.put(...args);
 };
-const delData = async (...args) => {
-  const res = await instance.del(...args);
-  return res;
+const delData = (...args) => {
+  return instance.del(...args);
 };
 
 export { instance, getData, postData, putData, delData };
