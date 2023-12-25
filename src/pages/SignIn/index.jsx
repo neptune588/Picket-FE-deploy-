@@ -1,5 +1,8 @@
 import { useEffect, useRef } from "react";
+
 import { useNavigate } from "react-router-dom";
+
+import useSignIn from "@/hooks/useSignIn";
 
 import {
   Title,
@@ -10,33 +13,46 @@ import {
 
 import Input from "@/components/Input/Input";
 import SubmitButton from "@/components/SubmitButton/SubmitButton";
-
-import {
-  emailDefaultData,
-  pwDefaultData,
-  vaildTotalData,
-} from "@/pages/Signin/InputData";
+import SiteLoading from "@/components/SiteLoading/SiteLoading";
+import { emailDefaultData, pwDefaultData } from "@/pages/Signin/InputData";
 
 export default function SignIn() {
   const navigate = useNavigate();
-
+  const { errors, values, handleSubmit, handleChange, isLoading } = useSignIn();
   const emailInput = useRef();
 
   useEffect(() => {
     emailInput.current && emailInput.current.focus();
   }, []);
+
+  if (isLoading) {
+    return <SiteLoading />;
+  }
   return (
     <>
       <Title>로그인</Title>
-      <form>
+      <form onSubmit={handleSubmit}>
         <InputBox>
-          <Input {...emailDefaultData} inputRef={emailInput} />
+          <Input
+            {...emailDefaultData}
+            value={values.userLoginEmail}
+            inputRef={emailInput}
+            onChange={handleChange}
+            vaildState={errors.emailInvaildNotice}
+          />
+          {errors.userEmailMsg && <p>{errors.userEmailMsg}</p>}
         </InputBox>
         <InputBox>
-          <Input {...pwDefaultData} />
+          <Input
+            {...pwDefaultData}
+            value={values.userLoginPassword}
+            onChange={handleChange}
+            vaildState={errors.pwInvaildNotice}
+          />
+          {errors.userPwMsg && <p>{errors.userPwMsg}</p>}
         </InputBox>
         <InputBox>
-          <SubmitButton width={"400px"} value={"로그인"} disabled />
+          <SubmitButton width={"400px"} value={"로그인"} />
         </InputBox>
         <InputBox>
           <SocialLogin disabled>Google 로그인</SocialLogin>

@@ -13,22 +13,12 @@ const pwDefaultData = {
   autoComplete: "new-password",
 };
 
-const vaildTotalData = {
-  checkData: {
-    emailVaild: false,
-    pwVaild: false,
-  },
-  inspectionData: {
-    emailVaild: false,
-    pwVaild: false,
-  },
-  errorData: {
-    userEmailMsg: "",
-    userPwMsg: "",
+const errorData = {
+  userEmailMsg: "",
+  userPwMsg: "",
 
-    emailInvaildNotice: false,
-    pwInvaildNotice: false,
-  },
+  emailInvaildNotice: "default",
+  pwInvaildNotice: "default",
 };
 
-export { emailDefaultData, pwDefaultData, vaildTotalData };
+export { emailDefaultData, pwDefaultData, errorData };

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { postData } from "@/services/api";
 
@@ -13,56 +13,34 @@ export default function useSignUp(vaildCheks, defaultData, onSubmit) {
   const [finalChecks, setFinalChecks] = useState({ ...finalCheckData });
   const [isLoaidng, setIsLoading] = useState(false);
 
-  /*   1. blur 일어날때마다 유효성 검사
-  2. 중복확인이 됐으면 repeat true
-  3. onchange일어났을때 다시 default로 바꾸기.
-  4. bodrer는 default로바꾸고 이후에 blur일어나면 유효성검사로 체크해서 border 바뀜. */
-
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
 
     if (e.target.name === "userEmail") {
-      setChecks((prev) => {
-        return {
-          ...prev,
-          emailRepeatVaild: "default",
-          nickNameRepeatVaild: "default",
-        };
+      setChecks({
+        ...checks,
+        emailRepeatVaild: "default",
       });
-      setErrors((prev) => {
-        return {
-          ...prev,
-          emailInvaildNotice: "default",
-          nickNameInvaildNotice: "default",
-        };
+      setErrors({
+        ...errors,
+        emailInvaildNotice: "default",
       });
     }
 
     if (e.target.name === "userNickName") {
-      setChecks((prev) => {
-        return {
-          ...prev,
-          emailRepeatVaild: "default",
-          nickNameRepeatVaild: "default",
-        };
+      setChecks({
+        ...checks,
+        nickNameRepeatVaild: "default",
       });
-      setErrors((prev) => {
-        return {
-          ...prev,
-          emailInvaildNotice: "default",
-          nickNameInvaildNotice: "default",
-        };
+      setErrors({
+        ...errors,
+        nickNameInvaildNotice: "default",
       });
     }
   };
 
   const handleTermsCheck = () => {
-    setChecks((prev) => {
-      return {
-        ...prev,
-        isChecked: !checks.isChecked,
-      };
-    });
+    setChecks({ ...checks, isChecked: !checks.isChecked });
   };
 
   const handleErrorCheck = (e) => {
@@ -99,52 +77,38 @@ export default function useSignUp(vaildCheks, defaultData, onSubmit) {
         );
 
         if (result.status === 200) {
-          setChecks((prev) => {
-            return {
-              ...prev,
-              emailRepeatVaild: "vaild",
-            };
+          setChecks({
+            ...checks,
+            emailRepeatVaild: "vaild",
           });
-          setErrors((prev) => {
-            return {
-              ...prev,
-              emailInvaildNotice: "vaild",
-            };
+          setErrors({
+            ...errors,
+            emailInvaildNotice: "vaild",
           });
-
-          console.log(result);
         }
       } catch (error) {
         const { response } = error;
 
         if (response.status === 409) {
-          setChecks((prev) => {
-            return {
-              ...prev,
-              emailRepeatVaild: "inVaild",
-            };
+          setChecks({
+            ...checks,
+            emailRepeatVaild: "inVaild",
           });
-          setErrors((prev) => {
-            return {
-              ...prev,
-              userEmailMsg: `${response.data.message}`,
-              emailInvaildNotice: "inVaild",
-            };
+          setErrors({
+            ...errors,
+            userEmailMsg: `${response.data.message}`,
+            emailInvaildNotice: "inVaild",
           });
         } else {
-          setChecks((prev) => {
-            return {
-              ...prev,
-              emailRepeatVaild: "inVaild",
-            };
+          setChecks({
+            ...checks,
+            emailRepeatVaild: "inVaild",
           });
-          setErrors((prev) => {
-            return {
-              ...prev,
-              userEmailMsg:
-                "서버와의 연결이 끊겼습니다. 다시 한번 시도 해주세요.",
-              emailInvaildNotice: "inVaild",
-            };
+          setErrors({
+            ...errors,
+            userEmailMsg:
+              "서버와의 연결이 끊겼습니다. 다시 한번 시도 해주세요.",
+            emailInvaildNotice: "inVaild",
           });
         }
       }
@@ -167,44 +131,34 @@ export default function useSignUp(vaildCheks, defaultData, onSubmit) {
         );
 
         if (result.status === 200) {
-          setChecks((prev) => {
-            return {
-              ...prev,
-              nickNameRepeatVaild: "vaild",
-            };
+          setChecks({
+            ...checks,
+            nickNameRepeatVaild: "vaild",
           });
-          setErrors((prev) => {
-            return {
-              ...prev,
-              nickNameInvaildNotice: "vaild",
-            };
+          setErrors({
+            ...errors,
+            nickNameInvaildNotice: "vaild",
           });
         }
       } catch (error) {
         const { response } = error;
 
         if (response.status === 409) {
-          setChecks((prev) => {
-            return {
-              ...prev,
-              nickNameRepeatVaild: "inVaild",
-            };
+          setChecks({
+            ...checks,
+            nickNameRepeatVaild: "inVaild",
           });
-          setErrors((prev) => {
-            return {
-              ...prev,
-              userNickNameMsg: `${response.data.message}`,
-              nickNameInvaildNotice: "inVaild",
-            };
+          setErrors({
+            ...errors,
+            userNickNameMsg: `${response.data.message}`,
+            nickNameInvaildNotice: "inVaild",
           });
         } else {
-          setErrors((prev) => {
-            return {
-              ...prev,
-              userNickNameMsg:
-                "서버와의 연결이 끊겼습니다. 다시 한번 시도 해주세요.",
-              nickNameInvaildNotice: "inVaild",
-            };
+          setErrors({
+            ...errors,
+            userNickNameMsg:
+              "서버와의 연결이 끊겼습니다. 다시 한번 시도 해주세요.",
+            nickNameInvaildNotice: "inVaild",
           });
         }
       }
@@ -240,23 +194,19 @@ export default function useSignUp(vaildCheks, defaultData, onSubmit) {
         console.error("Error: ", error);
       }
     } else if (!checks.nickNameVaild) {
-      setErrors((prev) => {
-        return {
-          ...prev,
-          lastPageMsg: "유효한 닉네임이 아닙니다. 다시 한번 확인 해주세요!",
-        };
+      setErrors({
+        ...errors,
+        lastPageMsg: "유효한 닉네임이 아닙니다. 다시 한번 확인 해주세요!",
       });
       setIsLoading(false);
-      return false;
+      return;
     } else {
-      setErrors((prev) => {
-        return {
-          ...prev,
-          lastPageMsg: "닉네임 중복확인을 해주세요!",
-        };
+      setErrors({
+        ...errors,
+        lastPageMsg: "닉네임 중복확인을 해주세요!",
       });
       setIsLoading(false);
-      return false;
+      return;
     }
   };
 

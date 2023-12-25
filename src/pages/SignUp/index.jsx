@@ -1,10 +1,7 @@
-//react default hooks
 import { useEffect, useRef } from "react";
 
-//custom hooks
 import useSignUp from "@/hooks/useSignUp";
 
-//styled-components
 import {
   InputBox,
   Title,
@@ -14,12 +11,10 @@ import {
   ButtonBox,
 } from "@/pages/SignUp/style";
 
-//native styled-components
 import Input from "@/components/Input/Input";
 import CheckBox from "@/components/CheckBox";
 import SubmitButton from "@/components/SubmitButton/SubmitButton";
 
-//inputdata
 import {
   emailDefaultData,
   pwDefaultData,
@@ -28,7 +23,6 @@ import {
   vaildTotalData,
 } from "@/pages/SignUp/inputData";
 
-//fnc
 import vaildCheck from "@/pages/SignUp/vaildCheck";
 import dataRefine from "@/pages/SignUp/dataRefine";
 

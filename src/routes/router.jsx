@@ -11,7 +11,7 @@ import TestMain from "../pages/TestMain/TestMain";
 import TestSearch from "../pages/TestSearch/TestSearch";
 import TestAlarm from "../pages/TestAlarm/TestAlarm";
 import TestMypage from "../pages/TestMypage/TestMypage";
-
+import SiteLoading from "@/components/SiteLoading/SiteLoading";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -60,6 +60,10 @@ const router = createBrowserRouter([
         element: <RegisterSuccess />,
       },
     ],
+  },
+  {
+    path: "/loading",
+    element: <SiteLoading />,
   },
 ]);
 

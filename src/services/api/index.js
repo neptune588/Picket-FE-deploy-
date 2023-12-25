@@ -1,13 +1,14 @@
 import axios from "axios";
 
+const BASE_URL = "/api";
+
 const instance = axios.create({
-  baseURL: "/api",
+  baseURL: BASE_URL,
   timeout: 5000,
 });
 
 const getData = (...args) => {
-  const res = instance.get(...args);
-  return res.json();
+  return instance.get(...args);
 };
 const postData = (...args) => {
   return instance.post(...args);

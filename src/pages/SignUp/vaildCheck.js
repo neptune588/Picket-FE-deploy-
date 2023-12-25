@@ -94,18 +94,5 @@ export default function vaildCheck(
     }
   }
 
-  /*   if (currentName === "submitButton") {
-    if (!checkList.nickNameVaild) {
-      errorList.lastPageMsg =
-        "유효한 닉네임이 아닙니다. 다시 한번 확인 해주세요!";
-      checkList.lastCheckVaild = false;
-    } else if (checks.nickNameRepeatVaild !== "vaild") {
-      errorList.lastPageMsg = "닉네임 중복확인을 해주세요!";
-      checkList.lastCheckVaild = false;
-    } else {
-      checkList.lastCheckVaild = true;
-    }
-  } */
-
   return { errorList, checkList, finalCheckList };
 }

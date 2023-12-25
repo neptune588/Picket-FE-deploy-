@@ -38,7 +38,7 @@ export default function Input({
   placeholder,
   autoComplete = null,
   onChange,
-  onBlur,
+  onBlur = null,
   vaildState = null,
 }) {
   return (
@@ -51,7 +51,7 @@ export default function Input({
       placeholder={placeholder}
       autoComplete={autoComplete || undefined}
       onChange={onChange}
-      onBlur={onBlur}
+      onBlur={onBlur || undefined}
       $vaildState={vaildState || undefined}
     />
   );
