@@ -5,9 +5,8 @@ import OnlyTest from "@/pages/OnlyTest/OnlyTest";
 import TestMain from "../pages/TestMain/TestMain";
 import TestSearch from "../pages/TestSearch/TestSearch";
 import TestAlarm from "../pages/TestAlarm/TestAlarm";
-import TestMypage from "../pages/TestMypage/TestMypage";
+import TestMyProfile from "../pages/TestProfile/TestProfile"
 import TestAddBucket from "../pages/TestAddBucket/TestAddBucket";
-import TestAddBucketAlarm from "../pages/TestAddBucketAlarm/TestAddBucketAlarm";
 
 const router = createBrowserRouter([
   {
@@ -30,19 +29,14 @@ const router = createBrowserRouter([
         label: 'alarm'
       },
       {
-        path: "/mypage",
-        element: <TestMypage/>,
-        label: 'mypage'
+        path: "/profile",
+        element: <TestMyProfile/>,
+        label: 'profile'
       },
       {
         path: "/add",
         element: <TestAddBucket/>,
         label: 'add'
-      },
-      {
-        path: "/add-alarm",
-        element: <TestAddBucketAlarm/>,
-        label: 'add-alarm'
       },
       {
         path: "/test",

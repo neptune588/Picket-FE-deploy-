@@ -1,9 +1,9 @@
+import { useState } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
 import styled from "styled-components";
 
-import Symbol from "@/assets/icons/symbol.svg?react";
-import Alarm from "@/assets/icons/alarm.svg?react";
-import Circle from "@/assets/icons/ellipse.svg?react";
+import Alarm from "@/assets/icons/alarm.svg?react"
+import Symbol from "@/assets/icons/symbol.svg?react"
 
 const NavBarWrapper = styled.div`
     width: 100%
@@ -70,6 +70,8 @@ const SearchBar = styled.input`
 
 const AlarmBox = styled.div`
     margin-left: auto;
+    display: flex;
+    align-items: center;
     float: right;
 `
 const AlarmIcon = styled(Alarm)`
@@ -77,21 +79,54 @@ const AlarmIcon = styled(Alarm)`
     cursor: pointer;
 `;
 
-const MypageBtn = styled(Circle)`
-    width: 32px;
-    hegiht: 32px;
-    margin: 10px 0px;
-    justify-content: center;
+const Profile = styled.div`
+    width: 25px;
+    height: 25px;
+    display: flex;
+    background: ${({ theme: { colors } }) => {
+        return colors.primary
+    }};
+    border-radius: 50%;
     cursor: pointer;
 `;
 
+const Dropdown = styled.div`
+  top: 65px;
+  right: calc((100% - 1500px) / 2);
+  width: 260px;
+  height: 210px;
+  border-radius: 2em;
+  position: absolute;
+  background: white;
+  box-shadow: gray 0px 3px 8px;
+
+  & > li {
+    height: calc(220px / 3);
+    text-align: center;
+    display: flex;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+`
+
+
 export default function NavBar() {
+    const [dropdownOpen, setDropdownOpen] = useState(false)
     const nav = useNavigate();
+
     const OnClickAlarm = ()=>{
         nav(`/alarm`)
     };
+    const OnClickDropdown = () => {
+        setDropdownOpen(!dropdownOpen)
+    };
     const OnClickMypage = ()=>{
-        nav(`/mypage`)
+        nav(`/profile`)
     };
 
     return (
@@ -102,7 +137,16 @@ export default function NavBar() {
             <SearchBar placeholder="검색"/>
             <AlarmBox>
                 <AlarmIcon onClick={OnClickAlarm} />
-                <MypageBtn onClick={OnClickMypage} />
+                <Profile onClick={OnClickDropdown}>
+                {
+                    dropdownOpen &&
+                    <Dropdown>
+                        <li onClick={OnClickMypage}>내 프로필</li>
+                        <li>프로필 편집</li>
+                        <li>로그아웃</li>
+                    </Dropdown>
+                }
+                </Profile>
             </AlarmBox>
         </NavBarWrapper>
     );

@@ -41,7 +41,7 @@ export default function MovementBtn( {setDetailToAlarm} ){
     return (
         <ButtonBox>
             <PrevBtn onClick={()=>{setDetailToAlarm(false)}}>이전</PrevBtn>
-            <NextBtn onClick={()=>{navigate('/mybucket')}}>완료</NextBtn>
+            <NextBtn onClick={()=>{navigate('/')}}>완료</NextBtn>
         </ButtonBox>
     )
 };
