@@ -1,9 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { postData } from "@/services/api";
 
 //endpoint auth/login
 export default function useSignIn(defaultData) {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const condition = localStorage.getItem("userInfo");
+    if (condition) {
+      navigate("/");
+    }
+  }, []);
+
   const [errors, setErrors] = useState({ ...defaultData });
   const [values, setValues] = useState({
     userLoginEmail: "",
@@ -11,13 +20,30 @@ export default function useSignIn(defaultData) {
   });
   const [submitLoading, setSubmitLoading] = useState(false);
 
-  const { data, isLoading, mutate } = useMutation({
+  const { isLoading, mutate } = useMutation({
     mutationFn: async (userData) => {
-      await postData(userData);
+      return await postData("auth/login", userData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    },
+    onMutate: () => {
+      const condition = localStorage.getItem("userInfo");
+      if (condition) {
+        return false;
+      }
     },
     //성공시
-    onSuccess: () => {
-      console.log("요청 성공");
+    onSuccess: (JWT) => {
+      const { data: tokenData } = JWT;
+      //localstroge는 오직 문자열 형태의 key,value만 가능하다.
+      localStorage.setItem("userInfo", JSON.stringify(tokenData));
+
+      setValues({ userLoginEmail: "", userLoginPassword: "" });
+      setErrors({ ...defaultData });
+
+      navigate("/");
     },
   });
 
@@ -65,7 +91,13 @@ export default function useSignIn(defaultData) {
       setSubmitLoading(false);
       return;
     } else {
-      mutate({});
+      const dataRefine = JSON.stringify({
+        email: values.userLoginEmail,
+        password: values.userLoginPassword,
+      });
+
+      mutate(dataRefine);
+
       setSubmitLoading(false);
       return;
     }
