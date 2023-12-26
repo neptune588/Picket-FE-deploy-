@@ -65,8 +65,7 @@ export default function useSignIn(defaultData) {
       setSubmitLoading(false);
       return;
     } else {
-      console.log(values.userLoginEmail);
-      console.log("로직 실행");
+      mutate({});
       setSubmitLoading(false);
       return;
     }
