@@ -1,15 +1,30 @@
 import { RouterProvider } from "react-router-dom";
 import router from "@/routes/router";
 
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
 import GlobalStyle from "@/styles/GlobalStyle";
 import { ThemeProvider } from "styled-components";
 import { theme } from "@/styles/theme";
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      onError: (error) => console.error(error),
+    },
+    mutations: {
+      onError: (error) => console.error(error),
+    },
+  },
+});
+
 export default function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <RouterProvider router={router} />
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }
