@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 
 import styled from "styled-components";
-import NavBar from "../components/Navbar/Navbar";
+import NavBar from "@/components/NavBar/NavBar";
 
 const CenterdContainer = styled.div`
   width: 100%;
@@ -15,6 +15,5 @@ export default function LayOut() {
         <Outlet />
       </CenterdContainer>
     </>
-    
   );
 }
