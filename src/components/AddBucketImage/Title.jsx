@@ -23,11 +23,15 @@ const TitleInput = styled.input`
     border-radius: 1em;
 `;
 
-export default function Title(){
+export default function Title({ context, updateContext }){
     return (
         <>
             <BigTitle>제목</BigTitle>
-            <TitleInput placeholder="제목을 입력하세요"></TitleInput>
+            <TitleInput 
+                placeholder="제목을 입력하세요"
+                value={context.title}
+                onChange={(e) => { updateContext("title", e.target.value) }}
+            ></TitleInput>
         </>
     )
 };

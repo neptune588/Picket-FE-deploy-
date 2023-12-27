@@ -26,8 +26,7 @@ const InputBtn = styled.div`
     }};
 `;
 
-export default function SetAlarm(){
-    const [DDay, setDDay] = useState(new Date());
+export default function SetAlarm({ context, updateContext }){
     const CustomInput = forwardRef(({ value, onClick }, ref) => (
         <InputBtn onClick={onClick} ref={ref}>
             {value}
@@ -45,8 +44,9 @@ export default function SetAlarm(){
                 <ReactDatePicker
                     locale={ko}
                     dateFormat="yyyy.MM.dd"
-                    selected={DDay}
-                    onChange={(date) => setDDay(date)}
+                    selected={context.deadline}
+                    value = {context.deadline}
+                    onChange={(date) => { updateContext("deadline", date )}}
                     customInput = {<CustomInput/>}
                     showPopperArrow = {false}
                     withPortal

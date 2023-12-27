@@ -14,12 +14,12 @@ const Details = styled.div`
     }};
 `;
 
-export default function DetailBox(){
+export default function DetailBox({ context, updateContext }){
     return(
         <Details>
-            <Tags />
-            <Title />
-            <Content />
+            <Tags context={context} updateContext={updateContext} />
+            <Title context={context} updateContext={updateContext} />
+            <Content context={context} updateContext={updateContext} />
         </Details>
     )
 }

@@ -117,11 +117,7 @@ export default function TestMyProfile(){
                     <span>0</span>
                 </div>
                 <div>
-                    미완료한 버킷
-                    <span>0</span>
-                </div>
-                <div>
-                    보류한 버킷
+                    진행 중인 버킷
                     <span>0</span>
                 </div>
             </BucketContainer>

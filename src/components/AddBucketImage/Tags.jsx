@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const TagTitle = styled.div`
@@ -40,8 +40,8 @@ const TagStyle = styled.button`
     }
 `;
 
-export default function Tags(){
-    const [selectedTags, setSelectedTags] = useState({});
+export default function Tags({ context, updateContext }){
+    const [selectedTags, setSelectedTags] = useState({ ...context.categoryList });
 
     const handleClick = (tag) => {
         setSelectedTags(prevTags => ({
@@ -50,16 +50,20 @@ export default function Tags(){
         }));
     };
 
+    useEffect(() => {
+        updateContext("categoryList", selectedTags)
+    }, [selectedTags]);
+
     return (
         <>
             <TagTitle>태그</TagTitle>
             <TagBox>
-                <TagStyle $isCliked={selectedTags['일상']} onClick={() => handleClick('일상')}>일상</TagStyle>
-                <TagStyle $isCliked={selectedTags['여행']} onClick={() => handleClick('여행')}>여행</TagStyle>
-                <TagStyle $isCliked={selectedTags['건강']} onClick={() => handleClick('건강')}>건강</TagStyle>
-                <TagStyle $isCliked={selectedTags['자기계발']} onClick={() => handleClick('자기계발')}>자기계발</TagStyle>
-                <TagStyle $isCliked={selectedTags['가족']} onClick={() => handleClick('가족')}>가족</TagStyle>
-                <TagStyle $isCliked={selectedTags['커플']} onClick={() => handleClick('커플')}>커플</TagStyle>
+            <TagStyle $isCliked={selectedTags[1]} onClick={() => handleClick(1)}>일상</TagStyle>
+                <TagStyle $isCliked={selectedTags[2]} onClick={() => handleClick(2)}>여행</TagStyle>
+                <TagStyle $isCliked={selectedTags[3]} onClick={() => handleClick(3)}>건강</TagStyle>
+                <TagStyle $isCliked={selectedTags[4]} onClick={() => handleClick(4)}>자기계발</TagStyle>
+                <TagStyle $isCliked={selectedTags[5]} onClick={() => handleClick(5)}>가족</TagStyle>
+                <TagStyle $isCliked={selectedTags[6]} onClick={() => handleClick(6)}>커플</TagStyle>
             </TagBox>
         </>
     )
