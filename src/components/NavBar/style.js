@@ -120,7 +120,6 @@ const SearchWrraper = styled.div`
   position: fixed;
   width: 100%;
   height: 100vh;
-  overflow: hidden;
   background-color: ${({ theme: { colors } }) => {
     return colors.gray["80"];
   }};

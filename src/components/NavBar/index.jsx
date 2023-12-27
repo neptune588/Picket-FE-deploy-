@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { useSelector, useDispatch } from "react-redux";
+import { setBoolean } from "@/store/searchModalSlice";
+
 import {
   NavBarWrapper,
   SymbolIcon,
@@ -17,10 +20,14 @@ import {
 
 export default function NavBar() {
   const nav = useNavigate();
+  const dispatch = useDispatch();
+  const currentModalState = useSelector((state) => {
+    return state.searchModal.currentModalState;
+  });
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [userNickName, setUserNickName] = useState(null);
-  const [serachModalOpen, setSearchModalOpen] = useState(false);
+  //const [searchModalOpen, setSearchModalOpen] = useState(false);
 
   const OnClickAlarm = () => {
     nav(`/alarm`);
@@ -63,7 +70,7 @@ export default function NavBar() {
         <SearchBar
           placeholder="검색"
           onClick={() => {
-            setSearchModalOpen((prev) => !prev);
+            dispatch(setBoolean());
           }}
         />
         <AlarmBox>
@@ -90,11 +97,11 @@ export default function NavBar() {
           )}
         </AlarmBox>
       </NavBarWrapper>
-      {/*       {serachModalOpen && (
+      {currentModalState && (
         <SearchWrraper>
           <SearchModal></SearchModal>
         </SearchWrraper>
-      )} */}
+      )}
     </>
   );
 }
