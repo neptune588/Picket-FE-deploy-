@@ -8,11 +8,10 @@ import SignUp from "@/pages/SignUp";
 import SignIn from "@/pages/SignIn";
 import RegisterSuccess from "@/pages/RegisterSuccess/RegisterSuccess";
 import TestMain from "../pages/TestMain/TestMain";
-import TestSearch from "../pages/TestSearch/TestSearch";
 import TestAlarm from "../pages/TestAlarm/TestAlarm";
-import TestMyProfile from "../pages/TestProfile/TestProfile"
+import TestMyProfile from "../pages/TestProfile/TestProfile";
 import TestAddBucket from "../pages/TestAddBucket/TestAddBucket";
-import SiteLoading from "@/components/SiteLoading/SiteLoading";
+import Browse from "@/pages/Browse";
 
 const router = createBrowserRouter([
   {
@@ -26,7 +25,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/search",
-        element: <TestSearch />,
+        element: <Browse />,
         label: "search",
       },
       {
@@ -36,13 +35,13 @@ const router = createBrowserRouter([
       },
       {
         path: "/profile",
-        element: <TestMyProfile/>,
-        label: 'profile'
+        element: <TestMyProfile />,
+        label: "profile",
       },
       {
         path: "/add",
-        element: <TestAddBucket/>,
-        label: 'add'
+        element: <TestAddBucket />,
+        label: "add",
       },
       {
         path: "/test5",
@@ -67,10 +66,6 @@ const router = createBrowserRouter([
         element: <RegisterSuccess />,
       },
     ],
-  },
-  {
-    path: "/loading",
-    element: <SiteLoading />,
   },
 ]);
 

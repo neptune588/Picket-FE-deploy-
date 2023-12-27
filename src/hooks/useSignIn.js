@@ -29,6 +29,7 @@ export default function useSignIn(defaultData) {
       });
     },
     onMutate: () => {
+      //중복로그인 막기위한 2중장치 useEffect 로 되돌리기 + undefined return
       const condition = localStorage.getItem("userInfo");
       if (condition) {
         return false;
@@ -40,6 +41,7 @@ export default function useSignIn(defaultData) {
       //localstroge는 오직 문자열 형태의 key,value만 가능하다.
       localStorage.setItem("userInfo", JSON.stringify(tokenData));
 
+      console.log(JSON.parse(localStorage.getItem("userInfo")));
       setValues({ userLoginEmail: "", userLoginPassword: "" });
       setErrors({ ...defaultData });
 

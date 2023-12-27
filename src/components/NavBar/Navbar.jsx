@@ -138,7 +138,7 @@ export default function NavBar() {
     if (condition) {
       const refine = JSON.parse(condition);
 
-      setUserNickName(`유저 ${refine.memberId}`);
+      setUserNickName(`${refine.nickname}`);
     }
   };
 

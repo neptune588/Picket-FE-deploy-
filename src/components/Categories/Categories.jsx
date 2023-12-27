@@ -14,7 +14,6 @@ const CategoriesBox = styled.div`
   display: flex;
   justify-content: space-between;
   width: 680px;
-  margin: 0px 20px;
 `;
 
 const CateStyle = styled(NavLink)`

@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { getData } from "@/services/api";
 
 import Categories from "../../components/Categories/Categories";
 import AddBucketIcon from "../../components/AddBucket/AddBucketIcon";
@@ -22,6 +23,10 @@ const MainBucket = styled.img`
 const AddBucketBox = styled.div`
   height: 160px;
   display: flex;
+`;
+
+const TestBtn = styled.div`
+  cursor: pointer;
 `;
 
 export default function TestMain() {
