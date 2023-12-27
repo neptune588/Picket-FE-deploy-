@@ -1,18 +1,16 @@
-import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import styled from "styled-components";
+import { Link } from "react-router-dom";
 
+import styled from "styled-components";
 import Alarm from "@/assets/icons/alarm.svg?react";
 import Symbol from "@/assets/icons/symbol.svg?react";
-import { useEffect } from "react";
 
 const NavBarWrapper = styled.div`
-    width: 100%
-    height: 10%;
-    margin: 0px 20px;
-    padding: 5px;
-    display: flex;
-    border-bottom: solid 1px ${({ theme: { colors } }) => {
+  height: 70px;
+  margin: 0px 20px;
+  padding: 5px;
+  display: flex;
+  border-bottom: solid 1px
+    ${({ theme: { colors } }) => {
       return colors.gray["40"];
     }};
 `;
@@ -117,72 +115,36 @@ const LoginNotice = styled.p`
   cursor: pointer;
   user-select: none;
 `;
-export default function NavBar() {
-  const nav = useNavigate();
 
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [userNickName, setUserNickName] = useState(null);
+const SearchWrraper = styled.div`
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background-color: ${({ theme: { colors } }) => {
+    return colors.gray["80"];
+  }};
+`;
 
-  const OnClickAlarm = () => {
-    nav(`/alarm`);
-  };
-  const OnClickDropdown = () => {
-    setDropdownOpen(!dropdownOpen);
-  };
-  const OnClickMypage = () => {
-    nav(`/profile`);
-  };
+const SearchModal = styled.div`
+  padding: 45px 40px 40px;
+  background-color: ${({ theme: { colors } }) => {
+    return colors.white;
+  }};
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+`;
 
-  const loginCheck = () => {
-    const condition = localStorage.getItem("userInfo");
-    if (condition) {
-      const refine = JSON.parse(condition);
-
-      setUserNickName(`${refine.nickname}`);
-    }
-  };
-
-  const handleSignOut = () => {
-    const condition = localStorage.getItem("userInfo");
-    if (condition) {
-      //일단은 로컬스토리지에서 지우는걸로 간단설정 보안을 생각하면 보완필요
-      localStorage.removeItem("userInfo");
-      setUserNickName("");
-    }
-  };
-  useEffect(() => {
-    loginCheck();
-  }, []);
-
-  return (
-    <NavBarWrapper>
-      <SymbolIcon />
-      <NavStyle to="/">홈</NavStyle>
-      <NavStyle to="/search">탐색</NavStyle>
-      <SearchBar placeholder="검색" />
-      <AlarmBox>
-        <AlarmIcon onClick={OnClickAlarm} />
-        {userNickName ? (
-          <Profile onClick={OnClickDropdown}>
-            {userNickName}
-            {dropdownOpen && (
-              <Dropdown>
-                <li onClick={OnClickMypage}>내 프로필</li>
-                <li>프로필 편집</li>
-                <li onClick={handleSignOut}>로그아웃</li>
-              </Dropdown>
-            )}
-          </Profile>
-        ) : (
-          <LoginNotice
-            onClick={() => {
-              nav("/auth/signin");
-            }}
-          >
-            로그인
-          </LoginNotice>
-        )}
-      </AlarmBox>
-    </NavBarWrapper>
-  );
-}
+export {
+  NavBarWrapper,
+  SymbolIcon,
+  NavStyle,
+  SearchBar,
+  AlarmBox,
+  AlarmIcon,
+  Profile,
+  Dropdown,
+  LoginNotice,
+  SearchWrraper,
+  SearchModal,
+};

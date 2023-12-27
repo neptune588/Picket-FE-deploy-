@@ -2,7 +2,7 @@ import { Outlet } from "react-router-dom";
 
 import styled from "styled-components";
 
-import NavBar from "@/components/NavBar/NavBar";
+import NavBar from "@/components/NavBar";
 
 const CenterdContaier = styled.div`
   display: flex;
