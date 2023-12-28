@@ -6,11 +6,11 @@ import Symbol from "@/assets/icons/symbol.svg?react";
 import Search from "@/assets/icons/search.svg?react";
 import Cross from "@/assets/icons/cross.svg?react";
 
-const NavBarWrapper = styled.div`
+const NavBarWrapper = styled.header`
   display: flex;
   align-items: center;
   height: 70px;
-  margin: 0px 20px;
+  padding: 0px 20px;
   border-bottom: solid 1px
     ${({ theme: { colors } }) => {
       return colors.gray["40"];
@@ -24,9 +24,6 @@ const SymbolIcon = styled(Symbol)`
 const NavLinkBox = styled.div`
   a {
     margin-right: 5px;
-    &:last-child {
-      margin-right: 0;
-    }
   }
 `;
 const NavStyle = styled(Link)`
@@ -116,8 +113,8 @@ const CloseCrossIcon = styled(Cross)`
 `;
 const AlarmBox = styled.div`
   display: flex;
-  justify-content: space-between;
-  width: 80px;
+  justify-content: flex-end;
+  width: 100px;
   margin-left: auto;
   align-items: center;
   user-select: none;
@@ -134,6 +131,13 @@ const AlarmIcon = styled(Alarm)`
 
 const Profile = styled.div`
   cursor: pointer;
+  > p {
+    width: 70px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-left: 5px;
+  }
 `;
 
 const Dropdown = styled.ul`
@@ -167,6 +171,7 @@ const LoginNotice = styled.p`
   color: ${({ theme: { colors } }) => {
     return colors.gray["80"];
   }};
+  margin-left: 5px;
   cursor: pointer;
   user-select: none;
 `;
@@ -221,6 +226,13 @@ const NavTag = styled.div`
     return colors.gray["0"];
   }};
   border-radius: 30px;
+  cursor: pointer;
+  &:hover {
+    background-color: ${({ theme: { colors } }) => {
+      return colors.gray["80"];
+    }};
+    color: white;
+  }
 `;
 
 const ThumnailCardBox = styled.div`

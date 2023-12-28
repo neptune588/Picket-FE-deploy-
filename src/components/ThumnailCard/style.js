@@ -14,6 +14,7 @@ const ThumnailImgBox = styled.div`
   }};
   overflow: hidden;
   border-radius: 15px;
+  cursor: pointer;
   > h2 {
     position: absolute;
     left: 20px;

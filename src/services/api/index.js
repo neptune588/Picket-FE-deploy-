@@ -5,7 +5,6 @@ const BASE_URL = "/api";
 const instance = axios.create({
   baseURL: BASE_URL,
   timeout: 5000,
-  withCredentials: true,
 });
 
 const getData = (...args) => {
@@ -18,7 +17,10 @@ const putData = (...args) => {
   return instance.put(...args);
 };
 const delData = (...args) => {
-  return instance.del(...args);
+  return instance.delete(...args);
+};
+const patchData = (...args) => {
+  return instance.patch(...args);
 };
 
-export { instance, getData, postData, putData, delData };
+export { getData, postData, putData, delData, patchData };

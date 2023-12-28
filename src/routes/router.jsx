@@ -13,6 +13,7 @@ import TestAlarm from "../pages/TestAlarm/TestAlarm";
 import TestMyProfile from "../pages/TestProfile/TestProfile";
 import TestAddBucket from "../pages/TestAddBucket/TestAddBucket";
 import Browse from "@/pages/Browse";
+import PassWordResearch from "@/pages/PassWordResearch";
 
 const router = createBrowserRouter([
   {
@@ -61,6 +62,10 @@ const router = createBrowserRouter([
       {
         path: "/auth/signin",
         element: <SignIn />,
+      },
+      {
+        path: "/auth/passwordResearch",
+        element: <PassWordResearch />,
       },
       {
         path: "/auth/registerSuccess/:message",

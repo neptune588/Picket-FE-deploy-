@@ -4,6 +4,21 @@ import { Link } from "react-router-dom";
 
 import { useParams } from "react-router-dom";
 
+import LocationBar from "@/components/LocationBar/LocationBar";
+
+const CenterdContainer = styled.div`
+  display: flex;
+  width: 400px;
+  height: calc(100vh - 70px);
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  input {
+    user-select: none;
+  }
+`;
+
 const Ment = styled.p`
   font-size: ${({ theme: { typo } }) => {
     return typo.size.xl;
@@ -37,8 +52,11 @@ export default function RegisterSuccess() {
 
   return (
     <>
-      <Ment>{message}</Ment>
-      <MoveButton to="/auth/signin">로그인 페이지로</MoveButton>
+      <LocationBar content={"회원가입"} />
+      <CenterdContainer>
+        <Ment>{message}</Ment>
+        <MoveButton to="/auth/signin">로그인 페이지로</MoveButton>
+      </CenterdContainer>
     </>
   );
 }

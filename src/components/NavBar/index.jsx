@@ -84,7 +84,7 @@ export default function NavBar() {
             onClick={() => {
               dispatch(setBoolean());
             }}
-          />{" "}
+          />
           <SearchIcon />
           {currentModalState && (
             <CloseButton>
@@ -102,7 +102,7 @@ export default function NavBar() {
           />
           {userNickName ? (
             <Profile onClick={OnClickDropdown}>
-              {userNickName}
+              <p>{userNickName}</p>
               {dropdownOpen && (
                 <Dropdown>
                   <li

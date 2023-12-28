@@ -13,12 +13,4 @@ const pwDefaultData = {
   autoComplete: "new-password",
 };
 
-const errorData = {
-  userEmailMsg: "",
-  userPwMsg: "",
-
-  emailInvaildNotice: "default",
-  pwInvaildNotice: "default",
-};
-
-export { emailDefaultData, pwDefaultData, errorData };
+export { emailDefaultData, pwDefaultData };
