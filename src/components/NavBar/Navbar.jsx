@@ -87,14 +87,14 @@ const Dropdown = styled.ul`
   top: 65px;
   right: calc((100% - 1500px) / 2);
   width: 260px;
-  height: 210px;
+  height: 150px;
   border-radius: 2em;
   position: absolute;
   background: white;
   box-shadow: gray 0px 3px 8px;
 
   & > li {
-    height: calc(220px / 3);
+    height: calc(150px / 2);
     text-align: center;
     display: flex;
     -webkit-user-select: none;
@@ -168,7 +168,6 @@ export default function NavBar() {
             {dropdownOpen && (
               <Dropdown>
                 <li onClick={OnClickMypage}>내 프로필</li>
-                <li>프로필 편집</li>
                 <li onClick={handleSignOut}>로그아웃</li>
               </Dropdown>
             )}

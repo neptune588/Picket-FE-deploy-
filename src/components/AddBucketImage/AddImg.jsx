@@ -46,29 +46,33 @@ export default function AddImg(){
     const submitHandler = async(callback) => {
         event.preventDefault();
 
-        const sendData = {
-                ...context,
-                categoryList: Object.keys(context.categoryList),
-                deadline: convertDateToString(context.deadline)
-        }
-
-        const data = {
-            postBoardRequestDTO: JSON.stringify(sendData),
-            file,
-        };
-        
-        console.log(data)
-
         let random = JSON.parse(localStorage.getItem("userInfo"));
-        const {grantType, accessToken} = random;
+        const { grantType, accessToken } = random;
         const token = `Bearer ${accessToken}`
 
-        const response = await postData("board", data, {
+        const formData = new FormData();
+
+        const sendData = {
+                ...context,
+                deadline: convertDateToString(context.deadline),
+                categoryList: Object.keys(context.categoryList).map(d => Number(d)),
+        }
+
+        formData.append("postBoardRequestDTO", new Blob([JSON.stringify(sendData)], {
+            type: 'application/json'
+        }));
+        
+        formData.append("file", file);
+        console.log(token);
+
+        const response = await postData("/board", formData, {
             headers: {
-              "Authorization": token     
+                "Content-Type": "multipart/form-data",
+                'Authorization': `${token}`,
             }
         });
 
+        console.log(response);
         if(callback) {
             callback();
         }

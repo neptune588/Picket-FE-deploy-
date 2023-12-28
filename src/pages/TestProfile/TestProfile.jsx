@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 
 import styled from "styled-components";
 import {MdModeEdit} from "react-icons/md";
 import ProfileEdit from "../../components/ProfileEditModal/ProfileEditModal";
+import HomeThumnailCard from "../../components/HomeThumnailCard";
+import { getData } from "@/services/api";
 
 const ProfileImage = styled.div`
     margin: 50px auto 10px;
@@ -16,26 +18,28 @@ const ProfileImage = styled.div`
 `
 
 const ProfileName = styled.div`
-  text-align: center;
-  font-weight: bold;
-  font-size: ${({ theme: { typo } }) => {
-    return typo.size.xl
-    }};
-  cursor: pointer;
-
-  & > svg {
-    margin-bottom: -2px;
-    color: ${({ theme: { colors } }) => {
-        return colors.primary
-    }};
+    margin: 20px;
+    text-align: center;
+    font-weight: bold;
     font-size: ${({ theme: { typo } }) => {
         return typo.size.xl
-    }}
+        }};
+    cursor: pointer;
+
+    & > svg {
+        margin-bottom: -2px;
+        color: ${({ theme: { colors } }) => {
+            return colors.primary
+        }};
+        font-size: ${({ theme: { typo } }) => {
+            return typo.size.xl
+        }}
 `;
 
 const BucketContainer = styled.div`
+  width: 600px;
   height: 60px;
-  margin: 30px 300px;
+  margin: 0 auto;
   display: flex;
   justify-content: space-between;
 
@@ -103,6 +107,35 @@ const BucketListContainer = styled.div`
 
 export default function TestMyProfile(){
     const [openModal, setOpenModal] = useState(false);
+    const [bucketList, setBucketList] = useState([]);
+
+    const init = async() => {    
+        let random = JSON.parse(localStorage.getItem("userInfo"));
+        const {grantType, accessToken} = random;
+        const token = `Bearer ${accessToken}`
+
+        const response = await getData("board/myposts", {
+            headers: {
+                Authorization: token
+            }
+        },
+        // { 
+        //     withCredentials: true 
+        // }
+        );
+        console.log(response);
+        if(response.data) {
+            setBucketList(response.data);
+        }
+    }
+
+    const items = bucketList.map((data, idx) => {
+        return <HomeThumnailCard />
+    })
+
+    useEffect(() => {
+        init();
+    }, []);
 
     return(
         <>
@@ -131,9 +164,11 @@ export default function TestMyProfile(){
                     <span>0</span>
                 </NavStyle>
             </BucketList>
-            <BucketListContainer>
-                작성한 버킷 리스트가 없습니다.
-            </BucketListContainer>
+            {items.length > 0 ?
+                items
+                : <BucketListContainer> 작성한 버킷 리스트가 없습니다. </BucketListContainer>
+            }
+            
         </>
     )
 }
