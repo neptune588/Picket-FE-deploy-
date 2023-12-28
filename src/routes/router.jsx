@@ -7,12 +7,13 @@ import OnlyTest from "@/pages/OnlyTest/OnlyTest";
 import SignUp from "@/pages/SignUp";
 import SignIn from "@/pages/SignIn";
 import RegisterSuccess from "@/pages/RegisterSuccess/RegisterSuccess";
-import TestMain from "../pages/TestMain/TestMain";
-import TestSearch from "../pages/TestSearch/TestSearch";
-import TestAlarm from "../pages/TestAlarm/TestAlarm";
-import TestMyProfile from "../pages/TestProfile/TestProfile"
-import TestAddBucket from "../pages/TestAddBucket/TestAddBucket";
 import SiteLoading from "@/components/SiteLoading/SiteLoading";
+import TestMain from "../pages/TestMain/TestMain";
+import TestAlarm from "../pages/TestAlarm/TestAlarm";
+import TestMyProfile from "../pages/TestProfile/TestProfile";
+import TestAddBucket from "../pages/TestAddBucket/TestAddBucket";
+import Browse from "@/pages/Browse";
+import PassWordResearch from "@/pages/PassWordResearch";
 
 const router = createBrowserRouter([
   {
@@ -26,7 +27,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/search",
-        element: <TestSearch />,
+        element: <Browse />,
         label: "search",
       },
       {
@@ -36,13 +37,13 @@ const router = createBrowserRouter([
       },
       {
         path: "/profile",
-        element: <TestMyProfile/>,
-        label: 'profile'
+        element: <TestMyProfile />,
+        label: "profile",
       },
       {
         path: "/add",
-        element: <TestAddBucket/>,
-        label: 'add'
+        element: <TestAddBucket />,
+        label: "add",
       },
       {
         path: "/test5",
@@ -61,6 +62,10 @@ const router = createBrowserRouter([
       {
         path: "/auth/signin",
         element: <SignIn />,
+      },
+      {
+        path: "/auth/passwordResearch",
+        element: <PassWordResearch />,
       },
       {
         path: "/auth/registerSuccess/:message",

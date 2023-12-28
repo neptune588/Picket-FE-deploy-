@@ -8,6 +8,7 @@ import DetailBox from "./DetailBox";
 import NextButton from "./NextBtn";
 import MovementBtn from "../AddBucketAlarm/MovementBtn";
 import { postData } from "@/services/api";
+import axios from "axios";
 
 const Container = styled.div`
     margin: 0 auto;
@@ -63,7 +64,6 @@ export default function AddImg(){
         }));
         
         formData.append("file", file);
-        console.log(token);
 
         const response = await postData("/board", formData, {
             headers: {

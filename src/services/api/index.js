@@ -17,7 +17,10 @@ const putData = (...args) => {
   return instance.put(...args);
 };
 const delData = (...args) => {
-  return instance.del(...args);
+  return instance.delete(...args);
+};
+const patchData = (...args) => {
+  return instance.patch(...args);
 };
 
-export { instance, getData, postData, putData, delData };
+export { getData, postData, putData, delData, patchData };

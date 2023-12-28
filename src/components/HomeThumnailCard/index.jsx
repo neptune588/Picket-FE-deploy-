@@ -11,6 +11,8 @@ import CardBirthView from "@/components/CardBirthView/CardBirthView";
 import CardTitle from "@/components/CardTitle/CardTitle";
 import CardContent from "@/components/CardContent/CardContent";
 
+import { getData } from "@/services/api";
+
 export default function HomeThumnailCard() {
   const br = 21;
   const [cardContent, setCardContent] = useState("");

@@ -8,27 +8,33 @@ import HomeThumnailCard from "../../components/HomeThumnailCard";
 import { getData } from "@/services/api";
 
 const Empty = styled.div`
-    margin: 40px;
+  margin: 40px;
 `;
 
 const CateBox = styled.div`
-    height: 60%;
-    margin: 150 auto;
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 `;
 
+const BucketWrapper = styled.div`
+  margin: 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  overflow-y: auto;
+  text-align: center;
+`
+
 const MainBucket = styled.img`
-    margin: 0 auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const AddBucketBox = styled.div`
     height: 160px;
     display: flex;
-    bottom: 0;
 `;
 
 export default function TestMain(){
@@ -65,7 +71,9 @@ export default function TestMain(){
             <CateBox>
                 <Categories />
             </CateBox>
-            {items.length > 0 ? items : <MainBucket src="/images/main_bucket.png" />}
+            <BucketWrapper>
+                {items.length > 0 ? items : <MainBucket src="/images/main_bucket.png" />}
+            </BucketWrapper>
             <AddBucketBox>
                 <AddBucketIcon />
             </AddBucketBox>
