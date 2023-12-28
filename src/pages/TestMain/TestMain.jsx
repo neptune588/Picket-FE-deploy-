@@ -1,43 +1,45 @@
 import styled from "styled-components";
+import { getData } from "@/services/api";
 
 import Categories from "../../components/Categories/Categories";
 import AddBucketIcon from "../../components/AddBucket/AddBucketIcon";
 
 const Empty = styled.div`
-    margin: 40px;
+  margin: 40px;
 `;
 
 const CateBox = styled.div`
-    height: 60%;
-    margin: 150 auto;
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 `;
 
 const MainBucket = styled.img`
-    margin: 0 auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const AddBucketBox = styled.div`
-    height: 160px;
-    display: flex;
-    bottom: 0;
+  height: 160px;
+  display: flex;
 `;
 
-export default function TestMain(){
-    return(
-        <>
-            <Empty/>
-            <CateBox>
-                <Categories />
-            </CateBox>
-            <MainBucket src="/images/main_bucket.png" />
-            <AddBucketBox>
-                <AddBucketIcon />
-            </AddBucketBox>
-        </>
-    )
+const TestBtn = styled.div`
+  cursor: pointer;
+`;
+
+export default function TestMain() {
+  return (
+    <>
+      <Empty />
+      <CateBox>
+        <Categories />
+      </CateBox>
+      <MainBucket src="/images/main_bucket.png" />
+      <AddBucketBox>
+        <AddBucketIcon />
+      </AddBucketBox>
+    </>
+  );
 }

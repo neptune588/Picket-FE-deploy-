@@ -12,13 +12,13 @@ import {
   ButtonBox,
 } from "@/components/ThumnailCard/style";
 
-export default function ThumnailCard() {
+export default function ThumnailCard({ width, height }) {
   const [heartClicked, setHeartClicked] = useState(false);
   const [scrapClicked, setScrapClicked] = useState(false);
 
   return (
-    <Container>
-      <ThumnailImgBox>
+    <Container $width={width}>
+      <ThumnailImgBox $height={height}>
         <ThumnailImg thumnailSrc={"/images/test_thumnail.jpg"} />
         <h2>여행의 순간들 기록하기</h2>
       </ThumnailImgBox>

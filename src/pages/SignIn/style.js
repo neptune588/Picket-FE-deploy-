@@ -1,5 +1,18 @@
 import styled from "styled-components";
 
+const CenterdContainer = styled.div`
+  display: flex;
+  width: 400px;
+  height: calc(100vh - 140px);
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  input {
+    user-select: none;
+  }
+`;
+
 const InputBox = styled.div`
   margin-bottom: 15px;
   &:last-child {
@@ -27,6 +40,17 @@ const Title = styled.h2`
   }};
   margin-bottom: 75px;
   user-select: none;
+`;
+
+const TotalErrorMsg = styled.p`
+  color: ${({ theme: { colors } }) => {
+    return colors.inVaild;
+  }};
+  text-align: center;
+  font-weight: ${({ theme: { typo } }) => {
+    return typo.weight.medium;
+  }};
+  margin-top: 10px;
 `;
 
 const SocialLogin = styled.button`
@@ -62,4 +86,11 @@ const UserAuthBox = styled.div`
     }
   }
 `;
-export { Title, InputBox, SocialLogin, UserAuthBox };
+export {
+  CenterdContainer,
+  Title,
+  InputBox,
+  TotalErrorMsg,
+  SocialLogin,
+  UserAuthBox,
+};

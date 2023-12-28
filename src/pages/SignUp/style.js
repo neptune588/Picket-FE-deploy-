@@ -1,5 +1,18 @@
 import styled from "styled-components";
 
+const CenterdContainer = styled.div`
+  display: flex;
+  width: 400px;
+  height: calc(100vh - 140px);
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  input {
+    user-select: none;
+  }
+`;
+
 const InputBox = styled.div`
   margin-bottom: 15px;
   &:last-child {
@@ -80,6 +93,7 @@ const NextButton = styled.button`
   user-select: none;
 `;
 export {
+  CenterdContainer,
   InputBox,
   Title,
   InputCheckWrapper,
