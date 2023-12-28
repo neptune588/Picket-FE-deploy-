@@ -1,7 +1,9 @@
 import styled, { keyframes } from "styled-components";
 
 const Container = styled.div`
-  width: 290px;
+  width: ${({ $width }) => {
+    return $width;
+  }};
   user-select: none;
 `;
 
@@ -16,7 +18,9 @@ const Animation = keyframes`
 
 const SkeletonAnimater = styled.div`
   width: 100%;
-  height: 290px;
+  height: ${({ $height }) => {
+    return $height;
+  }};
   border-radius: 15px;
   background: linear-gradient(
     90deg,
@@ -30,8 +34,9 @@ const SkeletonAnimater = styled.div`
 
 const CardSkeleton = styled.div`
   position: relative;
-  height: 290px;
-  margin-top: 40px;
+  height: ${({ $height }) => {
+    return $height;
+  }};
   &::after {
     content: "";
     display: block;

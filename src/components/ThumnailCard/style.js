@@ -1,14 +1,17 @@
 import styled from "styled-components";
 
 const Container = styled.div`
-  width: 290px;
-  margin-top: 40px;
+  width: ${({ $width }) => {
+    return $width;
+  }};
   user-select: none;
 `;
 
 const ThumnailImgBox = styled.div`
   position: relative;
-  height: 290px;
+  height: ${({ $height }) => {
+    return $height;
+  }};
   overflow: hidden;
   border-radius: 15px;
   > h2 {

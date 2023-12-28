@@ -7,11 +7,11 @@ import {
   ButtonSkeleton,
 } from "@/components/ThumnailCardSkeleton/style";
 
-export default function ThumnailCardSkeleton() {
+export default function ThumnailCardSkeleton({ width, height }) {
   return (
-    <Container>
-      <CardSkeleton>
-        <SkeletonAnimater />
+    <Container $width={width}>
+      <CardSkeleton $height={height}>
+        <SkeletonAnimater $height={height} />
       </CardSkeleton>
       <ProfileWrapper>
         <AvatarSkeleton />

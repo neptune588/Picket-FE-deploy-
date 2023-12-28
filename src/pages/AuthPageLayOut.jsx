@@ -7,7 +7,7 @@ import NavBar from "@/components/NavBar";
 const CenterdContaier = styled.div`
   display: flex;
   width: 400px;
-  height: 90vh;
+  height: calc(100vh - 70px);
   flex-direction: column;
   justify-content: center;
   align-items: center;

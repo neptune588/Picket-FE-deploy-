@@ -2,6 +2,9 @@ import styled from "styled-components";
 
 const Container = styled.div`
   display: flex;
+  > div {
+    margin-top: 40px;
+  }
   flex-wrap: wrap;
   justify-content: space-between;
 `;
