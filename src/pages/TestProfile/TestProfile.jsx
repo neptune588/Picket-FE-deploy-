@@ -105,6 +105,15 @@ const BucketListContainer = styled.div`
     }};
 `;
 
+const BucketWrapper = styled.div`
+  margin: 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  overflow-y: auto;
+  text-align: center;
+`
+
 export default function TestMyProfile(){
     const [openModal, setOpenModal] = useState(false);
     const [bucketList, setBucketList] = useState([]);
@@ -130,7 +139,7 @@ export default function TestMyProfile(){
     }
 
     const items = bucketList.map((data, idx) => {
-        return <HomeThumnailCard />
+        return <HomeThumnailCard key={idx} props={data} />
     })
 
     useEffect(() => {
@@ -157,18 +166,19 @@ export default function TestMyProfile(){
             <BucketList>
                 <NavStyle to="/profile">
                     마이 버킷
-                    <span>0</span>
+                    <span>{items.length}</span>
                 </NavStyle>
                 <NavStyle to="/profile/scrap">
                     스크랩한 버킷
                     <span>0</span>
                 </NavStyle>
             </BucketList>
-            {items.length > 0 ?
-                items
-                : <BucketListContainer> 작성한 버킷 리스트가 없습니다. </BucketListContainer>
-            }
-            
+            <BucketWrapper>
+                {items.length > 0 ?
+                    items
+                    : <BucketListContainer> 작성한 버킷 리스트가 없습니다. </BucketListContainer>
+                }
+            </BucketWrapper>       
         </>
     )
 }

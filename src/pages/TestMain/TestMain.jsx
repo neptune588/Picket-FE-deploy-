@@ -58,7 +58,7 @@ export default function TestMain(){
     }
 
     const items = bucketList.map((data, idx) => {
-        return <HomeThumnailCard />
+        return <HomeThumnailCard key={idx} props={data} />
     })
 
     useEffect(() => {

@@ -58,12 +58,12 @@ export default function Tags({ context, updateContext }){
         <>
             <TagTitle>태그</TagTitle>
             <TagBox>
-            <TagStyle $isCliked={selectedTags[1]} onClick={() => handleClick(1)}>일상</TagStyle>
-                <TagStyle $isCliked={selectedTags[2]} onClick={() => handleClick(2)}>여행</TagStyle>
-                <TagStyle $isCliked={selectedTags[3]} onClick={() => handleClick(3)}>건강</TagStyle>
-                <TagStyle $isCliked={selectedTags[4]} onClick={() => handleClick(4)}>자기계발</TagStyle>
-                <TagStyle $isCliked={selectedTags[5]} onClick={() => handleClick(5)}>가족</TagStyle>
-                <TagStyle $isCliked={selectedTags[6]} onClick={() => handleClick(6)}>커플</TagStyle>
+            <TagStyle type="button" $isCliked={selectedTags[1]} onClick={() => handleClick(1)}>일상</TagStyle>
+                <TagStyle type="button" $isCliked={selectedTags[2]} onClick={() => handleClick(2)}>여행</TagStyle>
+                <TagStyle type="button" $isCliked={selectedTags[3]} onClick={() => handleClick(3)}>건강</TagStyle>
+                <TagStyle type="button" $isCliked={selectedTags[4]} onClick={() => handleClick(4)}>자기계발</TagStyle>
+                <TagStyle type="button" $isCliked={selectedTags[5]} onClick={() => handleClick(5)}>가족</TagStyle>
+                <TagStyle type="button" $isCliked={selectedTags[6]} onClick={() => handleClick(6)}>커플</TagStyle>
             </TagBox>
         </>
     )

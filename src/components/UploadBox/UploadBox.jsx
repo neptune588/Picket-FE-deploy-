@@ -60,7 +60,8 @@ export default function MyDropzone({ contextFile, updateContextFile }) {
 
     const onDrop = useCallback((acceptedFile) => {
         setFiles(acceptedFile.map(file => Object.assign(file, {
-            preview: URL.createObjectURL(file)
+            preview: URL.createObjectURL(file),
+            origin: file
           })))
     }, [])
     
@@ -74,12 +75,7 @@ export default function MyDropzone({ contextFile, updateContextFile }) {
 
     useEffect(() => {
         if (files.length > 0) {
-            const reader = new FileReader();
-            reader.readAsDataURL(files[0]);
-            reader.onload = () => {
-                const base64data = reader.result;
-                updateContextFile(base64data);
-            }
+            updateContextFile(files[0].origin);
             setPreview(files[0].preview);
         }
         return () => files.forEach(file => URL.revokeObjectURL(file.preview));

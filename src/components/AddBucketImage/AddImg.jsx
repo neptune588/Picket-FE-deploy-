@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import styled from "styled-components";
 
@@ -8,7 +9,7 @@ import DetailBox from "./DetailBox";
 import NextButton from "./NextBtn";
 import MovementBtn from "../AddBucketAlarm/MovementBtn";
 import { postData } from "@/services/api";
-import axios from "axios";
+
 
 const Container = styled.div`
     margin: 0 auto;
@@ -21,6 +22,8 @@ const AddImageWrapper = styled.div`
 `;
 
 export default function AddImg(){
+    const navigation = useNavigate();
+
     const [DetailToAlarm, setDetailToAlarm] = useState(false);
 
     const [file, setFile] = useState("");
@@ -73,8 +76,9 @@ export default function AddImg(){
         });
 
         console.log(response);
-        if(callback) {
-            callback();
+        if(response.status && response.status == 200) {
+            alert(response.data.message);
+            navigation("/");
         }
     }
     
