@@ -112,7 +112,6 @@ export default function NavBar() {
                   >
                     내 프로필
                   </li>
-                  <li>프로필 편집</li>
                   <li onClick={handleSignOut}>로그아웃</li>
                 </Dropdown>
               )}

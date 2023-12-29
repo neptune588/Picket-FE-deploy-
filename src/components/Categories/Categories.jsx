@@ -5,10 +5,6 @@ import { useNavigate, NavLink } from "react-router-dom";
 import styled from "styled-components";
 
 import { categoriesData } from "@/components/Categories/data";
-// useNavigate를 사용하여 카테고리 버튼 클릭할 경우 카테고리 페이지로 이동하도록 했습니다.
-// 다만 카테고리 코드가 필요하여,
-// 백엔드에게 api 추가 요청해야합니다.
-// [전체: 코드없음, 일상: everyday, 여행: travel, 건강:health, 자기계발:improvement, 가족: family, 커플: couple]
 
 const CategoriesBox = styled.div`
   display: flex;

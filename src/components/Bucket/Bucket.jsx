@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 
 import styled from "styled-components";
+import BucketHandle from "@/components/Bucket/BucketHandleModal";
 import { Container, ImgBox, Wrapper, WriterBox, ButtonBox, ReplyBox } from "@/components/Bucket/style";
 
 import LikeButton from "../LikeButton/LikeButton";
 import ScrapButton from "../ScrapButton/ScrapButton";
 import CardBirthView from "../CardBirthView/CardBirthView";
+
 
 import ThreeDot from "@/assets/icons/threedot.svg?react";
 import Reply from "@/assets/icons/reply.svg?react";
@@ -19,6 +21,7 @@ const ProfileImg = styled.img`
 
 const ThreeDotIcon = styled(ThreeDot)`
     margin-left: auto;
+    cursor: pointer;
 `;
 
 const BucketTitle = styled.div`
@@ -57,7 +60,9 @@ const ReplyBar = styled.input`
     border-radius: 1em;
 `;
 
+
 export default function Bucket(){
+    const [openModal, setOpenModal] = useState(false);
     const [heartcount, setHeartCount] = useState(0);
     const [heartClicked, setHeartClicked] = useState(false);
     const [scrapcount, setScrapCount] = useState(0);
@@ -70,8 +75,9 @@ export default function Bucket(){
                 <WriterBox>
                     <ProfileImg src="/images/test_writer.jpg" />
                     <span>미도</span>
-                    <ThreeDotIcon />
+                    <ThreeDotIcon onClick={() => setOpenModal(true)} />
                 </WriterBox>
+                {openModal && <BucketHandle setOpenModal={setOpenModal} />}
                 <BucketTitle>24년도 첫 사진찍기</BucketTitle>
                 <CardBirthView margin={"0 0 20px"} content={"2023.12.09"} />
                 <Content>

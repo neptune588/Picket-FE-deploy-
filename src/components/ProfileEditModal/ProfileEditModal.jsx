@@ -5,9 +5,7 @@ import MyProfileImg from "./ProfileImg";
 const Modal = styled.div`
     width: 100%;
     height: calc(100% - 70px);
-    background: ${({ theme: { colors } }) => {
-        return colors.gray["40"]
-    }};
+    background: rgba(0, 0, 0, 0.5);
     top: 65px;
     position: fixed;
 `;

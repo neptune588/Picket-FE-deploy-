@@ -14,11 +14,10 @@ const Alarms = styled.div`
 `;
 
 
-export default function AlarmBox(){
+export default function AlarmBox({ context, updateContext }){
     return (
         <Alarms>
-            <SetAlarm />
-            <SetPublic />
+            <SetAlarm context={context} updateContext={updateContext} />
         </Alarms>
     )
 };

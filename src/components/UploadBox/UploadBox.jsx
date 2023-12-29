@@ -54,13 +54,14 @@ const Img = styled.img`
     object-fit: cover;
 `;
 
-export default function MyDropzone() {
+export default function MyDropzone({ contextFile, updateContextFile }) {
     const [files, setFiles] = useState([]);
     const [preview, setPreview] = useState(null);
 
     const onDrop = useCallback((acceptedFile) => {
         setFiles(acceptedFile.map(file => Object.assign(file, {
-            preview: URL.createObjectURL(file)
+            preview: URL.createObjectURL(file),
+            origin: file
           })))
     }, [])
     
@@ -74,6 +75,7 @@ export default function MyDropzone() {
 
     useEffect(() => {
         if (files.length > 0) {
+            updateContextFile(files[0].origin);
             setPreview(files[0].preview);
         }
         return () => files.forEach(file => URL.revokeObjectURL(file.preview));

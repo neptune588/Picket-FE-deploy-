@@ -26,11 +26,15 @@ const ContentText = styled.textarea`
     resize: none;
 `;
 
-export default function Content(){
+export default function Content({ context, updateContext }){
     return (
         <>
             <ContentTitle>설명</ContentTitle>
-            <ContentText placeholder="내용을 입력하세요"></ContentText>
+            <ContentText 
+                placeholder="내용을 입력하세요" 
+                value={context.content} 
+                onChange={(e) => { updateContext("content", e.target.value) }}
+            />
         </>
     )
 };

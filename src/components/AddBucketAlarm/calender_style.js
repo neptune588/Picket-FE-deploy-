@@ -57,7 +57,7 @@ const DateCustomHeader = styled.div`
     font-weight: bold;
 
     .button {
-        cursur: pointer;
+        cursor: pointer;
     }
 `;
 
