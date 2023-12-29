@@ -12,14 +12,13 @@ export default function Browse() {
     Array.from({ length: 8 })
   );
   const [pageParam, setPageParam] = useState(0);
-  const EndViewPort = useRef();
 
   return (
     <>
       <SubTitle>오늘의 추천 버킷리스트를 발견 해보세요.</SubTitle>
       <Categories />
       <Container>
-        <div ref={EndViewPort}></div>
+        <div></div>
       </Container>
     </>
   );
