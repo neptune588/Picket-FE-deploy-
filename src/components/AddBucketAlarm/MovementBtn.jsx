@@ -38,10 +38,15 @@ const NextBtn = styled.button`
 
 export default function MovementBtn( {setDetailToAlarm} ){
     const navigate = useNavigate();
+    const callback = () => {
+        navigate('/');
+    }
+
     return (
         <ButtonBox>
             <PrevBtn onClick={()=>{setDetailToAlarm(false)}}>이전</PrevBtn>
-            <NextBtn onClick={()=>{navigate('/')}}>완료</NextBtn>
+            <NextBtn>완료</NextBtn>
+            {/* <NextBtn onClick={()=>{submitHandler(callback)}}>완료</NextBtn> */}
         </ButtonBox>
     )
 };

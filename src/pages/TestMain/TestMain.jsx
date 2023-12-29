@@ -1,8 +1,11 @@
+import { useState, useEffect } from "react";
+
 import styled from "styled-components";
-import { getData } from "@/services/api";
 
 import Categories from "../../components/Categories/Categories";
 import AddBucketIcon from "../../components/AddBucket/AddBucketIcon";
+import HomeThumnailCard from "../../components/HomeThumnailCard";
+import { getData } from "@/services/api";
 
 const Empty = styled.div`
   margin: 40px;
@@ -13,6 +16,15 @@ const CateBox = styled.div`
   justify-content: center;
 `;
 
+const BucketWrapper = styled.div`
+  margin: 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  overflow-y: auto;
+  text-align: center;
+`
+
 const MainBucket = styled.img`
   margin: 0 auto;
   display: flex;
@@ -21,25 +33,50 @@ const MainBucket = styled.img`
 `;
 
 const AddBucketBox = styled.div`
-  height: 160px;
-  display: flex;
+    height: 160px;
+    display: flex;
 `;
 
-const TestBtn = styled.div`
-  cursor: pointer;
-`;
+export default function TestMain(){
+    const [bucketList, setBucketList] = useState([]);
 
-export default function TestMain() {
-  return (
-    <>
-      <Empty />
-      <CateBox>
-        <Categories />
-      </CateBox>
-      <MainBucket src="/images/main_bucket.png" />
-      <AddBucketBox>
-        <AddBucketIcon />
-      </AddBucketBox>
-    </>
-  );
+    const init = async() => {    
+        let random = JSON.parse(localStorage.getItem("userInfo"));
+        const {grantType, accessToken} = random;
+        const token = `Bearer ${accessToken}`;
+
+        const response = await getData("board/myposts", {
+            headers: {
+                Authorization: token
+            }
+        });
+
+        console.log(response);
+        if(response.data) {
+            setBucketList(response.data);
+        }
+    }
+
+    const items = bucketList.map((data, idx) => {
+        return <HomeThumnailCard key={idx} props={data} />
+    })
+
+    useEffect(() => {
+        init();
+    }, []);
+
+    return(
+        <>
+            <Empty/>
+            <CateBox>
+                <Categories />
+            </CateBox>
+            <BucketWrapper>
+                {items.length > 0 ? items : <MainBucket src="/images/main_bucket.png" />}
+            </BucketWrapper>
+            <AddBucketBox>
+                <AddBucketIcon />
+            </AddBucketBox>
+        </>
+    )
 }
