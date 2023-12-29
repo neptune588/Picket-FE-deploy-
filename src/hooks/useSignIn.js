@@ -28,7 +28,7 @@ export default function useSignIn() {
   });
   const [submitLoading, setSubmitLoading] = useState(false);
 
-  const { isLoading, mutate } = useMutation({
+  const { isPending, mutate } = useMutation({
     mutationFn: async (userData) => {
       return await postData("auth/login", userData, {
         headers: {
@@ -123,5 +123,5 @@ export default function useSignIn() {
     }
   };
 
-  return { errors, values, isLoading, handleSubmit, handleChange };
+  return { errors, values, isPending, handleSubmit, handleChange };
 }

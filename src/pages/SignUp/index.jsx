@@ -1,8 +1,11 @@
 import { useEffect, useRef } from "react";
 
 import useSignUp from "@/hooks/useSignUp";
-
+import NavBar from "@/components/NavBar";
 import LocationBar from "@/components/LocationBar/LocationBar";
+import Input from "@/components/Input/Input";
+import CheckBox from "@/components/CheckBox";
+import SubmitButton from "@/components/SubmitButton/SubmitButton";
 
 import {
   CenterdContainer,
@@ -13,10 +16,6 @@ import {
   NextButton,
   ButtonBox,
 } from "@/pages/SignUp/style";
-
-import Input from "@/components/Input/Input";
-import CheckBox from "@/components/CheckBox";
-import SubmitButton from "@/components/SubmitButton/SubmitButton";
 
 import {
   emailDefaultData,
@@ -54,6 +53,7 @@ export default function SignUp() {
 
   return (
     <>
+      <NavBar />
       <LocationBar content={"회원가입"} />
       <CenterdContainer>
         <Title>

@@ -24,12 +24,12 @@ const queryClient = new QueryClient({
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={theme}>
-        <Provider store={store}>
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
           <GlobalStyle />
           <RouterProvider router={router} />
-        </Provider>
-      </ThemeProvider>
+        </ThemeProvider>
+      </Provider>
     </QueryClientProvider>
   );
 }

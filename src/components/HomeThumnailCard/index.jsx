@@ -23,7 +23,7 @@ export default function HomeThumnailCard() {
       : ment;
 
   useEffect(() => {
-    setCardContent((prev) => textRefine);
+    setCardContent(textRefine);
   }, []);
 
   return (

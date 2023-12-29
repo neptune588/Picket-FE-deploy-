@@ -25,7 +25,7 @@ export default function usePwResearch() {
   const [submitLoading, setSubmitLoading] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
-  const { isLoading, mutate } = useMutation({
+  const { isPending, mutate } = useMutation({
     mutationFn: async (userEmail) => {
       //return 안해주면 success로 안간다. 성공이든 실패든 응답메시지확인할꺼면 리턴필수
       const res = await patchData("auth/reset-password", userEmail, {
@@ -61,6 +61,7 @@ export default function usePwResearch() {
     },
   });
 
+  console.log(isPending);
   const handleChange = (e) => {
     setValue({ ...value, [e.target.name]: e.target.value });
 
@@ -102,7 +103,7 @@ export default function usePwResearch() {
   return {
     value,
     errors,
-    isLoading,
+    isPending,
     submitSuccess,
     setSubmitSuccess,
     handleChange,

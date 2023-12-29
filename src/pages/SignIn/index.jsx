@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import useSignIn from "@/hooks/useSignIn";
 
+import NavBar from "@/components/NavBar";
 import LocationBar from "@/components/LocationBar/LocationBar";
 
 import {
@@ -22,19 +23,19 @@ import { emailDefaultData, pwDefaultData } from "@/pages/Signin/InputData";
 
 export default function SignIn() {
   const navigate = useNavigate();
-  const { errors, values, handleSubmit, handleChange, isLoading } = useSignIn();
+  const { errors, values, handleSubmit, handleChange, isPending } = useSignIn();
   const emailInput = useRef();
 
   useEffect(() => {
-    console.log(isLoading);
     emailInput.current && emailInput.current.focus();
-  }, [isLoading]);
+  }, []);
 
-  if (isLoading) {
+  if (isPending) {
     return <SiteLoading />;
   }
   return (
     <>
+      <NavBar />
       <LocationBar content={"로그인"} />
       <CenterdContainer>
         <Title>로그인</Title>
