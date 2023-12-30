@@ -140,7 +140,9 @@ export default function TestMyProfile(){
         if (condition) {
             const refine = JSON.parse(condition);
             setNickname(`${refine.nickname}`);
+            console.log(refine)
         }
+
     }
 
     const init = async() => {    

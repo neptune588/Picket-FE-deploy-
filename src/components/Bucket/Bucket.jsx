@@ -11,8 +11,10 @@ import CardBirthView from "../CardBirthView/CardBirthView";
 
 import ThreeDot from "@/assets/icons/threedot.svg?react";
 import Reply from "@/assets/icons/reply.svg?react";
+import { BiSend } from "react-icons/bi";
+import { MdClear } from "react-icons/md";
 
-import { getData, postData } from '@/services/api';
+import { getData, postData, delData } from '@/services/api';
 
 const ProfileImg = styled.img`
     width: 30px;
@@ -38,6 +40,10 @@ const Content = styled.div`
     height: 55%;
     background: white;
     font-size: 12pt;
+`;
+
+const CommentBox = styled.div`
+
 `;
 
 const ReplyIcon = styled(Reply)`
@@ -79,6 +85,7 @@ export default function Bucket({ boardId, onModal }){
     const [scrapClicked, setScrapClicked] = useState(false);
 
     const [data, setData] = useState({});
+    const [value, setValue] = useState('');
 
     const getDday = (dateString) => {
         const today = new Date();
@@ -132,12 +139,34 @@ export default function Bucket({ boardId, onModal }){
         const response = await postData(`board/${boardId}/scrap`, {}, { headers });
         setScrapClicked(response.data ? true : false);
         console.log(response);
-    }
+    };
 
-    console.log(data)
+    const commentSubmit = async() => {
+        const token = getToken();
+        const data = { boardId };
+
+        const headers = {
+            Authorization: token
+        }
+
+        const response = await postData(`board/${boardId}/comments`, {content: value}, { headers });
+        console.log(response);
+    };
+
+    const commentDelete = async(commentId)=>{
+        const token = getToken();
+        const data = { boardId, commentId };
+
+        const headers = {
+            Authorization: token
+        }
+
+        const response = await delData(`board/${boardId}/comments/${commentId}`, {}, { headers });
+        console.log(response);
+    };
+
     useEffect(() => {
         init();
-
     }, [])
 
     return (
@@ -155,9 +184,7 @@ export default function Bucket({ boardId, onModal }){
                     <FlexBox>
                         <ThreeDotIcon onClick={() => setOpenModal(true)} />
                         <div onClick={onModal}>
-                            <svg width="16" height="16" viewBox="0 0 89 89" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M10.5 10L79 78.5M79 10L10.5 78.5" stroke="black" stroke-width="3"/>
-                            </svg>
+                            <MdClear style={{cursor:'pointer'}}/>
                         </div>
                     </FlexBox>
                 </WriterBox>
@@ -186,9 +213,25 @@ export default function Bucket({ boardId, onModal }){
                     <ReplyIcon />
                     <span>{data.commentList?.length ?? 0}</span>
                 </ButtonBox>
+                <CommentBox>
+                    {data.commentList && data.commentList.map((comment) => (
+                        <div key={comment.id}>
+                            <img style={{width: '32px', height: '32px', objectFit:'cover'}}src={comment.profileUrl} />
+                            {comment.nickname}
+                            {comment.content}
+                            {comment.createDate}
+                            <MdClear style={{cursor:'pointer'}} onClick={() => commentDelete(comment.id)}/>
+                        </div>
+                    ))}
+                </CommentBox>
                 <ReplyBox>
                     <ProfileImg src="/images/test_replier.jpg" />
-                    <ReplyBar placeholder="댓글 추가"/>
+                    <ReplyBar
+                        placeholder="댓글 추가"
+                        value={value}
+                        onChange={(e) => setValue(e.target.value)}
+                    />
+                    <BiSend style={{cursor: 'pointer'}} onClick={commentSubmit} />
                 </ReplyBox>
             </StyledWrapper>
         </Container>
