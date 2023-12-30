@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import InfiniteScroll from 'react-infinite-scroll-component';
 
+import Bucket from "../../components/Bucket/Bucket";
 import Categories from "../../components/Categories/Categories";
 import AddBucketIcon from "../../components/AddBucket/AddBucketIcon";
 import HomeThumnailCard from "../../components/HomeThumnailCard";
@@ -124,9 +125,9 @@ export default function TestMain(){
                 loader={<div>loading</div>}
             >
                 <Empty/>
-                <CateBox>
+                {/* <CateBox>
                     <Categories />
-                </CateBox>    
+                </CateBox>     */}
                 {items.length > 0 ? 
                     <BucketWrapper>{items}</BucketWrapper>
                     : <MainBucket src="/images/main_bucket.png" />

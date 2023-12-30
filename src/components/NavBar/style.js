@@ -15,6 +15,7 @@ const NavBarWrapper = styled.header`
     ${({ theme: { colors } }) => {
       return colors.gray["40"];
     }};
+  z-index: 10000;
 `;
 
 const SymbolIcon = styled(Symbol)`
@@ -111,6 +112,7 @@ const CloseCrossIcon = styled(Cross)`
   left: 51%;
   transform: translate(-50%, -50%);
 `;
+
 const AlarmBox = styled.div`
   display: flex;
   justify-content: flex-end;
@@ -118,7 +120,9 @@ const AlarmBox = styled.div`
   margin-left: auto;
   align-items: center;
   user-select: none;
+  z-index: 9000;
 `;
+
 const AlarmIcon = styled(Alarm)`
   width: ${({ $width }) => {
     return $width;

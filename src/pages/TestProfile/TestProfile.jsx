@@ -114,7 +114,18 @@ const BucketWrapper = styled.div`
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
   overflow-y: auto;
-  text-align: center;
+`
+const ModalBg = styled.div`
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    left: 0;
+    z-index: 10000;
+    background: rgba(0, 0, 0, 0.5);
 `
 
 export default function TestMyProfile(){
@@ -187,11 +198,9 @@ export default function TestMyProfile(){
             <BucketList>
                 <NavStyle onClick={() => { setNav(1) }}>
                     마이 버킷
-                    <span>{items.length}</span>
                 </NavStyle>
                 <NavStyle onClick={() => { setNav(2) }}>
                     스크랩한 버킷
-                    {/* <span>{scrapItems.length}</span> */}
                 </NavStyle>
             </BucketList>
             <BucketWrapper>
@@ -324,7 +333,7 @@ function ScrapListTab({ bucketList, setBucketList }) {
         }
     }
     
-    const scrapItems = bucketList.map((data, idx) => {
+    const items = bucketList.map((data, idx) => {
         return <HomeThumnailCard key={idx} props={data} onModal={() => { 
             setSelectedBoardId(data.boardId);
             setModal(prev => !prev);
@@ -340,12 +349,12 @@ function ScrapListTab({ bucketList, setBucketList }) {
             <InfiniteScroll
                 pageStart={page}
                 next={loadMoreHandler}
-                dataLength={scrapItems.length}
+                dataLength={items.length}
                 hasMore={next}
                 loader={<div>loading</div>}
             >
                 <BucketWrapper>
-                    {scrapItems.length > 0 ? scrapItems : <BucketListContainer></BucketListContainer>}
+                    {items.length > 0 ? items : <BucketListContainer></BucketListContainer>}
                 </BucketWrapper>
             </InfiniteScroll>
             {modal && <ModalBg><Bucket boardId={selectedBoardId} onModal={() => { setModal(prev => !prev) }}/></ModalBg>}
