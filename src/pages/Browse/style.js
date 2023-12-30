@@ -1,12 +1,16 @@
 import styled from "styled-components";
 
-const Container = styled.div`
+const Container = styled.ul`
   display: flex;
-  > div {
+  > li {
+    margin-right: 40px;
     margin-top: 40px;
+    &:nth-child(4n) {
+      margin-right: 0px;
+    }
   }
   flex-wrap: wrap;
-  justify-content: space-between;
+  padding-bottom: 40px;
 `;
 
 const SubTitle = styled.h2`

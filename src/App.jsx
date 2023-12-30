@@ -10,16 +10,7 @@ import GlobalStyle from "@/styles/GlobalStyle";
 import { ThemeProvider } from "styled-components";
 import { theme } from "@/styles/theme";
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      onError: (error) => console.error(error),
-    },
-    mutations: {
-      onError: (error) => console.error(error),
-    },
-  },
-});
+const queryClient = new QueryClient();
 
 export default function App() {
   return (

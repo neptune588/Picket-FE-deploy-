@@ -12,21 +12,27 @@ import {
   ButtonBox,
 } from "@/components/ThumnailCard/style";
 
-export default function ThumnailCard({ width, height }) {
+export default function ThumnailCard({
+  width,
+  height,
+  title,
+  avatarSrc = "/images/test_avatar.jpg",
+  nickname = "빈값",
+  thumnailSrc = "/images/test_thumnail.jpg",
+  likeCount,
+  scrapCount,
+}) {
   const [heartClicked, setHeartClicked] = useState(false);
   const [scrapClicked, setScrapClicked] = useState(false);
 
   return (
     <Container $width={width}>
       <ThumnailImgBox $height={height}>
-        <ThumnailImg thumnailSrc={"/images/test_thumnail.jpg"} />
-        <h2>여행의 순간들 기록하기</h2>
+        <ThumnailImg thumnailSrc={thumnailSrc} />
+        <h2>{title}</h2>
       </ThumnailImgBox>
       <ProfileWrapper>
-        <ProfileAvatar
-          nickName={"테스트용 아바타"}
-          avatarSrc={"/images/test_avatar.jpg"}
-        />
+        <ProfileAvatar nickname={nickname} avatarSrc={avatarSrc} />
         <ButtonBox>
           <LikeButton
             onClick={() => {
@@ -38,7 +44,7 @@ export default function ThumnailCard({ width, height }) {
             width={16}
             height={16}
           />
-          <span>5</span>
+          <span>{likeCount}</span>
           <ScrapButton
             onClick={() => {
               setScrapClicked((prev) => {
@@ -49,7 +55,7 @@ export default function ThumnailCard({ width, height }) {
             width={18}
             height={18}
           />
-          <span>7</span>
+          <span>{scrapCount}</span>
         </ButtonBox>
       </ProfileWrapper>
     </Container>
