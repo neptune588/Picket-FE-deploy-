@@ -161,7 +161,7 @@ export default function Bucket({ boardId, onModal }){
             Authorization: token
         }
 
-        const response = await delData(`board/${boardId}/comments/${commentId}`, {}, { headers });
+        const response = await delData(`board/${boardId}/comments/${commentId}`, { headers });
         console.log(response);
     };
 
