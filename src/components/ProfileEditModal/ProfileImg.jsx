@@ -48,13 +48,14 @@ const Img = styled.img`
     object-fit: cover;
 `;
 
-export default function MyProfileImg() {
+export default function MyProfileImg({ setFile }) {
     const [files, setFiles] = useState([]);
     const [preview, setPreview] = useState(null);
 
     const onDrop = useCallback((acceptedFile) => {
         setFiles(acceptedFile.map(file => Object.assign(file, {
-            preview: URL.createObjectURL(file)
+            preview: URL.createObjectURL(file),
+            origin: file
           })))
     }, [])
     
@@ -68,6 +69,7 @@ export default function MyProfileImg() {
 
     useEffect(() => {
         if (files.length > 0) {
+            if(setFile) setFile(files[0].origin);
             setPreview(files[0].preview);
         }
         return () => files.forEach(file => URL.revokeObjectURL(file.preview));

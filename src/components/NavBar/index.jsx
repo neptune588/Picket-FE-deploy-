@@ -1,8 +1,7 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-
 import { useSelector, useDispatch } from "react-redux";
 import { setBoolean } from "@/store/searchModalSlice";
+
+import useNavBarOptions from "@/hooks/useNavBarOptions";
 
 import ThumnailCard from "@/components/ThumnailCard";
 
@@ -30,42 +29,21 @@ import {
 } from "@/components/NavBar/style";
 
 export default function NavBar() {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const currentModalState = useSelector((state) => {
     return state.searchModal.currentModalState;
   });
 
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [userNickName, setUserNickName] = useState(null);
-
-  const OnClickDropdown = () => {
-    setDropdownOpen(!dropdownOpen);
-  };
-
-  const loginCheck = () => {
-    const condition = localStorage.getItem("userInfo");
-    if (condition) {
-      const refine = JSON.parse(condition);
-
-      setUserNickName(`${refine.nickname}`);
-    }
-  };
-
-  const handleSignOut = () => {
-    const condition = localStorage.getItem("userInfo");
-    if (condition) {
-      //일단은 로컬스토리지에서 지우는걸로 간단설정 보안을 생각하면 보완필요
-      localStorage.removeItem("userInfo");
-      setUserNickName("");
-    }
-  };
-
-  useEffect(() => {
-    loginCheck();
-  }, []);
-
+  const {
+    searchValue,
+    dropdownOpen,
+    userNickName,
+    handleChange,
+    handleSignOut,
+    handleNavigate,
+    OnClickDropdown,
+  } = useNavBarOptions();
   return (
     <>
       <NavBarWrapper>
@@ -79,12 +57,16 @@ export default function NavBar() {
           </NavStyle>
         </NavLinkBox>
         <SearchBarBox>
-          <SearchBar
-            placeholder="검색"
-            onClick={() => {
-              dispatch(setBoolean());
-            }}
-          />
+          <form>
+            <SearchBar
+              /*               value={searchValue}
+              onhange={handleChange} */
+              placeholder="검색"
+              onClick={() => {
+                dispatch(setBoolean());
+              }}
+            />
+          </form>
           <SearchIcon />
           {currentModalState && (
             <CloseButton>
@@ -94,9 +76,7 @@ export default function NavBar() {
         </SearchBarBox>
         <AlarmBox>
           <AlarmIcon
-            onClick={() => {
-              navigate("/alarm");
-            }}
+            onClick={handleNavigate("/alarm")}
             $width={"24px"}
             $height={"24px"}
           />
@@ -105,23 +85,13 @@ export default function NavBar() {
               <p>{userNickName}</p>
               {dropdownOpen && (
                 <Dropdown>
-                  <li
-                    onClick={() => {
-                      navigate("/profile");
-                    }}
-                  >
-                    내 프로필
-                  </li>
+                  <li onClick={handleNavigate("/profile")}>내 프로필</li>
                   <li onClick={handleSignOut}>로그아웃</li>
                 </Dropdown>
               )}
             </Profile>
           ) : (
-            <LoginNotice
-              onClick={() => {
-                navigate("/auth/signin");
-              }}
-            >
+            <LoginNotice onClick={handleNavigate("/auth/signin")}>
               로그인
             </LoginNotice>
           )}
@@ -130,7 +100,7 @@ export default function NavBar() {
       {currentModalState && (
         <SearchModalWrraper>
           <SearchModal>
-            <SubTitle>추천 버킷 리스트</SubTitle>
+            <SubTitle>최근 검색어</SubTitle>
             <NavTagBox>
               <NavTag>유튜브 시작하기</NavTag>
               <NavTag>타투하기</NavTag>

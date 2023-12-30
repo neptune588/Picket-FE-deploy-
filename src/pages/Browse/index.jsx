@@ -1,23 +1,47 @@
 import useBrwoseGetItem from "@/hooks/useBrwoseGetItem";
 
-import Categories from "@/components/Categories/Categories";
+import Category from "@/components/Category/Category";
 import ThumnailCard from "@/components/ThumnailCard";
 import ThumnailCardSkeleton from "@/components/ThumnailCardSkeleton";
+import TopButton from "@/components/TopButton/TopButton";
 
-import { Container, SubTitle } from "@/pages/Browse/style";
+import { Container, CategoryBox, SubTitle } from "@/pages/Browse/style";
 
 export default function Browse() {
-  const { dummy, cardData, isLoading, observerRef } = useBrwoseGetItem();
+  const {
+    dummy,
+    cardData,
+    categoryData,
+    isLoading,
+    observerRef,
+    handleCategoryClick,
+  } = useBrwoseGetItem();
   const titleViewLength = 15;
   return (
     <>
       <SubTitle>오늘의 추천 버킷리스트를 발견 해보세요.</SubTitle>
-      <Categories />
+      <TopButton
+        onClick={() => {
+          window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+        }}
+      />
+      <CategoryBox>
+        {categoryData.map((category, idx) => {
+          return (
+            <Category
+              key={category.id}
+              isActive={category.activeState}
+              content={category.content}
+              onClick={handleCategoryClick(idx)}
+            />
+          );
+        })}
+      </CategoryBox>
       <Container>
         {cardData.map((card) => {
           return (
             <ThumnailCard
-              key={card.boardId}
+              key={"boardKey" + card.boardId}
               width={"290px"}
               height={"290px"}
               title={

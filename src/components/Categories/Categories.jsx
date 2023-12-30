@@ -35,24 +35,21 @@ const CateStyle = styled(NavLink)`
   }
 `;
 
-export default function Categories({ cateCode }) {
-  const nav = useNavigate();
+export default function Categories() {
+  const navigation = useNavigate();
 
-  const [activeCategory, setActiveCategory] = useState(0);
-  const OnClickCate = () => {
-    nav(`/cate=${cateCode}`);
-  };
+  const [activeCategory, setActiveCategory] = useState(1);
+
   return (
-    <CategoriesBox onClick={OnClickCate}>
-      {categoriesData.map((data, idx) => {
+    <CategoriesBox>
+      {categoriesData.map((data) => {
         return (
           <CateStyle
             key={data.id}
-            to={data.query}
-            $activeNumber={idx}
+            $activeNumber={data.query}
             $isActive={activeCategory}
             onClick={() => {
-              setActiveCategory(idx);
+              setActiveCategory(data.query);
             }}
           >
             {data.content}

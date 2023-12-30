@@ -23,4 +23,13 @@ const SubTitle = styled.h2`
   }};
 `;
 
-export { Container, SubTitle };
+const CategoryBox = styled.ul`
+  display: flex;
+  > li {
+    margin-right: 15px;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+`;
+export { Container, CategoryBox, SubTitle };
