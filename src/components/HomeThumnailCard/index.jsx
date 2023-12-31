@@ -11,7 +11,10 @@ import CardBirthView from "@/components/CardBirthView/CardBirthView";
 import CardTitle from "@/components/CardTitle/CardTitle";
 import CardContent from "@/components/CardContent/CardContent";
 
-export default function HomeThumnailCard({ props }) {
+import { getData } from "@/services/api";
+
+
+export default function HomeThumnailCard( {props, onModal} ) {
   const br = 21;
   const [cardContent, setCardContent] = useState("");
   const ment = props.content.length > 0 ? props.content : ""; //55
@@ -34,7 +37,7 @@ export default function HomeThumnailCard({ props }) {
   }, []);
 
   return (
-    <Container>
+    <Container onClick={onModal}>
       <ThumnailImgBox>
         <ThumnailImg
           thumnailSrc={

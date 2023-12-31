@@ -106,16 +106,9 @@ export default function ProfileEdit({ setOpenModal }) {
   };
 
   const saveHandler = async () => {
-    if (
-      context.nickname === "" ||
-      context.nickname === undefined ||
-      context.nickname === null
-    ) {
-      return;
-    }
-
-    let random = JSON.parse(localStorage.getItem("userAccessToken"));
-    const token = `Bearer ${random}`;
+    let random = JSON.parse(localStorage.getItem("userInfo"));
+    const { accessToken } = random;
+    const token = `Bearer ${accessToken}`;
 
     const json = JSON.stringify(context);
     const validate = await validateNickname(json, token);
@@ -136,9 +129,6 @@ export default function ProfileEdit({ setOpenModal }) {
     };
 
     const response = await patchData("/member/profile", formData, headers);
-
-    localStorage.setItem("userNickname", JSON.stringify(response));
-
     console.log(response);
   };
 
@@ -156,7 +146,14 @@ export default function ProfileEdit({ setOpenModal }) {
         />
         <ButtonBox>
           <CancelBtn onClick={() => setOpenModal(false)}>취소</CancelBtn>
-          <DoneBtn onClick={saveHandler}>확인</DoneBtn>
+          <DoneBtn
+            onClick={() => {
+              saveHandler;
+              setOpenModal(false);
+            }}
+          >
+            확인
+          </DoneBtn>
         </ButtonBox>
       </EditBox>
     </Modal>

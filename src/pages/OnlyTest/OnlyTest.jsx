@@ -7,8 +7,6 @@ export default function OnlyTest() {
   return (
     <>
       <Bucket/>
-      <ThumnailCard />
-      <HomeThumnailCard />
     </>
   );
 }
