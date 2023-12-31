@@ -29,7 +29,7 @@ export default function Browse() {
         {categoryData.map((category, idx) => {
           return (
             <Category
-              key={"cate" + category.id}
+              key={category.id}
               isActive={category.activeState}
               content={category.content}
               onClick={handleCategoryClick(idx)}
