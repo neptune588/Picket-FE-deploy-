@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useInView } from "react-intersection-observer";
 import { getData } from "@/services/api";
 
@@ -22,27 +22,30 @@ export default function useBrwoseGetItem() {
     queryValue: 0,
   });
   const [boardId, setBoardId] = useState({
-    queryString: "", //&lastBoardId=
-    queryValue: null,
+    queryString: "&lastBoardId", //&lastBoardId=
+    queryValue: "",
   });
   const [categoryQuery, setCategoryQuery] = useState({
-    queryString: "", //&categoryList=
+    queryString: "&categoryList", //&categoryList=
     queryValueList: [],
   });
   const [searchQuery, setSearchQuery] = useState({
-    queryString: "", //&keyword=
-    queryValue: null,
+    queryString: "&keyword", //&keyword=
+    queryValue: "",
   });
 
   const [params, setParams] = useState("");
+  const [changeParma, setChangeParam] = useState(false);
   const [lastPage, setLastPage] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  const mounted = useRef(false);
+  const mounted01 = useRef(false);
+  const mounted02 = useRef(false);
+  const mounted03 = useRef(false);
 
   const dataReset = () => {
     setPage({ ...page, queryValue: 0 });
-    setBoardId({ queryString: "", queryValue: null });
+    setBoardId({ queryString: "&lastBoardId", queryValue: null });
     setLastPage(false);
 
     setCardData([]);
@@ -65,8 +68,8 @@ export default function useBrwoseGetItem() {
         setCategoryData([...categories]);
 
         dataReset();
-        //전체 카테고리는 categoryquery를 사용안한다.
-        setCategoryQuery({ queryString: "", queryValueList: [] });
+        //전체 카테고리는 categoryquery가 필요가 없으므로 초기화.
+        setCategoryQuery({ queryString: "&categoryList", queryValueList: [] });
       } else {
         //전체를 제외한 카테고리 선택했을시 전체 카테고리 비활성화
         //카테고리가 바뀌었으므로 page,boardid등을 초기화하고 다시 받아와야함.
@@ -82,6 +85,7 @@ export default function useBrwoseGetItem() {
           const refine = [];
           refine.push(activeNum);
 
+          //카테고리 설정
           setCategoryQuery((prev) => {
             return {
               ...prev,
@@ -92,31 +96,32 @@ export default function useBrwoseGetItem() {
 
           dataReset();
         } else {
-          const refine = [...categoryQuery.queryValueList];
-          refine.splice(condition, 1);
-
-          setCategoryQuery((prev) => {
-            return {
-              ...prev,
-              queryValueList: [...refine],
-            };
+          //카테고리가 1개남아있는 상태에서 같은 카테고리를 눌렀는지 체크하는 로직
+          //활성화효과만 되돌려주고 데이터는 리셋x 다시받아올필요x
+          const condition = categoryData.every((obj) => {
+            return obj.activeState === false;
+            //맞으면 true
           });
+
+          if (condition) {
+            const categories = [...categoriesData];
+            categories[activeNum].activeState = true;
+
+            setCategoryData([...categories]);
+            return;
+          } else {
+            const refine = [...categoryQuery.queryValueList];
+            refine.splice(condition, 1);
+
+            setCategoryQuery((prev) => {
+              return {
+                ...prev,
+                queryValueList: [...refine],
+              };
+            });
+            dataReset();
+          }
         }
-      }
-
-      //카테고리가 1개남아있는 상태에서 같은 카테고리를 눌렀는지 체크하는 로직
-      //활성화효과만 되돌려주고 데이터는 리셋x 다시받아올필요x
-      const condition = categoryData.every((obj) => {
-        return obj.activeState === false;
-        //맞으면 true
-      });
-
-      if (condition) {
-        const categories = [...categoriesData];
-        categories[activeNum].activeState = true;
-
-        setCategoryData([...categories]);
-        return;
       }
     };
   };
@@ -127,6 +132,7 @@ export default function useBrwoseGetItem() {
       setIsLoading(true);
       const { data } = await getData(`/board/list/search${query}`);
 
+      console.log(data);
       //마지막페이지 검증로직
       if (data.last) {
         //라스트페이지면 스켈레톤x axios호출x
@@ -167,37 +173,41 @@ export default function useBrwoseGetItem() {
 
   //page,boardId가 적용이 됐다면 파라미터에 적용.
   useEffect(() => {
-    if (!mounted.current) {
-      mounted.current = true;
+    if (!mounted01.current) {
+      mounted01.current = true;
     } else {
       const pageParam = page.queryString + page.queryValue;
-      const categoryParam = categoryQuery.queryString + categoryQuery.queryValueList.join(",");
+      const categoryParam =
+        categoryQuery.queryString + categoryQuery.queryValueList.join(",");
       const kewordParam = searchQuery.queryString + searchQuery.queryValue;
       const boardIdParam = boardId.queryString + boardId.queryValue;
 
-      setParams(page.queryString +);
+      setParams(pageParam + categoryParam + kewordParam + boardIdParam);
     }
   }, [page, boardId]);
 
   useEffect(() => {
-    if (!mounted.current) {
-      mounted.current = true;
+    if (!mounted02.current) {
+      mounted02.current = true;
     } else {
-      setParams(
-        `?page=${page}&categoryList=${categoryQuery.join(
-          ","
-        )}&lastBoardId=${boardId}`
-      );
+      const pageParam = page.queryString + page.queryValue;
+      const categoryParam =
+        categoryQuery.queryString + categoryQuery.queryValueList.join(",");
+      const kewordParam = searchQuery.queryString + searchQuery.queryValue;
+      const boardIdParam = boardId.queryString + boardId.queryValue;
+
+      setParams(pageParam + categoryParam + kewordParam + boardIdParam);
+      cardReq(params);
     }
   }, [categoryQuery]);
 
-  useEffect(() => {
-    if (!mounted.current) {
-      mounted.current = true;
+  /*   useEffect(() => {
+    if (!mounted03.current) {
+      mounted03.current = true;
     } else {
       cardReq(params);
     }
-  }, [page, boardId, params, categoryData]);
+  }, [changeParma]); */
 
   const { ref: observerRef } = useInView({
     threshold: 0.1,
