@@ -2,9 +2,12 @@ import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 
 import styled from "styled-components";
+import InfiniteScroll from "react-infinite-scroll-component";
+
 import {MdModeEdit} from "react-icons/md";
 import ProfileEdit from "../../components/ProfileEditModal/ProfileEditModal";
 import HomeThumnailCard from "../../components/HomeThumnailCard";
+import Bucket from "../../components/Bucket/Bucket";
 import { getData } from "@/services/api";
 
 const ProfileImage = styled.div`
@@ -111,18 +114,42 @@ const BucketWrapper = styled.div`
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
   overflow-y: auto;
-  text-align: center;
+`
+const ModalBg = styled.div`
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    left: 0;
+    z-index: 10000;
+    background: rgba(0, 0, 0, 0.5);
 `
 
 export default function TestMyProfile(){
     const [openModal, setOpenModal] = useState(false);
     const [bucketList, setBucketList] = useState([]);
+    const [scrapList, setScrapList] = useState([]);
+    const [nav, setNav] = useState(1);
+    const [nickname, setNickname] = useState("");
+
+    const getNick = () => {
+        const condition = localStorage.getItem("userInfo");
+        if (condition) {
+            const refine = JSON.parse(condition);
+            setNickname(`${refine.nickname}`);
+            console.log(refine)
+        }
+
+    }
 
     const init = async() => {    
         let random = JSON.parse(localStorage.getItem("userInfo"));
         const {grantType, accessToken} = random;
         const token = `Bearer ${accessToken}`
-
+        console.log(token);
         const response = await getData("board/myposts", {
             headers: {
                 Authorization: token
@@ -133,8 +160,10 @@ export default function TestMyProfile(){
         // }
         );
         console.log(response);
-        if(response.data) {
-            setBucketList(response.data);
+        if(Array.isArray(response.data.content)) {
+            setBucketList(response.data.content);
+        } else {
+            console.error('Error: response.data is not an array');
         }
     }
 
@@ -143,14 +172,19 @@ export default function TestMyProfile(){
     })
 
     useEffect(() => {
-        init();
+        getNick();
     }, []);
+
+    useEffect(() => {
+        setBucketList([]);
+        setScrapList([]);
+    }, [nav]);
 
     return(
         <>
             <ProfileImage />
             <ProfileName  onClick={() => setOpenModal(true)}>
-                    미도 <MdModeEdit/>
+                    {nickname} <MdModeEdit/>
             </ProfileName>
             {openModal && <ProfileEdit setOpenModal={setOpenModal} />}
             <BucketContainer>
@@ -164,21 +198,168 @@ export default function TestMyProfile(){
                 </div>
             </BucketContainer>
             <BucketList>
-                <NavStyle to="/profile">
+                <NavStyle onClick={() => { setNav(1) }}>
                     마이 버킷
-                    <span>{items.length}</span>
                 </NavStyle>
-                <NavStyle to="/profile/scrap">
+                <NavStyle onClick={() => { setNav(2) }}>
                     스크랩한 버킷
-                    <span>0</span>
                 </NavStyle>
             </BucketList>
             <BucketWrapper>
-                {items.length > 0 ?
-                    items
-                    : <BucketListContainer> 작성한 버킷 리스트가 없습니다. </BucketListContainer>
-                }
+            {   nav === 1 && <BucketListTab bucketList={bucketList} setBucketList={setBucketList} /> }
+            {   nav === 2 && <ScrapListTab bucketList={scrapList} setBucketList={setScrapList}  /> }
             </BucketWrapper>       
+        </>
+    )
+}
+
+function BucketListTab({ bucketList, setBucketList }) {
+    const [next, setNext] = useState(true);
+    const [page, setPage] = useState(0);
+    const [modal, setModal] = useState(false);
+    const [selectedBoardId, setSelectedBoardId] = useState(-1);
+
+    const loadSize = 8;
+
+    const search = async() => {    
+        let random = JSON.parse(localStorage.getItem("userInfo"));
+        const {grantType, accessToken} = random;
+        const token = `Bearer ${accessToken}`;
+
+        const params =  {
+            "page": page,
+            "size": loadSize,
+            "sort": [
+            ]
+        }
+
+        if(bucketList.length > 0) {
+            params["lastBoardId"] = bucketList.at(-1).boardId;
+        } 
+        
+        const response = await getData("board/myposts", {
+            headers: {
+                Authorization: token
+            },
+            params
+        });
+        if(Array.isArray(response.data.content)) {
+            setNext(!response.data.last);
+            setBucketList(prev => [...prev, ...response.data.content]);
+        } else {
+            console.error('Error: response.data is not an array');
+        }
+    }
+
+    const loadMoreHandler = () => {
+        if(bucketList.length === 0) return;
+        
+        else {
+            setPage(prev => prev + 1);
+        }
+    }
+    
+    const items = bucketList.map((data, idx) => {
+        return <HomeThumnailCard key={idx} props={data} onModal={() => { 
+            setSelectedBoardId(data.boardId);
+            setModal(prev => !prev);
+        }} />
+    })
+
+    useEffect(() => {
+        search();
+    }, [page])
+    
+    return(
+        <>
+            <InfiniteScroll
+                pageStart={page}
+                next={loadMoreHandler}
+                dataLength={items.length}
+                hasMore={next}
+                loader={<div>loading</div>}
+            >
+                <BucketWrapper>
+                    {items.length > 0 ? items : <BucketListContainer></BucketListContainer>}
+                </BucketWrapper>
+            </InfiniteScroll>
+            {modal && <ModalBg><Bucket boardId={selectedBoardId} onModal={() => { setModal(prev => !prev) }}/></ModalBg>}
+        </>
+    )
+}
+
+
+function ScrapListTab({ bucketList, setBucketList }) {
+    const [next, setNext] = useState(true);
+    const [page, setPage] = useState(0);
+    const [modal, setModal] = useState(false);
+    const [selectedBoardId, setSelectedBoardId] = useState(-1);
+
+    const loadSize = 8;
+
+    const search = async() => {    
+        let random = JSON.parse(localStorage.getItem("userInfo"));
+        const {grantType, accessToken} = random;
+        const token = `Bearer ${accessToken}`;
+
+        const params =  {
+            "page": page,
+            "size": loadSize,
+            "sort": [
+            ]
+        }
+
+        if(bucketList.length > 0) {
+            params["lastBoardId"] = bucketList.at(-1).boardId;
+        } 
+        
+        const response = await getData("board/myposts/scraps", {
+            headers: {
+                Authorization: token
+            },
+            params
+        });
+        if(Array.isArray(response.data.content)) {
+            setNext(!response.data.last);
+            setBucketList(prev => [...prev, ...response.data.content]);
+        } else {
+            console.error('Error: response.data is not an array');
+        }
+    }
+
+    const loadMoreHandler = () => {
+        if(bucketList.length === 0) return;
+        
+        else {
+            setPage(prev => prev + 1);
+        }
+    }
+    
+    const items = bucketList.map((data, idx) => {
+        return <HomeThumnailCard key={idx} props={data} onModal={() => { 
+            setSelectedBoardId(data.boardId);
+            setModal(prev => !prev);
+        }} />
+    })
+
+    useEffect(() => {
+        search();
+    }, [page])
+    
+    return(
+        <>
+            <InfiniteScroll
+                pageStart={page}
+                next={loadMoreHandler}
+                dataLength={items.length}
+                hasMore={next}
+                loader={<div>loading</div>}
+            >
+                <BucketWrapper>
+                    {items.length > 0 ? items : <BucketListContainer></BucketListContainer>}
+                </BucketWrapper>
+            </InfiniteScroll>
+            {modal && <ModalBg><Bucket boardId={selectedBoardId} onModal={() => { setModal(prev => !prev) }}/></ModalBg>}
         </>
     )
 }

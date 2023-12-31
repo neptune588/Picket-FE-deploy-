@@ -14,7 +14,7 @@ import CardContent from "@/components/CardContent/CardContent";
 import { getData } from "@/services/api";
 
 
-export default function HomeThumnailCard( {props} ) {
+export default function HomeThumnailCard( {props, onModal} ) {
   const br = 21;
   const [cardContent, setCardContent] = useState("");
   const ment = props.content.length > 0 ? props.content : ""; //55
@@ -37,7 +37,7 @@ export default function HomeThumnailCard( {props} ) {
   }, []);
 
   return (
-    <Container>
+    <Container onClick={onModal}>
       <ThumnailImgBox>
         <ThumnailImg thumnailSrc={props.filepath ? props.filepath : "/images/test_thumnail.jpg"} />
         <Dday>{getDday(props.deadline)}</Dday>

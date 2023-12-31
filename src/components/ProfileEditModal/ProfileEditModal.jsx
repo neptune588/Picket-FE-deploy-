@@ -1,3 +1,6 @@
+import { useState } from "react";
+import { postData, patchData } from "@/services/api";
+
 import styled from "styled-components";
 
 import MyProfileImg from "./ProfileImg";
@@ -80,15 +83,61 @@ const DoneBtn = styled.button`
 
 
 export default function ProfileEdit ({setOpenModal}){
+    const [file, setFile] = useState(null);
+    const [context, setContext] = useState({ nickname: '' });
+
+    const updateContext = (key, value) => {
+        setContext(prev => ({ ...prev, [key]: value }));
+    }
+
+    const validateNickname = async (context, token) => {
+        const validate = await postData('/member/profile/check-nickname', context, {
+            headers: {
+                "Content-Type": 'application/json',
+                'Authorization': `${token}`,
+            }
+        });
+
+        return validate;
+    }
+
+    const saveHandler = async() => {
+        let random = JSON.parse(localStorage.getItem("userInfo"));
+        const { accessToken } = random;
+        const token = `Bearer ${accessToken}`;
+
+        const json = JSON.stringify(context);
+        const validate = await validateNickname(json, token);
+
+        const formData = new FormData();
+    
+        formData.append("patchMemberRequestDTO", new Blob([json], { type: 'application/json' }));
+        formData.append("file", file);
+
+        const headers = {
+            headers: {
+                "Content-Type": "multipart/form-data",
+                'Authorization': `${token}`,
+            }
+        }
+
+        const response = await patchData("/member/profile", formData, headers);
+        console.log(response);
+    }
+
     return (
     <Modal>
         <EditBox>
             <Title>프로필 편집</Title>
-            <MyProfileImg/>
-            <NicknameConfirm placeholder={'닉네임을 입력하세요'}/>
+            <MyProfileImg setFile={setFile}/>
+            <NicknameConfirm 
+                placeholder={'닉네임을 입력하세요'}
+                value={context.nickname} 
+                onChange={(e) => { updateContext("nickname", e.target.value)}}
+            />
             <ButtonBox>
                 <CancelBtn onClick={() => setOpenModal(false)}>취소</CancelBtn>
-                <DoneBtn onClick={() => setOpenModal(false)}>확인</DoneBtn>
+                <DoneBtn onClick={() => {saveHandler; setOpenModal(false)}}>확인</DoneBtn>
             </ButtonBox>
         </EditBox>
     </Modal>
