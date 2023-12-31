@@ -137,19 +137,16 @@ export default function TestMyProfile() {
   const [nickname, setNickname] = useState("");
 
   const getNick = () => {
-    const condition = localStorage.getItem("userInfo");
+    const condition = localStorage.getItem("userNickname");
     if (condition) {
-      const refine = JSON.parse(condition);
-      setNickname(`${refine.nickname}`);
-      console.log(refine);
+      setNickname(condition);
     }
   };
 
   const init = async () => {
-    let random = JSON.parse(localStorage.getItem("userInfo"));
-    const { grantType, accessToken } = random;
-    const token = `Bearer ${accessToken}`;
-    console.log(token);
+    const token = `Bearer ${JSON.parse(
+      localStorage.getItem("userAccessToken")
+    )}`;
     const response = await getData(
       "board/myposts",
       {
@@ -168,6 +165,10 @@ export default function TestMyProfile() {
       console.error("Error: response.data is not an array");
     }
   };
+
+  const items = bucketList.map((data, idx) => {
+    return <HomeThumnailCard key={idx} props={data} />;
+  });
 
   useEffect(() => {
     getNick();
@@ -235,9 +236,9 @@ function BucketListTab({ bucketList, setBucketList }) {
   const loadSize = 8;
 
   const search = async () => {
-    let random = JSON.parse(localStorage.getItem("userInfo"));
-    const { grantType, accessToken } = random;
-    const token = `Bearer ${accessToken}`;
+    const token = `Bearer ${JSON.parse(
+      localStorage.getItem("userAccessToken")
+    )}`;
 
     const params = {
       page: page,
@@ -327,10 +328,9 @@ function ScrapListTab({ bucketList, setBucketList }) {
   const loadSize = 8;
 
   const search = async () => {
-    let random = JSON.parse(localStorage.getItem("userInfo"));
-    const { grantType, accessToken } = random;
-    const token = `Bearer ${accessToken}`;
-
+    const token = `Bearer ${JSON.parse(
+      localStorage.getItem("userAccessToken")
+    )}`;
     const params = {
       page: page,
       size: loadSize,

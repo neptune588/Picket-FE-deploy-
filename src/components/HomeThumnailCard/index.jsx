@@ -13,8 +13,7 @@ import CardContent from "@/components/CardContent/CardContent";
 
 import { getData } from "@/services/api";
 
-
-export default function HomeThumnailCard( {props, onModal} ) {
+export default function HomeThumnailCard({ props, onModal }) {
   const br = 21;
   const [cardContent, setCardContent] = useState("");
   const ment = props.content.length > 0 ? props.content : ""; //55
@@ -33,7 +32,7 @@ export default function HomeThumnailCard( {props, onModal} ) {
   };
 
   useEffect(() => {
-    setCardContent(textRefine);
+    setCardContent((prev) => textRefine);
   }, []);
 
   return (

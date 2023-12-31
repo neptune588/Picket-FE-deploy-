@@ -4,7 +4,7 @@ import styled from "styled-components";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 import Bucket from "../../components/Bucket/Bucket";
-//import Categories from "../../components/Categories/Categories";
+import Categories from "../../components/Categories/Categories";
 import AddBucketIcon from "../../components/AddBucket/AddBucketIcon";
 import HomeThumnailCard from "../../components/HomeThumnailCard";
 import { getData } from "@/services/api";
@@ -13,10 +13,10 @@ const Empty = styled.div`
   margin: 40px;
 `;
 
-/* const CateBox = styled.div`
+const CateBox = styled.div`
   display: flex;
   justify-content: center;
-`; */
+`;
 
 const BucketWrapper = styled.div`
   margin: 20px;
@@ -63,12 +63,12 @@ export default function TestMain() {
   const [modal, setModal] = useState(false);
   const [selectedBoardId, setSelectedBoardId] = useState(-1);
 
-  /*   const loadSize = 8;
+  const loadSize = 8;
 
   const init = async () => {
-    let random = JSON.parse(localStorage.getItem("userInfo"));
-    const { grantType, accessToken } = random;
-    const token = `Bearer ${accessToken}`;
+    const token = `Bearer ${JSON.parse(
+      localStorage.getItem("userAccessToken")
+    )}`;
 
     const params = {
       page: page,
@@ -84,11 +84,16 @@ export default function TestMain() {
       headers: {
         Authorization: token,
       },
+      params,
     });
 
     console.log(response);
-    if (response.data) {
-      setBucketList(response.data);
+
+    if (Array.isArray(response.data.content)) {
+      setNext(!response.data.last);
+      setBucketList((prev) => [...prev, ...response.data.content]);
+    } else {
+      console.error("Error: response.data is not an array");
     }
   };
 
@@ -114,7 +119,40 @@ export default function TestMain() {
 
   useEffect(() => {
     init();
-  }, [page]); */
+  }, [page]);
 
-  return <></>;
+  return (
+    <>
+      <InfiniteScroll
+        pageStart={page}
+        next={loadMoreHandler}
+        dataLength={items.length}
+        hasMore={next}
+        loader={<div>loading</div>}
+      >
+        <Empty />
+        {/* <CateBox>
+                    <Categories />
+                </CateBox>     */}
+        {items.length > 0 ? (
+          <BucketWrapper>{items}</BucketWrapper>
+        ) : (
+          <MainBucket src="/images/main_bucket.png" />
+        )}
+        <AddBucketBox>
+          <AddBucketIcon />
+        </AddBucketBox>
+      </InfiniteScroll>
+      {modal && (
+        <ModalBg>
+          <Bucket
+            boardId={selectedBoardId}
+            onModal={() => {
+              setModal((prev) => !prev);
+            }}
+          />
+        </ModalBg>
+      )}
+    </>
+  );
 }

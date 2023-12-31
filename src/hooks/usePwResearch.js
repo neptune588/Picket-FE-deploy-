@@ -9,7 +9,7 @@ export default function usePwResearch() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const condition = localStorage.getItem("userInfo");
+    const condition = localStorage.getItem("userAccessToken");
     if (condition) {
       navigate("/");
     }
@@ -36,7 +36,7 @@ export default function usePwResearch() {
       return res;
     },
     onMutate: () => {
-      const condition = localStorage.getItem("userInfo");
+      const condition = localStorage.getItem("userAccessToken");
       if (condition) {
         return;
       }

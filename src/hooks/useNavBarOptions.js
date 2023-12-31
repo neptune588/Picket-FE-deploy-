@@ -18,23 +18,17 @@ export default function useNavBarOptions() {
   const loginCheck = () => {
     const condition = localStorage.getItem("userNickname");
     if (condition) {
-      const refine = JSON.parse(condition);
-
-      setUserNickName(refine);
+      setUserNickName(JSON.parse(condition));
     }
   };
 
   const handleSignOut = () => {
-    const condition = localStorage.getItem("userInfo");
-    if (condition) {
-      //일단은 로컬스토리지에서 지우는걸로 간단설정 보안을 생각하면 보완필요
-      localStorage.removeItem("userInfo");
-      localStorage.removeItem("userAccessToken");
-      localStorage.removeItem("userId");
-      localStorage.removeItem("userNickname");
+    //일단은 로컬스토리지에서 지우는걸로 간단설정 보안을 생각하면 보완필요
+    localStorage.removeItem("userAccessToken");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("userNickname");
 
-      setUserNickName("");
-    }
+    setUserNickName("");
   };
 
   const handleNavigate = (params) => {

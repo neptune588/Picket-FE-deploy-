@@ -1,20 +1,16 @@
-import styled from "styled-components";
-
-import MyProfileImg from "./ProfileImg";
 import { useState } from "react";
 import { postData, patchData } from "@/services/api";
 
+import styled from "styled-components";
+
+import MyProfileImg from "./ProfileImg";
+
 const Modal = styled.div`
   width: 100%;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.3);
-  top: 0;
-  left: 0;
+  height: calc(100% - 70px);
+  background: rgba(0, 0, 0, 0.5);
+  top: 65px;
   position: fixed;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 100000;
 `;
 
 const EditBox = styled.div`
@@ -106,9 +102,9 @@ export default function ProfileEdit({ setOpenModal }) {
   };
 
   const saveHandler = async () => {
-    let random = JSON.parse(localStorage.getItem("userInfo"));
-    const { accessToken } = random;
-    const token = `Bearer ${accessToken}`;
+    const token = `Bearer ${JSON.parse(
+      localStorage.getItem("userAccessToken")
+    )}`;
 
     const json = JSON.stringify(context);
     const validate = await validateNickname(json, token);
