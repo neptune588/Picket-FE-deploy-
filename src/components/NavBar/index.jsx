@@ -27,6 +27,7 @@ import {
 
 export default function NavBar() {
   const {
+    searchTextBar,
     searchValue,
     dropdownOpen,
     userNickName,
@@ -46,17 +47,19 @@ export default function NavBar() {
           <NavStyle to="/" $width={"50px"}>
             홈
           </NavStyle>
-          <NavStyle to="/search" $width={"60px"}>
+          <NavStyle to="/search/default" $width={"60px"}>
             탐색
           </NavStyle>
         </NavLinkBox>
         <SearchBarBox>
           <SearchBar
+            ref={searchTextBar}
             value={searchValue}
             onChange={handleChange}
             placeholder="검색"
             onClick={handleSearchModalControl}
             onKeyUp={handleSearch}
+            maxLength={15}
           />
           <SearchIcon />
           {currentModalState && (

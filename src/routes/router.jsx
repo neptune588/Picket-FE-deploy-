@@ -26,7 +26,7 @@ const router = createBrowserRouter([
         label: "main",
       },
       {
-        path: "/search",
+        path: "/search/:keword",
         element: <Browse />,
         label: "search",
       },

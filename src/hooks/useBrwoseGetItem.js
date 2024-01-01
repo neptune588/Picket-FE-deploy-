@@ -1,8 +1,10 @@
 import { useEffect, useState, useRef } from "react";
-import { useInView } from "react-intersection-observer";
+import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { useInView } from "react-intersection-observer";
 import {
   setTotalParams,
+  setPrevParams,
   setPageParams,
   setCategoryListParams,
   setLastBoardParams,
@@ -13,12 +15,13 @@ import { categoriesData } from "@/pages/Browse/categoryData";
 
 export default function useBrwoseGetItem() {
   const dispatch = useDispatch();
+  const { keword: curKeword } = useParams();
 
   const params = useSelector((state) => {
     return state.parameter;
   });
 
-  const { page, keword, categoryList, totalParams } = params;
+  const { page, keword, categoryList, prevParams, totalParams } = params;
 
   const [dummy, setDummy] = useState([
     { id: "sklt01" },
@@ -108,11 +111,20 @@ export default function useBrwoseGetItem() {
   const handleCategoryClick = (activeNum, curQuery) => {
     return () => {
       if (activeNum === 0) {
-        page_board_data_reset();
         setCategoryData(activeAllCategory());
 
-        dispatch(setCategoryListParams(["", []]));
-        dispatch(setTotalParams());
+        if (prevParams.value === totalParams.value) {
+          return;
+        } else {
+          page_board_data_reset();
+
+          dispatch(setCategoryListParams(["", []]));
+          dispatch(setTotalParams());
+          //파람바껴서 데이터 불러오고 한번 데이터 뿌려준뒤에 prev param갱신 -> 데이터는 보존 된채로 클릭만 막아진다.
+          dispatch(setPrevParams());
+        }
+
+        console.log(cardData.length);
       } else {
         //바꾼배열 반환받아서 검사
         const condition = activeCategory(activeNum).every((data) => {
@@ -170,12 +182,22 @@ export default function useBrwoseGetItem() {
   //시작시 리스트 불러옴
   useEffect(() => {
     page_board_data_reset();
+    //비워줘야지 다른 페이지갔다 다시 와서 카테구리 누를때 []이 디폴트인상태에서 됨. 즉 처음페이지에 온것처럼 됨.
     dispatch(setCategoryListParams(["", []]));
-
-    //쿼리스트링을 전역으로 설정해놔서 쿼리스트링 초기화 한번해줘야할듯
     cardReq(`${page.key + 0}`);
     window.scrollTo({ top: 0, left: 0 });
   }, []);
+
+  useEffect(() => {
+    if (!mounted02.current) {
+      mounted02.current = true;
+    } else {
+      page_board_data_reset();
+      dispatch(setCategoryListParams(["", []]));
+
+      dispatch(setTotalParams());
+    }
+  }, [curKeword]);
 
   useEffect(() => {
     //데이터 없으면 옵저버 못보게 더미 on 데이터 있으면 off
@@ -186,6 +208,8 @@ export default function useBrwoseGetItem() {
     }
   }, [cardData]);
 
+  //마지막 경우의수, 전체 카테고리를 두번눌렀을때.. 두번누르면 비어있는상태에서 또 비어지는거ㅗ니까 변화가없어서
+  //실행이안된다.. 흠
   useEffect(() => {
     if (!mounted01.current) {
       mounted01.current = true;
@@ -204,3 +228,10 @@ export default function useBrwoseGetItem() {
     handleCategoryClick,
   };
 }
+
+//느낀것
+
+//api관련 동작 중 쿼리스트링 같은 정확하게 전달해야하는 정보는
+//비동기 방식이 아닌 동기 방식으로 적용하는게 좋을것같다.
+//setState와 디펜던시로 해결하기엔 너무 복잡해져서 리덕스툴킷의 reducer set함수를 통해 동기적으로 작동하고
+//데이터(쿼리)를 덮어씌우는 방식으로 작업했는데, 덕분에 구현이 된것같다.

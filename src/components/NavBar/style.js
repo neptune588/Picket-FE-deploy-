@@ -7,6 +7,7 @@ import Search from "@/assets/icons/search.svg?react";
 import Cross from "@/assets/icons/cross.svg?react";
 
 const NavBarWrapper = styled.header`
+  position: relative;
   display: flex;
   align-items: center;
   height: 70px;
@@ -56,9 +57,11 @@ const NavStyle = styled(Link)`
 `;
 
 const SearchBarBox = styled.div`
+  position: absolute;
+  display: block;
+  left: 50%;
+  transform: translateX(-50%);
   width: 1060px;
-  position: relative;
-  margin: 0 auto;
 `;
 
 const SearchIcon = styled(Search)`

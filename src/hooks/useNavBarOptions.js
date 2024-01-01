@@ -1,16 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import { useNavigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
 import { setBoolean } from "@/store/searchModalSlice";
-import {
-  setTotalParams,
-  setPageParams,
-  setCategoryListParams,
-  setLastBoardParams,
-  setKewordParams,
-} from "@/store/parameterSlice";
+import { setKewordParams } from "@/store/parameterSlice";
 
 export default function useNavBarOptions() {
   const navigate = useNavigate();
@@ -23,11 +17,13 @@ export default function useNavBarOptions() {
     return state.parameter;
   });
 
-  let { page, categoryList, totalParams } = params;
+  const { keword } = params;
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [userNickName, setUserNickName] = useState(null);
   const [searchValue, setSearchValue] = useState("");
+
+  const searchTextBar = useRef();
 
   const OnClickDropdown = () => {
     setDropdownOpen(!dropdownOpen);
@@ -69,12 +65,14 @@ export default function useNavBarOptions() {
         searchValue === undefined ||
         searchValue === null
       ) {
-        setKewordParams(["", ""]);
+        dispatch(setKewordParams(["", ""]));
+        navigate("/search/default");
       } else {
-        setKewordParams(["&keword=", searchValue]);
+        dispatch(setKewordParams(["&keword=", searchValue]));
+        navigate(`/search/${searchValue}`);
       }
-      setTotalParams();
-      navigate("/search");
+      setSearchValue("");
+      searchTextBar.current && searchTextBar.current.focus();
     }
   };
 
@@ -83,6 +81,7 @@ export default function useNavBarOptions() {
   }, []);
 
   return {
+    searchTextBar,
     searchValue,
     dropdownOpen,
     userNickName,
