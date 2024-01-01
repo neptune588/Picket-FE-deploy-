@@ -1,6 +1,3 @@
-import { useSelector, useDispatch } from "react-redux";
-import { setBoolean } from "@/store/searchModalSlice";
-
 import useNavBarOptions from "@/hooks/useNavBarOptions";
 
 import ThumnailCard from "@/components/ThumnailCard";
@@ -29,17 +26,14 @@ import {
 } from "@/components/NavBar/style";
 
 export default function NavBar() {
-  const dispatch = useDispatch();
-
-  const currentModalState = useSelector((state) => {
-    return state.searchModal.currentModalState;
-  });
-
   const {
     searchValue,
     dropdownOpen,
     userNickName,
+    currentModalState,
+    handleSearchModalControl,
     handleChange,
+    handleSearch,
     handleSignOut,
     handleNavigate,
     OnClickDropdown,
@@ -57,16 +51,13 @@ export default function NavBar() {
           </NavStyle>
         </NavLinkBox>
         <SearchBarBox>
-          <form>
-            <SearchBar
-              /*               value={searchValue}
-              onhange={handleChange} */
-              placeholder="검색"
-              onClick={() => {
-                dispatch(setBoolean());
-              }}
-            />
-          </form>
+          <SearchBar
+            value={searchValue}
+            onChange={handleChange}
+            placeholder="검색"
+            onClick={handleSearchModalControl}
+            onKeyUp={handleSearch}
+          />
           <SearchIcon />
           {currentModalState && (
             <CloseButton>

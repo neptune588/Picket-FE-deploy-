@@ -13,6 +13,7 @@ export default function Browse() {
     cardData,
     categoryData,
     isLoading,
+    dummyObserver,
     observerRef,
     handleCategoryClick,
   } = useBrwoseGetItem();
@@ -32,7 +33,7 @@ export default function Browse() {
               key={category.id}
               isActive={category.activeState}
               content={category.content}
-              onClick={handleCategoryClick(idx)}
+              onClick={handleCategoryClick(idx, category.query)}
             />
           );
         })}
@@ -68,6 +69,7 @@ export default function Browse() {
             );
           })}
       </Container>
+      <div style={{ height: "2000px" }} ref={dummyObserver}></div>
       <div ref={observerRef}></div>
     </>
   );

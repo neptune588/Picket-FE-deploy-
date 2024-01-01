@@ -2,19 +2,40 @@ import { useState, useEffect } from "react";
 
 import { useNavigate } from "react-router-dom";
 
+import { useDispatch, useSelector } from "react-redux";
+import { setBoolean } from "@/store/searchModalSlice";
+import {
+  setTotalParams,
+  setPageParams,
+  setCategoryListParams,
+  setLastBoardParams,
+  setKewordParams,
+} from "@/store/parameterSlice";
+
 export default function useNavBarOptions() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const currentModalState = useSelector((state) => {
+    return state.searchModal.currentModalState;
+  });
+  const params = useSelector((state) => {
+    return state.parameter;
+  });
+
+  let { page, categoryList, totalParams } = params;
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [userNickName, setUserNickName] = useState(null);
-  const [submitLoading, setSubmitLoading] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [searchValue, setSearchValue] = useState("");
 
   const OnClickDropdown = () => {
     setDropdownOpen(!dropdownOpen);
   };
 
+  const handleSearchModalControl = () => {
+    dispatch(setBoolean());
+  };
   const loginCheck = () => {
     const condition = localStorage.getItem("userNickname");
     if (condition) {
@@ -41,20 +62,19 @@ export default function useNavBarOptions() {
     setSearchValue(e.target.value);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (
-      searchValue === "" ||
-      searchValue === undefined ||
-      searchValue === null
-    ) {
-      return;
-    } else {
-      if (submitLoading) {
-        return;
+  const handleSearch = (e) => {
+    if (e.key === "Enter") {
+      if (
+        searchValue === "" ||
+        searchValue === undefined ||
+        searchValue === null
+      ) {
+        setKewordParams(["", ""]);
+      } else {
+        setKewordParams(["&keword=", searchValue]);
       }
-      setSubmitLoading(true);
+      setTotalParams();
+      navigate("/search");
     }
   };
 
@@ -66,7 +86,10 @@ export default function useNavBarOptions() {
     searchValue,
     dropdownOpen,
     userNickName,
+    currentModalState,
+    handleSearchModalControl,
     handleChange,
+    handleSearch,
     handleSignOut,
     handleNavigate,
     OnClickDropdown,
