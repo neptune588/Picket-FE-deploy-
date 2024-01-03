@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import ThumnailImg from "@/components/ThumnailImg/ThumnailImg";
 import ProfileAvatar from "@/components/ProfileAvatar/ProfileAvatar";
 import LikeButton from "@/components/LikeButton/LikeButton";
@@ -21,13 +19,13 @@ export default function ThumnailCard({
   thumnailSrc = "/images/test_thumnail.jpg",
   likeCount,
   scrapCount,
+  handledetailView,
+  handleHeartClick,
+  handleScrapClick,
 }) {
-  const [heartClicked, setHeartClicked] = useState(false);
-  const [scrapClicked, setScrapClicked] = useState(false);
-
   return (
     <Container $width={width}>
-      <ThumnailImgBox $height={height}>
+      <ThumnailImgBox $height={height} onClick={handledetailView}>
         <ThumnailImg thumnailSrc={thumnailSrc} />
         <h2>{title}</h2>
       </ThumnailImgBox>
@@ -35,23 +33,13 @@ export default function ThumnailCard({
         <ProfileAvatar nickname={nickname} avatarSrc={avatarSrc} />
         <ButtonBox>
           <LikeButton
-            onClick={() => {
-              setHeartClicked((prev) => {
-                return !prev;
-              });
-            }}
-            isClicked={heartClicked}
+            handleHeartClick={handleHeartClick}
             width={16}
             height={16}
           />
           <span>{likeCount}</span>
           <ScrapButton
-            onClick={() => {
-              setScrapClicked((prev) => {
-                return !prev;
-              });
-            }}
-            isClicked={scrapClicked}
+            handleScrapClick={handleScrapClick}
             width={18}
             height={18}
           />

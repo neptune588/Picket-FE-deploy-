@@ -12,7 +12,7 @@ const initialState = {
     key: "",
     value: [],
   },
-  keword: {
+  keyword: {
     key: "",
     value: "",
   },
@@ -26,7 +26,7 @@ const parameterSlice = createSlice({
   initialState,
   reducers: {
     setTotalParams(state) {
-      let { page, lastBoardId, categoryList, keword, totalParams } = state;
+      let { page, lastBoardId, categoryList, keyword, totalParams } = state;
       totalParams.value =
         page.key +
         page.value +
@@ -34,11 +34,13 @@ const parameterSlice = createSlice({
         lastBoardId.value +
         categoryList.key +
         categoryList.value.join(",") +
-        keword.key +
-        keword.value;
+        keyword.key +
+        keyword.value;
+      console.log("totalParam은", totalParams.value);
     },
     setPrevParams(state) {
       state.prevParams.value = state.totalParams.value;
+      console.log("prevParam이 갱신되었습니다.");
     },
     setPageParams(state, action) {
       const { page } = state;
@@ -61,12 +63,12 @@ const parameterSlice = createSlice({
       categoryList.key = queryData[0];
       categoryList.value = queryData[1];
     },
-    setKewordParams(state, action) {
-      const { keword } = state;
+    setKeywordParams(state, action) {
+      const { keyword } = state;
       const { payload: queryData } = action;
 
-      keword.key = queryData[0];
-      keword.value = queryData[1];
+      keyword.key = queryData[0];
+      keyword.value = queryData[1];
     },
   },
 });
@@ -77,6 +79,6 @@ export const {
   setPageParams,
   setLastBoardParams,
   setCategoryListParams,
-  setKewordParams,
+  setKeywordParams,
 } = parameterSlice.actions;
 export default parameterSlice.reducer;

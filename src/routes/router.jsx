@@ -7,7 +7,6 @@ import OnlyTest from "@/pages/OnlyTest/OnlyTest";
 import SignUp from "@/pages/SignUp";
 import SignIn from "@/pages/SignIn";
 import RegisterSuccess from "@/pages/RegisterSuccess/RegisterSuccess";
-import SiteLoading from "@/components/SiteLoading/SiteLoading";
 import TestMain from "../pages/TestMain/TestMain";
 import TestAlarm from "../pages/TestAlarm/TestAlarm";
 import TestMyProfile from "../pages/TestProfile/TestProfile";
@@ -26,7 +25,7 @@ const router = createBrowserRouter([
         label: "main",
       },
       {
-        path: "/search/:keword",
+        path: `/search/:keyword`,
         element: <Browse />,
         label: "search",
       },
@@ -44,10 +43,6 @@ const router = createBrowserRouter([
         path: "/add",
         element: <TestAddBucket />,
         label: "add",
-      },
-      {
-        path: "/test5",
-        element: <OnlyTest />,
       },
     ],
   },
@@ -74,8 +69,8 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/loading",
-    element: <SiteLoading />,
+    path: "/test5",
+    element: <OnlyTest />,
   },
 ]);
 

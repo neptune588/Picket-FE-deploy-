@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
-import searchModalReducer from "@/store/searchModalSlice";
+import modalsReducer from "@/store/modalsSlice";
 import setParameterReducer from "@/store/parameterSlice";
+import bucketDetailReducer from "@/store/bucketDetailSlice";
 
 const store = configureStore({
   reducer: {
-    searchModal: searchModalReducer,
+    modals: modalsReducer,
     parameter: setParameterReducer,
+    bucketDetail: bucketDetailReducer,
   },
 });
 

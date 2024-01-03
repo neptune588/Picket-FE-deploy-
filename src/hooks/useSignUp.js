@@ -180,7 +180,7 @@ export default function useSignUp(vaildCheks, defaultData, onSubmit) {
 
       try {
         if (inspect) {
-          const result = await postData("auth/signup", onSubmit(values), {
+          const result = await postData("/auth/signup", onSubmit(values), {
             headers: {
               "Content-Type": "application/json",
             },

@@ -13,6 +13,24 @@ const Container = styled.ul`
   padding-bottom: 40px;
 `;
 
+const BucketNotContainer = styled.div`
+  display: flex;
+  height: 50vh;
+  justify-content: center;
+  align-items: center;
+  > p {
+    font-size: ${({ theme: { typo } }) => {
+      return typo.size.xl;
+    }};
+    color: ${({ theme: { colors } }) => {
+      return colors.gray["40"];
+    }};
+    font-weight: ${({ theme: { typo } }) => {
+      return typo.weight.bold;
+    }};
+  }
+`;
+
 const SubTitle = styled.h2`
   margin: 75px 0 50px;
   font-size: ${({ theme: { typo } }) => {
@@ -32,4 +50,4 @@ const CategoryBox = styled.ul`
     }
   }
 `;
-export { Container, CategoryBox, SubTitle };
+export { Container, BucketNotContainer, CategoryBox, SubTitle };

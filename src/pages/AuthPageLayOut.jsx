@@ -4,18 +4,27 @@ import { useLocation, Outlet } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { setBoolean } from "@/store/searchModalSlice";
+import { setSearchModal } from "@/store/modalsSlice";
+import {
+  setKeywordParams,
+  setPrevParams,
+  setTotalParams,
+} from "@/store/parameterSlice";
 
 export default function AuthPageLayOut() {
   const dispatch = useDispatch();
   const searchModalState = useSelector((state) => {
-    return state.searchModal.currentModalState;
+    return state.modals.searchModal;
   });
   const location = useLocation();
 
   useEffect(() => {
-    if (searchModalState) {
-      dispatch(setBoolean());
+    searchModalState && dispatch(setSearchModal());
+
+    if (!location.pathname.split("/").includes("search")) {
+      dispatch(setKeywordParams(["", ""]));
+      dispatch(setTotalParams());
+      dispatch(setPrevParams());
     }
   }, [location]);
 

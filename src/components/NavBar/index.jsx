@@ -1,6 +1,7 @@
 import useNavBarOptions from "@/hooks/useNavBarOptions";
 
 import ThumnailCard from "@/components/ThumnailCard";
+import BucketCard from "@/components/BucketCard";
 
 import {
   NavBarWrapper,
@@ -20,34 +21,74 @@ import {
   SubTitle,
   NavTagBox,
   NavTag,
+  NavTagDelButton,
   ThumnailCardBox,
   SearchModalWrraper,
+  SearchModalCloseArea,
   SearchModal,
 } from "@/components/NavBar/style";
 
 export default function NavBar() {
   const {
+    keyword,
+    keywordListData,
     searchTextBar,
     searchValue,
     dropdownOpen,
     userNickName,
-    currentModalState,
+    searchModal,
+    browseDetailModal,
+    latestDetailCard,
+    setSearchValue,
     handleSearchModalControl,
     handleChange,
     handleSearch,
     handleSignOut,
     handleNavigate,
+    handleKeywordClick,
+    handleLatestKeywordDelete,
+    handleDetailCardReq,
+    handleDetailModalState,
+    handleHeartAndScrapClick,
     OnClickDropdown,
   } = useNavBarOptions();
+  const nicknameViewLength = 8;
+  const titleViewLength = 12;
   return (
     <>
+      {browseDetailModal && (
+        <BucketCard
+          boardId={latestDetailCard.boardId}
+          nickname={latestDetailCard.nickname}
+          avatar={latestDetailCard.avatar}
+          title={latestDetailCard.title}
+          cardImg={latestDetailCard.cardImg}
+          cardCotent={latestDetailCard.cardCotent}
+          commentList={latestDetailCard.commentList}
+          cardCreated={latestDetailCard.created}
+          heartCount={latestDetailCard.heartCount}
+          scrapCount={latestDetailCard.scrapCount}
+          handleHeartClick={handleHeartAndScrapClick(
+            "heart",
+            latestDetailCard.boardId
+          )}
+          handleScrapClick={handleHeartAndScrapClick(
+            "scrap",
+            latestDetailCard.boardId
+          )}
+          modalHandle={handleDetailModalState}
+        />
+      )}
       <NavBarWrapper>
         <SymbolIcon />
         <NavLinkBox>
           <NavStyle to="/" $width={"50px"}>
             홈
           </NavStyle>
-          <NavStyle to="/search/default" $width={"60px"}>
+          <NavStyle
+            to={`/search/${keyword.value ? keyword.value : "default"}`}
+            $width={"60px"}
+          >
             탐색
           </NavStyle>
         </NavLinkBox>
@@ -62,11 +103,13 @@ export default function NavBar() {
             maxLength={15}
           />
           <SearchIcon />
-          {currentModalState && (
-            <CloseButton>
-              <CloseCrossIcon />
-            </CloseButton>
-          )}
+          <CloseButton
+            onClick={() => {
+              setSearchValue("");
+            }}
+          >
+            <CloseCrossIcon />
+          </CloseButton>
         </SearchBarBox>
         <AlarmBox>
           <AlarmIcon
@@ -91,25 +134,69 @@ export default function NavBar() {
           )}
         </AlarmBox>
       </NavBarWrapper>
-      {currentModalState && (
+      {searchModal && (
         <SearchModalWrraper>
           <SearchModal>
             <SubTitle>최근 검색어</SubTitle>
             <NavTagBox>
-              <NavTag>유튜브 시작하기</NavTag>
-              <NavTag>타투하기</NavTag>
-              <NavTag>미라클 모닝</NavTag>
-              <NavTag>공모전 나가기</NavTag>
-              <NavTag>커플링 맞추기</NavTag>
+              {keywordListData.length > 0
+                ? keywordListData.map((data, idx) => {
+                    return (
+                      <>
+                        <NavTag
+                          key={data.id}
+                          onClick={handleKeywordClick(data.value)}
+                        >
+                          {data.value}
+                        </NavTag>
+                        <NavTagDelButton
+                          onClick={handleLatestKeywordDelete(idx)}
+                        />
+                      </>
+                    );
+                  })
+                : "최근 검색하신 단어가 없습니다."}
             </NavTagBox>
             <SubTitle>최근 본 버킷 리스트</SubTitle>
             <ThumnailCardBox>
-              <ThumnailCard width={"230px"} height={"230px"}></ThumnailCard>
-              <ThumnailCard width={"230px"} height={"230px"}></ThumnailCard>
-              <ThumnailCard width={"230px"} height={"230px"}></ThumnailCard>
-              <ThumnailCard width={"230px"} height={"230px"}></ThumnailCard>
+              {JSON.parse(localStorage.getItem("latestBucket"))
+                ? JSON.parse(localStorage.getItem("latestBucket")).map(
+                    (card) => (
+                      <ThumnailCard
+                        key={"latestBoard" + card.boardId}
+                        width={"230px"}
+                        height={"230px"}
+                        title={
+                          card.title.length > titleViewLength
+                            ? card.title.substring(0, titleViewLength) + "..."
+                            : card.title
+                        }
+                        //thumnailSrc={card.filepath}
+                        //avatarSrc={card.filename}
+                        nickname={
+                          card.nickname.length > nicknameViewLength
+                            ? card.nickname.substring(0, nicknameViewLength) +
+                              "..."
+                            : card.nickname
+                        }
+                        likeCount={card.likeCount}
+                        scrapCount={card.scrapCount}
+                        handledetailView={handleDetailCardReq(card.boardId)}
+                        handleHeartClick={handleHeartAndScrapClick(
+                          "heart",
+                          card.boardId
+                        )}
+                        handleScrapClick={handleHeartAndScrapClick(
+                          "scrap",
+                          card.boardId
+                        )}
+                      />
+                    )
+                  )
+                : "최근 본 버킷리스트가 없습니다."}
             </ThumnailCardBox>
           </SearchModal>
+          <SearchModalCloseArea onClick={handleSearchModalControl} />
         </SearchModalWrraper>
       )}
     </>

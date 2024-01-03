@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useInView } from "react-intersection-observer";
 import {
@@ -9,19 +10,33 @@ import {
   setCategoryListParams,
   setLastBoardParams,
 } from "@/store/parameterSlice";
+import { setBrowseDetailBucketModal } from "@/store/modalsSlice";
+import { setDetailButcket, setScrollLocation } from "@/store/bucketDetailSlice";
+
 import { getData } from "@/services/api";
+import { postData } from "@/services/api";
 
 import { categoriesData } from "@/pages/Browse/categoryData";
 
 export default function useBrwoseGetItem() {
   const dispatch = useDispatch();
-  const { keword: curKeword } = useParams();
 
+  const navigate = useNavigate();
+  const { keyword: curKeyword } = useParams();
+
+  const moadals = useSelector((state) => {
+    return state.modals;
+  });
   const params = useSelector((state) => {
     return state.parameter;
   });
+  const bucketDetailObj = useSelector((state) => {
+    return state.bucketDetail;
+  });
 
-  const { page, keword, categoryList, prevParams, totalParams } = params;
+  const { browseDetailModal } = moadals;
+  const { page, keyword, categoryList, prevParams, totalParams } = params;
+  const { bucketDetailData, curScrollLocation } = bucketDetailObj;
 
   const [dummy, setDummy] = useState([
     { id: "sklt01" },
@@ -41,16 +56,18 @@ export default function useBrwoseGetItem() {
   const [lastPage, setLastPage] = useState(false);
   //데이터 불러오는동안 스켈레톤 띄우기
   const [isLoading, setIsLoading] = useState(true);
+  const [CardDetailData, setCardDetailData] = useState({});
   //첫 렌더링시 강제실행 막기
   const mounted01 = useRef(false);
   const mounted02 = useRef(false);
+  const mounted03 = useRef(false);
   //렌더링할때 화면이 비게되면 옵저버가 관측이 되어서 스크롤된것처럼 되기 때문에
   //그것을 위한 더미 옵저버
   const dummyObserver = useRef();
   //트리거가 발동했을때 초기치로 리셋
   const page_board_data_reset = () => {
     //value 즉 페이지숫자는 스크롤 제외하고 트리거 발동때마다 리셋되어야하니까 0으로 주기
-    dispatch(setPageParams([`${page.key}`, 0]));
+    dispatch(setPageParams([`page=`, 0]));
     dispatch(setLastBoardParams(["", ""]));
 
     setIsLoading(true);
@@ -112,7 +129,6 @@ export default function useBrwoseGetItem() {
     return () => {
       if (activeNum === 0) {
         setCategoryData(activeAllCategory());
-
         if (prevParams.value === totalParams.value) {
           return;
         } else {
@@ -122,9 +138,10 @@ export default function useBrwoseGetItem() {
           dispatch(setTotalParams());
           //파람바껴서 데이터 불러오고 한번 데이터 뿌려준뒤에 prev param갱신 -> 데이터는 보존 된채로 클릭만 막아진다.
           dispatch(setPrevParams());
+          //console.log("현재 prevparam은", prevParams.value);
         }
 
-        console.log(cardData.length);
+        //console.log(cardData.length);
       } else {
         //바꾼배열 반환받아서 검사
         const condition = activeCategory(activeNum).every((data) => {
@@ -159,19 +176,25 @@ export default function useBrwoseGetItem() {
       const { data } = await getData(`/board/list/search?${query}`);
 
       console.log(data);
-      if (data.last) {
-        //마지막페이지 검증로직
-        //라스트페이지면 스켈레톤x axios호출x
-        setLastPage(true);
-        setCardData((prev) => [...prev, ...data.content]);
 
-        setIsLoading(false);
+      if (data.content?.length > 0) {
+        if (data.last) {
+          //마지막페이지 검증로직
+          //라스트페이지면 스켈레톤x axios호출x
+          setLastPage(true);
+          setCardData((prev) => [...prev, ...data.content]);
 
-        return;
+          setIsLoading(false);
+
+          return;
+        } else {
+          setLastPage(false);
+          setCardData((prev) => [...prev, ...data.content]);
+
+          setIsLoading(false);
+        }
       } else {
-        setLastPage(false);
-        setCardData((prev) => [...prev, ...data.content]);
-
+        setLastPage(true);
         setIsLoading(false);
       }
     } catch (error) {
@@ -179,12 +202,187 @@ export default function useBrwoseGetItem() {
     }
   };
 
+  const cardDetailReq = async (borardNum) => {
+    try {
+      const { data } = await getData(`/board/${borardNum}`);
+
+      dispatch(
+        setDetailButcket({
+          boardId: data.boardId,
+          title: data.title,
+          categoryList: data.categoryList,
+          cardContent: data.content,
+          cardImg: data.filepath,
+          created: data.deadline.split("-").join("."),
+          commentList: data.commentList,
+          heartCount: data.heartCount,
+          scrapCount: data.scrapCount,
+          nickname: data.nickname,
+          avatar: data.profileImg,
+        })
+      );
+
+      const latestBucket = JSON.parse(localStorage.getItem("latestBucket"));
+
+      const latestCard = cardData.find((card) => card.boardId === borardNum);
+      if (latestBucket) {
+        const refine = [...latestBucket];
+        !refine.some((card) => card.boardId === borardNum) &&
+          refine.push(latestCard);
+
+        refine.length > 4 && refine.splice(0, 1);
+        localStorage.setItem("latestBucket", JSON.stringify(refine));
+      } else {
+        localStorage.setItem("latestBucket", JSON.stringify([latestCard]));
+      }
+      !browseDetailModal && dispatch(setBrowseDetailBucketModal());
+
+      //console.log(data);
+    } catch (error) {
+      if (error.response.status === 401) {
+        console.error("error입니다.");
+      }
+      console.error("Oh~", error);
+    }
+  };
+
+  const handledetailView = (curBoardId) => {
+    return () => {
+      dispatch(setScrollLocation(window.scrollY));
+      cardDetailReq(curBoardId);
+    };
+  };
+
+  const handleDetailModalState = () => {
+    if (browseDetailModal) {
+      browseDetailModal && dispatch(setBrowseDetailBucketModal());
+      setTimeout(() => {
+        window.scroll({ top: curScrollLocation, left: 0 });
+      }, 50);
+    }
+  };
+
+  const likeAndScrapReq = useMutation({
+    mutationFn: async (curData) => {
+      const token = `Bearer ${JSON.parse(
+        localStorage.getItem("userAccessToken")
+      )}`;
+      return await postData(`/board/${curData}`, null, {
+        headers: {
+          Authorization: token,
+        },
+      });
+    },
+    onSuccess: async (res) => {
+      try {
+        //페이지로 산정되지 않는 짜투리 갯수를 위해 + 8 한번더
+        const { data } = await getData(
+          `/board/list/search?size=${page.value * 8 + 8}${keyword.key + keyword.value}${
+            categoryList.key + categoryList.value
+          }`
+        );
+        setCardData(data.content);
+        //console.log(res);
+      } catch (error) {
+        console.error("Oh~ :", error);
+      }
+    },
+
+    onError: (error) => {
+      if (error.response.status) {
+        console.log("에러러");
+      }
+    },
+  });
+
+  const detailLikeAndScrapReq = useMutation({
+    mutationFn: async (curData) => {
+      const token = `Bearer ${JSON.parse(
+        localStorage.getItem("userAccessToken")
+      )}`;
+      return await postData(`/board/${curData}`, null, {
+        headers: {
+          Authorization: token,
+        },
+      });
+    },
+    onSuccess: async () => {
+      cardDetailReq(bucketDetailData.boardId);
+    },
+    onError: (error) => {
+      if (error.response.status) {
+        console.log("에러러");
+      }
+    },
+  });
+
+  const handleHeartAndScrapClick = (type, curBoardId) => {
+    return () => {
+      const condition = localStorage.getItem("userAccessToken");
+      if (!condition) {
+        const question = confirm(
+          "로그인을 하셔야 이용 가능합니다. 로그인 하시겠습니까?"
+        );
+        question && navigate("/auth/signin");
+        return;
+      } else {
+        switch (type) {
+          case "heart": {
+            likeAndScrapReq.mutate(`${curBoardId}/like`);
+            break;
+          }
+          case "scrap": {
+            likeAndScrapReq.mutate(`${curBoardId}/scrap`);
+            break;
+          }
+        }
+      }
+    };
+  };
+
+  const handleDetailHeartAndScrapClick = (type, curBoardId) => {
+    return () => {
+      const condition = localStorage.getItem("userAccessToken");
+      if (!condition) {
+        const question = confirm(
+          "로그인을 하셔야 이용 가능합니다. 로그인 하시겠습니까?"
+        );
+        question && navigate("/auth/signin");
+        return;
+      } else {
+        switch (type) {
+          case "heart": {
+            detailLikeAndScrapReq.mutate(`${curBoardId}/like`);
+            break;
+          }
+          case "scrap": {
+            detailLikeAndScrapReq.mutate(`${curBoardId}/scrap`);
+            break;
+          }
+        }
+      }
+    };
+  };
+
   //시작시 리스트 불러옴
   useEffect(() => {
-    page_board_data_reset();
     //비워줘야지 다른 페이지갔다 다시 와서 카테구리 누를때 []이 디폴트인상태에서 됨. 즉 처음페이지에 온것처럼 됨.
-    dispatch(setCategoryListParams(["", []]));
-    cardReq(`${page.key + 0}`);
+    //다른페이지에서 검색을했을때의 경우를 대비하여 totalparmas를 변경해준다.
+    //검색창에서 keyword값이 갱신되므로 setotal로 바뀐값 갱신해주면 다른사이트에서 이동했을때에도 마찬가지로 목록이 뿌려짐
+    if (curKeyword !== "default") {
+      dispatch(setTotalParams());
+      dispatch(setPrevParams());
+      /*       console.log(
+        "검색을 하셨습니다. 비어잇는 디펜던시의 useEffect가 실행됩니다."
+      ); */
+    } else {
+      /*       console.log(
+        "검색을 제외한 데이터를 초기화하고 렌더링이 실행 되었습니다."
+      ); */
+      page_board_data_reset();
+      dispatch(setCategoryListParams(["", []]));
+      cardReq(`${page.key + 0}`);
+    }
     window.scrollTo({ top: 0, left: 0 });
   }, []);
 
@@ -192,40 +390,61 @@ export default function useBrwoseGetItem() {
     if (!mounted02.current) {
       mounted02.current = true;
     } else {
+      /*       console.log(
+        "검색을 제외한 데이터를 초기화하고 totalparam이 바뀌었습니다."
+      ); */
       page_board_data_reset();
       dispatch(setCategoryListParams(["", []]));
+      setCategoryData(activeAllCategory());
 
       dispatch(setTotalParams());
+      dispatch(setPrevParams());
+      console.log(prevParams.value);
     }
-  }, [curKeword]);
+  }, [curKeyword]);
 
   useEffect(() => {
     //데이터 없으면 옵저버 못보게 더미 on 데이터 있으면 off
-    if (cardData.length > 0) {
+    if (dummyObserver.current && cardData.length > 0) {
       dummyObserver.current.style.display = "none";
-    } else {
+    } else if (dummyObserver.current && cardData.length === 0) {
       dummyObserver.current.style.display = "block";
     }
   }, [cardData]);
 
-  //마지막 경우의수, 전체 카테고리를 두번눌렀을때.. 두번누르면 비어있는상태에서 또 비어지는거ㅗ니까 변화가없어서
-  //실행이안된다.. 흠
   useEffect(() => {
     if (!mounted01.current) {
       mounted01.current = true;
     } else {
+      //console.log("totalparam이 바꼈으므로 목록을 불러옵니다.");
       cardReq(totalParams.value);
     }
   }, [totalParams.value]);
 
+  useEffect(() => {
+    if (!mounted03.current) {
+      mounted03.current = true;
+    } else {
+      setCardDetailData(bucketDetailData);
+    }
+  }, [bucketDetailData]);
+
   return {
     dummy,
+    keyword,
     categoryData,
     cardData,
     isLoading,
     dummyObserver,
+    CardDetailData,
+    browseDetailModal,
+    cardDetailReq,
     observerRef,
     handleCategoryClick,
+    handledetailView,
+    handleDetailModalState,
+    handleHeartAndScrapClick,
+    handleDetailHeartAndScrapClick,
   };
 }
 

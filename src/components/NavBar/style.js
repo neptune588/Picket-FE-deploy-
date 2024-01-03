@@ -112,8 +112,9 @@ const CloseCrossIcon = styled(Cross)`
   width: 10px;
   height: 10px;
   top: 50%;
-  left: 51%;
+  left: 50%;
   transform: translate(-50%, -50%);
+  stroke: #e9e9ee;
 `;
 
 const AlarmBox = styled.div`
@@ -149,7 +150,7 @@ const Profile = styled.div`
 
 const Dropdown = styled.ul`
   top: 65px;
-  right: calc((100% - 1500px) / 2);
+  right: 20px;
   width: 260px;
   height: 150px;
   border-radius: 2em;
@@ -193,7 +194,17 @@ const SearchModalWrraper = styled.div`
   z-index: 9999;
 `;
 
+const SearchModalCloseArea = styled.div`
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  cursor: pointer;
+`;
+
 const SearchModal = styled.div`
+  position: relative;
   width: 1060px;
   margin: 0 auto;
   padding: 0 40px 40px;
@@ -202,6 +213,7 @@ const SearchModal = styled.div`
   }};
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
+  z-index: 10;
 `;
 
 const SubTitle = styled.h2`
@@ -216,12 +228,7 @@ const SubTitle = styled.h2`
 
 const NavTagBox = styled.div`
   display: flex;
-  > div {
-    margin-right: 15px;
-    &:last-child {
-      margin-right: 0;
-    }
-  }
+  align-items: center;
 `;
 
 const NavTag = styled.div`
@@ -234,18 +241,48 @@ const NavTag = styled.div`
   }};
   border-radius: 30px;
   cursor: pointer;
+  user-select: none;
   &:hover {
     background-color: ${({ theme: { colors } }) => {
       return colors.gray["80"];
     }};
     color: white;
+    > svg {
+      stroke: ${({ theme: { colors } }) => {
+        return colors.gray["20"];
+      }};
+    }
+  }
+`;
+
+const NavTagDelButton = styled(Cross)`
+  display: inline-block;
+  width: 15px;
+  hegiht: 15px;
+  stroke: ${({ theme: { colors } }) => {
+    return colors.gray["40"];
+  }};
+  margin: 0 20px 0 10px;
+  cursor: pointer;
+  user-select: none;
+
+  &:hover {
+    stroke: ${({ theme: { colors } }) => {
+      return colors.gray["80"];
+    }};
   }
 `;
 
 const ThumnailCardBox = styled.div`
   display: flex;
-  justify-content: space-between;
+  > li {
+    margin-right: 20px;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
 `;
+
 export {
   NavBarWrapper,
   SymbolIcon,
@@ -264,7 +301,9 @@ export {
   SubTitle,
   NavTagBox,
   NavTag,
+  NavTagDelButton,
   ThumnailCardBox,
   SearchModalWrraper,
+  SearchModalCloseArea,
   SearchModal,
 };

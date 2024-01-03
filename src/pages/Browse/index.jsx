@@ -4,23 +4,63 @@ import Category from "@/components/Category/Category";
 import ThumnailCard from "@/components/ThumnailCard";
 import ThumnailCardSkeleton from "@/components/ThumnailCardSkeleton";
 import TopButton from "@/components/TopButton/TopButton";
+import BucketCard from "@/components/BucketCard";
 
-import { Container, CategoryBox, SubTitle } from "@/pages/Browse/style";
+import {
+  Container,
+  BucketNotContainer,
+  CategoryBox,
+  SubTitle,
+} from "@/pages/Browse/style";
 
 export default function Browse() {
   const {
     dummy,
+    keyword,
     cardData,
     categoryData,
     isLoading,
     dummyObserver,
+    CardDetailData,
+    browseDetailModal,
     observerRef,
     handleCategoryClick,
+    handledetailView,
+    handleDetailModalState,
+    handleHeartAndScrapClick,
+    handleDetailHeartAndScrapClick,
   } = useBrwoseGetItem();
   const titleViewLength = 15;
   return (
     <>
-      <SubTitle>오늘의 추천 버킷리스트를 발견 해보세요.</SubTitle>
+      {browseDetailModal && (
+        <BucketCard
+          boardId={CardDetailData.boardId}
+          nickname={CardDetailData.nickname}
+          avatar={CardDetailData.avatar}
+          title={CardDetailData.title}
+          cardImg={CardDetailData.cardImg}
+          cardCotent={CardDetailData.cardCotent}
+          cardCreated={CardDetailData.created}
+          heartCount={CardDetailData.heartCount}
+          commentList={CardDetailData.commentList}
+          scrapCount={CardDetailData.scrapCount}
+          handleHeartClick={handleDetailHeartAndScrapClick(
+            "heart",
+            CardDetailData.boardId
+          )}
+          handleScrapClick={handleDetailHeartAndScrapClick(
+            "scrap",
+            CardDetailData.boardId
+          )}
+          modalHandle={handleDetailModalState}
+        />
+      )}
+      <SubTitle>
+        {keyword.value
+          ? `'${keyword.value}'에 대한 검색 결과 입니다.`
+          : "오늘의 추천 버킷리스트를 발견 해보세요."}
+      </SubTitle>
       <TopButton
         onClick={() => {
           window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
@@ -39,25 +79,35 @@ export default function Browse() {
         })}
       </CategoryBox>
       <Container>
-        {cardData.map((card) => {
-          return (
-            <ThumnailCard
-              key={"boardKey" + card.boardId}
-              width={"290px"}
-              height={"290px"}
-              title={
-                card.title.length > titleViewLength
-                  ? card.title.substring(0, titleViewLength) + "..."
-                  : card.title
-              }
-              //thumnailSrc={card.filepath}
-              //avatarSrc={card.filename}
-              nickname={card.nickname}
-              likeCount={card.likeCount}
-              scrapCount={card.scrapCount}
-            />
-          );
-        })}
+        {cardData.length > 0 &&
+          cardData.map((card) => {
+            return (
+              <ThumnailCard
+                key={"boardKey" + card.boardId}
+                width={"290px"}
+                height={"290px"}
+                title={
+                  card.title.length > titleViewLength
+                    ? card.title.substring(0, titleViewLength) + "..."
+                    : card.title
+                }
+                //thumnailSrc={card.filepath}
+                //avatarSrc={card.filename}
+                nickname={card.nickname}
+                likeCount={card.likeCount}
+                scrapCount={card.scrapCount}
+                handledetailView={handledetailView(card.boardId)}
+                handleHeartClick={handleHeartAndScrapClick(
+                  "heart",
+                  card.boardId
+                )}
+                handleScrapClick={handleHeartAndScrapClick(
+                  "scrap",
+                  card.boardId
+                )}
+              />
+            );
+          })}
         {isLoading &&
           dummy.map((dummyContent) => {
             return (
@@ -69,8 +119,17 @@ export default function Browse() {
             );
           })}
       </Container>
-      <div style={{ height: "2000px" }} ref={dummyObserver}></div>
-      <div ref={observerRef}></div>
+      {cardData.length > 0 && (
+        <>
+          <div style={{ height: "2000px" }} ref={dummyObserver}></div>
+          <div ref={observerRef}></div>
+        </>
+      )}
+      {cardData.length === 0 && keyword.value && (
+        <BucketNotContainer>
+          <p>해당 버킷을 찾을 수 없습니다.</p>
+        </BucketNotContainer>
+      )}
     </>
   );
 }
