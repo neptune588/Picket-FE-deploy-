@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 import { useParams } from "react-router-dom";
 
+import NavBar from "@/components/NavBar";
 import LocationBar from "@/components/LocationBar/LocationBar";
 
 const CenterdContainer = styled.div`
@@ -52,6 +53,7 @@ export default function RegisterSuccess() {
 
   return (
     <>
+      <NavBar />
       <LocationBar content={"회원가입"} />
       <CenterdContainer>
         <Ment>{message}</Ment>

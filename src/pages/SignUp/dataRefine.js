@@ -5,5 +5,5 @@ export default function dataSend(data) {
     nickname: data.userNickname,
   };
 
-  return refineData;
+  return JSON.stringify(refineData);
 }

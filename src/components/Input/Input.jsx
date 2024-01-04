@@ -10,7 +10,7 @@ const InputBox = styled.input`
     return colors.gray["100"];
   }};
   padding: 20px 25px;
-  border: 1px solid
+  border: 2px solid
     ${({ $vaildState, theme: { colors } }) => {
       if ($vaildState === "vaild") {
         return colors.primary;
@@ -22,7 +22,7 @@ const InputBox = styled.input`
     }};
   border-radius: 15px;
   &:focus {
-    border: 1px solid
+    border: 2px solid
       ${({ theme: { colors } }) => {
         return colors.gray["100"];
       }};

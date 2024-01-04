@@ -3,7 +3,7 @@ import {
   ContentsWrapper,
   Container,
   ThumnailImgBox,
-  Dday
+  Dday,
 } from "@/components/HomeThumnailCard/style";
 
 import ThumnailImg from "@/components/ThumnailImg/ThumnailImg";
@@ -13,8 +13,7 @@ import CardContent from "@/components/CardContent/CardContent";
 
 import { getData } from "@/services/api";
 
-
-export default function HomeThumnailCard( {props, onModal} ) {
+export default function HomeThumnailCard({ props, onModal }) {
   const br = 21;
   const [cardContent, setCardContent] = useState("");
   const ment = props.content.length > 0 ? props.content : ""; //55
@@ -30,7 +29,7 @@ export default function HomeThumnailCard( {props, onModal} ) {
     const daysLeft = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
 
     return daysLeft === 0 ? "D-day" : `D-${daysLeft}`;
-  }
+  };
 
   useEffect(() => {
     setCardContent((prev) => textRefine);
@@ -39,7 +38,11 @@ export default function HomeThumnailCard( {props, onModal} ) {
   return (
     <Container onClick={onModal}>
       <ThumnailImgBox>
-        <ThumnailImg thumnailSrc={props.filepath ? props.filepath : "/images/test_thumnail.jpg"} />
+        <ThumnailImg
+          thumnailSrc={
+            props.filepath ? props.filepath : "/images/test_thumnail.jpg"
+          }
+        />
         <Dday>{getDday(props.deadline)}</Dday>
       </ThumnailImgBox>
       <ContentsWrapper>

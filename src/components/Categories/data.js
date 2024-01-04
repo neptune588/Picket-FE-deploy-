@@ -1,37 +1,37 @@
 const categoriesData = [
   {
     id: "cate01",
-    query: "/cate",
+    query: 1,
     content: "전체",
   },
   {
     id: "cate02",
-    query: "/cate=everyday",
+    query: 2,
     content: "일상",
   },
   {
     id: "cate03",
-    query: "//cate=travel",
+    query: 3,
     content: "여행",
   },
   {
     id: "cate04",
-    query: "/cate=health",
+    query: 4,
     content: "건강",
   },
   {
     id: "cate05",
-    query: "/cate=improvement",
+    query: 5,
     content: "자기계발",
   },
   {
     id: "cate06",
-    query: "/cate=family",
+    query: 6,
     content: "가족",
   },
   {
     id: "cate07",
-    query: "/cate=couple",
+    query: 7,
     content: "커플",
   },
 ];

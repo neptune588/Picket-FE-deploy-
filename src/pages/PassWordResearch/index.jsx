@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Input from "@/components/Input/Input";
 import SubmitButton from "@/components/SubmitButton/SubmitButton";
 import SiteLoading from "@/components/SiteLoading/SiteLoading";
+import NavBar from "@/components/NavBar";
 import LocationBar from "@/components/LocationBar/LocationBar";
 
 import { pwResearchDefaultData } from "@/pages/PassWordResearch/inputData";
@@ -28,7 +29,7 @@ export default function PassWordResearch() {
   const {
     value,
     errors,
-    dataLoading,
+    isPending,
     submitSuccess,
     setSubmitSuccess,
     handleChange,
@@ -36,13 +37,12 @@ export default function PassWordResearch() {
   } = usePwResearch();
   const pwResearchInput = useRef();
 
-  if (dataLoading) {
+  if (isPending) {
     return <SiteLoading />;
   }
 
   return (
     <>
-      <LocationBar content={"비밀번호 찾기"} />
       {submitSuccess && (
         <SuccessModalBox>
           <SuccessModal>
@@ -64,6 +64,8 @@ export default function PassWordResearch() {
           />
         </SuccessModalBox>
       )}
+      <NavBar />
+      <LocationBar content={"비밀번호 찾기"} />
       <CenterdContainer>
         <Title>비밀번호 찾기</Title>
         <NoticeMent>

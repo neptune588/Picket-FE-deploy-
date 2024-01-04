@@ -18,7 +18,7 @@ const Avatar = styled.div`
   }
 `;
 
-const NickName = styled.p`
+const Nickname = styled.p`
   font-size: ${({ theme: { typo } }) => {
     return typo.size.md;
   }};
@@ -27,13 +27,13 @@ const NickName = styled.p`
   }};
 `;
 
-export default function ProfileAvatar({ avatarSrc, nickName }) {
+export default function ProfileAvatar({ avatarSrc, nickname }) {
   return (
     <Wrapper>
       <Avatar>
         <img src={avatarSrc} alt={"profile_avatar"} />
       </Avatar>
-      <NickName>{nickName}</NickName>
+      <Nickname>{nickname}</Nickname>
     </Wrapper>
   );
 }

@@ -1,12 +1,9 @@
-//test용 컴포넌트입니다.
-import ThumnailCard from "@/components/ThumnailCard";
-import HomeThumnailCard from "@/components/HomeThumnailCard";
-import Bucket from "../../components/Bucket/Bucket";
+import BucketCard from "@/components/BucketCard";
 
 export default function OnlyTest() {
   return (
-    <>
-      <Bucket/>
-    </>
+    <div style={{ width: "100%", height: "100vh", backgroundColor: "black" }}>
+      <BucketCard />
+    </div>
   );
 }

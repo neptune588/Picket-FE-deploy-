@@ -7,7 +7,7 @@ import { postData } from "@/services/api";
 export default function useSignIn() {
   const navigate = useNavigate();
   useEffect(() => {
-    const condition = localStorage.getItem("userInfo");
+    const condition = localStorage.getItem("userAccessToken");
     if (condition) {
       navigate("/");
     }
@@ -28,7 +28,7 @@ export default function useSignIn() {
   });
   const [submitLoading, setSubmitLoading] = useState(false);
 
-  const { isLoading, mutate } = useMutation({
+  const { isPending, mutate } = useMutation({
     mutationFn: async (userData) => {
       return await postData("auth/login", userData, {
         headers: {
@@ -38,7 +38,7 @@ export default function useSignIn() {
     },
     onMutate: () => {
       //중복로그인 막기위한 2중장치 useEffect 로 되돌리기 + undefined return
-      const condition = localStorage.getItem("userInfo");
+      const condition = localStorage.getItem("userAccessToken");
       if (condition) {
         return;
       }
@@ -47,7 +47,12 @@ export default function useSignIn() {
     onSuccess: (JWT) => {
       const { data: tokenData } = JWT;
       //localstroge는 오직 문자열 형태의 key,value만 가능하다.
-      localStorage.setItem("userInfo", JSON.stringify(tokenData));
+      localStorage.setItem(
+        "userAccessToken",
+        JSON.stringify(tokenData.accessToken)
+      );
+      localStorage.setItem("userId", JSON.stringify(tokenData.memberId));
+      localStorage.setItem("userNickname", JSON.stringify(tokenData.nickname));
 
       setValues({ userLoginEmail: "", userLoginPassword: "" });
       setErrors({
@@ -123,5 +128,5 @@ export default function useSignIn() {
     }
   };
 
-  return { errors, values, isLoading, handleSubmit, handleChange };
+  return { errors, values, isPending, handleSubmit, handleChange };
 }
