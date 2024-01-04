@@ -1,16 +1,27 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-
 import { useMutation } from "@tanstack/react-query";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setDetailButcket,
+  setCommentModalState,
+} from "@/store/bucketDetailSlice";
+
 import { postData } from "@/services/api";
+import { getData } from "@/services/api";
+import { delData } from "@/services/api";
 
 export default function useBucketOptions() {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
+
+  const bucketDetailObj = useSelector((state) => {
+    return state.bucketDetail;
+  });
+
   const [commentValue, setCommentValue] = useState("");
-  const { bucketDetailData, curScrollLocation } = bucketDetailObj;
+  const { bucketDetailData } = bucketDetailObj;
 
   const commentCreateInput = useRef();
 
@@ -18,7 +29,7 @@ export default function useBucketOptions() {
     setCommentValue(e.target.value);
   };
 
-  const handleCommentDel = () => {
+  const handleCurCommentDel = () => {
     setCommentValue("");
     commentCreateInput.current && commentCreateInput.current.focus();
   };
@@ -46,6 +57,61 @@ export default function useBucketOptions() {
     },
     onSuccess: async (res) => {
       alert(res.data.message);
+      const { data } = await getData(`/board/${bucketDetailData.boardId}`);
+      data.commentList.forEach((obj) => (obj.putOptions = false));
+      dispatch(
+        setDetailButcket({
+          boardId: data.boardId,
+          title: data.title,
+          categoryList: data.categoryList,
+          cardContent: data.content,
+          cardImg: data.filepath,
+          created: data.deadline.split("-").join("."),
+          commentList: data.commentList,
+          heartCount: data.heartCount,
+          scrapCount: data.scrapCount,
+          nickname: data.nickname,
+          avatar: data.profileImg,
+        })
+      );
+    },
+    onError: (error) => {
+      if (error.response.status) {
+        console.log("에러러");
+      }
+    },
+  });
+
+  const commentDelReq = useMutation({
+    mutationFn: async ({ boardId, commentId }) => {
+      const token = `Bearer ${JSON.parse(
+        localStorage.getItem("userAccessToken")
+      )}`;
+      return await delData(`/board/${boardId}/comments/${commentId}`, {
+        headers: {
+          Authorization: token,
+        },
+      });
+    },
+    onSuccess: async (res) => {
+      alert(res.data.message);
+      const { data } = await getData(`/board/${bucketDetailData.boardId}`);
+      data.commentList.forEach((obj) => (obj.putOptions = false));
+      dispatch(
+        setDetailButcket({
+          boardId: data.boardId,
+          title: data.title,
+          categoryList: data.categoryList,
+          cardContent: data.content,
+          cardImg: data.filepath,
+          created: data.deadline.split("-").join("."),
+          commentList: data.commentList,
+          heartCount: data.heartCount,
+          scrapCount: data.scrapCount,
+          nickname: data.nickname,
+          avatar: data.profileImg,
+        })
+      );
     },
     onError: (error) => {
       if (error.response.status) {
@@ -60,22 +126,36 @@ export default function useBucketOptions() {
       commentValue === null ||
       commentValue === undefined
     ) {
-      console.log(commentValue);
       alert("댓글 내용을 작성 해주세요!");
     } else {
       createCommentReq.mutate({
         boardId: boardId,
         content: JSON.stringify({ content: commentValue }),
       });
+      handleCurCommentDel();
     }
+  };
+
+  const handleCommentDelReq = (boardId, commentId) => {
+    return () => {
+      commentDelReq.mutate({ boardId, commentId });
+    };
+  };
+
+  const handlePutModal = (curCommentNumber, putOptionsState) => {
+    return () => {
+      dispatch(setCommentModalState({ curCommentNumber, putOptionsState }));
+    };
   };
 
   return {
     commentValue,
     commentCreateInput,
     handleChange,
-    handleCommentDel,
+    handleCurCommentDel,
     handleLoginCheck,
     handleCommentCreate,
+    handlePutModal,
+    handleCommentDelReq,
   };
 }

@@ -143,7 +143,7 @@ export default function useNavBarOptions() {
     return async () => {
       try {
         const { data } = await getData(`/board/${boardNum}`);
-
+        data.commentList.forEach((obj) => (obj.putOptions = false));
         dispatch(
           setDetailButcket({
             boardId: data.boardId,

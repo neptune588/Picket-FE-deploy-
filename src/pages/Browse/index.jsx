@@ -83,7 +83,7 @@ export default function Browse() {
           cardData.map((card) => {
             return (
               <ThumnailCard
-                key={"boardKey" + card.boardId}
+                key={"thumnail" + card.boardId}
                 width={"290px"}
                 height={"290px"}
                 title={

@@ -205,6 +205,7 @@ export default function useBrwoseGetItem() {
   const cardDetailReq = async (borardNum) => {
     try {
       const { data } = await getData(`/board/${borardNum}`);
+      data.commentList.forEach((obj) => (obj.putOptions = false));
 
       dispatch(
         setDetailButcket({
@@ -237,7 +238,7 @@ export default function useBrwoseGetItem() {
       }
       !browseDetailModal && dispatch(setBrowseDetailBucketModal());
 
-      //console.log(data);
+      console.log(data);
     } catch (error) {
       if (error.response.status === 401) {
         console.error("error입니다.");
@@ -274,18 +275,14 @@ export default function useBrwoseGetItem() {
       });
     },
     onSuccess: async (res) => {
-      try {
-        //페이지로 산정되지 않는 짜투리 갯수를 위해 + 8 한번더
-        const { data } = await getData(
-          `/board/list/search?size=${page.value * 8 + 8}${keyword.key + keyword.value}${
-            categoryList.key + categoryList.value
-          }`
-        );
-        setCardData(data.content);
-        //console.log(res);
-      } catch (error) {
-        console.error("Oh~ :", error);
-      }
+      //페이지로 산정되지 않는 짜투리 갯수를 위해 + 8 한번더
+      const { data } = await getData(
+        `/board/list/search?size=${page.value * 8 + 8}${
+          keyword.key + keyword.value
+        }${categoryList.key + categoryList.value}`
+      );
+      setCardData(data.content);
+      //console.log(res);
     },
 
     onError: (error) => {

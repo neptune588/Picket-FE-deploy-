@@ -4,7 +4,10 @@ import { useLocation, Outlet } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { setSearchModal } from "@/store/modalsSlice";
+import {
+  setSearchModal,
+  setBrowseDetailBucketModal,
+} from "@/store/modalsSlice";
 import {
   setKeywordParams,
   setPrevParams,
@@ -13,13 +16,15 @@ import {
 
 export default function AuthPageLayOut() {
   const dispatch = useDispatch();
-  const searchModalState = useSelector((state) => {
-    return state.modals.searchModal;
+  const modals = useSelector((state) => {
+    return state.modals;
   });
+  const { searchModal, browseDetailModal } = modals;
   const location = useLocation();
 
   useEffect(() => {
-    searchModalState && dispatch(setSearchModal());
+    searchModal && dispatch(setSearchModal());
+    browseDetailModal && dispatch(setBrowseDetailBucketModal());
 
     if (!location.pathname.split("/").includes("search")) {
       dispatch(setKeywordParams(["", ""]));

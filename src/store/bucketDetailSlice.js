@@ -41,9 +41,20 @@ const bucketDetailSlice = createSlice({
       const { payload: scrollY } = action;
       state.curScrollLocation = scrollY;
     },
+    setCommentModalState(state, action) {
+      const { bucketDetailData } = state;
+      const { payload: curCommentPutModal } = action;
+      let { curCommentNumber, putOptionsState } = curCommentPutModal;
+
+      bucketDetailData.commentList.forEach((comment) => {
+        comment.putOptions = false;
+        bucketDetailData.commentList[curCommentNumber].putOptions =
+          putOptionsState;
+      });
+    },
   },
 });
 
-export const { setDetailButcket, setScrollLocation } =
+export const { setDetailButcket, setCommentModalState, setScrollLocation } =
   bucketDetailSlice.actions;
 export default bucketDetailSlice.reducer;

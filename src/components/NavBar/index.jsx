@@ -144,12 +144,13 @@ export default function NavBar() {
                     return (
                       <>
                         <NavTag
-                          key={data.id}
+                          key={"keywordTag" + data.id}
                           onClick={handleKeywordClick(data.value)}
                         >
                           {data.value}
                         </NavTag>
                         <NavTagDelButton
+                          key={"keywordDel" + data.id}
                           onClick={handleLatestKeywordDelete(idx)}
                         />
                       </>

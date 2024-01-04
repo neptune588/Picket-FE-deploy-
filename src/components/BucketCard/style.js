@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Comment from "@/assets/icons/commentIcon.svg?react";
 import Cross from "@/assets/icons/cross.svg?react";
+import Dot from "@/assets/icons/dot.svg?react";
 
 const Container = styled.div`
   position: fixed;
@@ -120,7 +121,7 @@ const ContentBox = styled.div`
 const IconsBox = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   > div {
     display: flex;
     align-items: center;
@@ -145,12 +146,82 @@ const CommentIcon = styled(Comment)`
 `;
 
 const CommentListBox = styled.div`
-  height: 90px;
+  height: 100px;
   overflow-y: scroll;
+  line-height: 30px;
+  > div {
+    position: relative;
+    display: flex;
+    > p {
+      color: ${({ theme: { colors } }) => {
+        return colors.gray["100"];
+      }};
+      &:first-child {
+        width: 90px;
+        margin-right: 10px;
+        font-weight: ${({ theme: { typo } }) => {
+          return typo.weight.bold;
+        }};
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+      &:last-child {
+        width: 360px;
+        margin-right: 10px;
+      }
+    }
+  }
+`;
+
+const CommentPutButton = styled(Dot)`
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  bottom: 7px;
+  right: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+  fill: ${({ theme: { colors } }) => {
+    return colors.gray["40"];
+  }};
+  &:hover {
+    fill: ${({ theme: { colors } }) => {
+      return colors.gray["80"];
+    }};
+  }
+`;
+
+const CommentPutArea = styled.ul`
+  position: absolute;
+  display: flex;
+  align-items: center;
+  bottom: 0px;
+  right: 15px;
+  user-select: none;
+  > li {
+    cursor: pointer;
+    margin-left: 10px;
+    transition: all 0.2s;
+    color: ${({ theme: { colors } }) => {
+      return colors.gray["60"];
+    }};
+    font-weight: ${({ theme: { typo } }) => {
+      return typo.weight.medium;
+    }};
+    &:hover {
+      color: ${({ theme: { colors } }) => {
+        return colors.gray["100"];
+      }};
+    }
+    &:first-child {
+      margin-left: 0;
+    }
+  }
 `;
 
 const CommentListNot = styled.div`
-  height: 90px;
+  height: 100px;
   line-height: 65px;
   color: ${({ theme: { colors } }) => {
     return colors.gray["60"];
@@ -253,7 +324,7 @@ const SendIcon = styled.div`
   }
 `;
 
-const CloseButton = styled.div`
+const MentDelButton = styled.div`
   position: absolute;
   top: 50%;
   right: 30px;
@@ -268,7 +339,7 @@ const CloseButton = styled.div`
   user-select: none;
 `;
 
-const CloseCrossIcon = styled(Cross)`
+const CrossIcon = styled(Cross)`
   position: absolute;
   display: inline-block;
   width: 10px;
@@ -294,10 +365,12 @@ export {
   CommentListBox,
   CommentIcon,
   CommentBox,
+  CommentPutButton,
+  CommentPutArea,
   CommentListNot,
   CommentUserAvatar,
   TextInputArea,
   SendIcon,
-  CloseButton,
-  CloseCrossIcon,
+  MentDelButton,
+  CrossIcon,
 };

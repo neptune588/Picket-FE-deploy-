@@ -4,7 +4,10 @@ import { useLocation, Outlet } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { setSearchModal } from "@/store/modalsSlice";
+import {
+  setSearchModal,
+  setBrowseDetailBucketModal,
+} from "@/store/modalsSlice";
 import {
   setKeywordParams,
   setPrevParams,
@@ -36,7 +39,7 @@ export default function LayOut() {
 
   useEffect(() => {
     searchModal && dispatch(setSearchModal());
-
+    browseDetailModal && dispatch(setBrowseDetailBucketModal());
     if (!location.pathname.split("/").includes("search")) {
       dispatch(setKeywordParams(["", ""]));
       dispatch(setTotalParams());
