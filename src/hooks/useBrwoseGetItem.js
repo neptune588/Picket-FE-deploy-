@@ -10,6 +10,10 @@ import {
   setCategoryListParams,
   setLastBoardParams,
 } from "@/store/parameterSlice";
+import {
+  setThumnailCard,
+  deleteThumnailCard,
+} from "@/store/bucketThumnailSlice";
 import { setBrowseDetailBucketModal } from "@/store/modalsSlice";
 import { setDetailButcket, setScrollLocation } from "@/store/bucketDetailSlice";
 
@@ -24,6 +28,9 @@ export default function useBrwoseGetItem() {
   const navigate = useNavigate();
   const { keyword: curKeyword } = useParams();
 
+  const cards = useSelector((state) => {
+    return state.bucketThumnail;
+  });
   const moadals = useSelector((state) => {
     return state.modals;
   });
@@ -34,8 +41,9 @@ export default function useBrwoseGetItem() {
     return state.bucketDetail;
   });
 
-  const { browseDetailModal } = moadals;
   const { page, keyword, categoryList, prevParams, totalParams } = params;
+  const { thumnailCards } = cards;
+  const { browseDetailModal } = moadals;
   const { bucketDetailData, curScrollLocation } = bucketDetailObj;
 
   const [dummy, setDummy] = useState([
@@ -61,6 +69,7 @@ export default function useBrwoseGetItem() {
   const mounted01 = useRef(false);
   const mounted02 = useRef(false);
   const mounted03 = useRef(false);
+  const mounted04 = useRef(false);
   //렌더링할때 화면이 비게되면 옵저버가 관측이 되어서 스크롤된것처럼 되기 때문에
   //그것을 위한 더미 옵저버
   const dummyObserver = useRef();
@@ -69,11 +78,10 @@ export default function useBrwoseGetItem() {
     //value 즉 페이지숫자는 스크롤 제외하고 트리거 발동때마다 리셋되어야하니까 0으로 주기
     dispatch(setPageParams([`page=`, 0]));
     dispatch(setLastBoardParams(["", ""]));
+    dispatch(deleteThumnailCard());
 
     setIsLoading(true);
     setLastPage(false);
-
-    setCardData([]);
   };
 
   const { ref: observerRef } = useInView({
@@ -182,14 +190,14 @@ export default function useBrwoseGetItem() {
           //마지막페이지 검증로직
           //라스트페이지면 스켈레톤x axios호출x
           setLastPage(true);
-          setCardData((prev) => [...prev, ...data.content]);
+          dispatch(setThumnailCard(data.content));
 
           setIsLoading(false);
 
           return;
         } else {
           setLastPage(false);
-          setCardData((prev) => [...prev, ...data.content]);
+          dispatch(setThumnailCard(data.content));
 
           setIsLoading(false);
         }
@@ -281,7 +289,8 @@ export default function useBrwoseGetItem() {
           keyword.key + keyword.value
         }${categoryList.key + categoryList.value}`
       );
-      setCardData(data.content);
+      dispatch(deleteThumnailCard());
+      dispatch(setThumnailCard(data.content));
       //console.log(res);
     },
 
@@ -305,6 +314,14 @@ export default function useBrwoseGetItem() {
     },
     onSuccess: async () => {
       cardDetailReq(bucketDetailData.boardId);
+      //페이지로 산정되지 않는 짜투리 갯수를 위해 + 8 한번더
+      const { data } = await getData(
+        `/board/list/search?size=${page.value * 8 + 8}${
+          keyword.key + keyword.value
+        }${categoryList.key + categoryList.value}`
+      );
+      dispatch(deleteThumnailCard());
+      dispatch(setThumnailCard(data.content));
     },
     onError: (error) => {
       if (error.response.status) {
@@ -400,6 +417,13 @@ export default function useBrwoseGetItem() {
     }
   }, [curKeyword]);
 
+  useEffect(() => {
+    if (!mounted04.current) {
+      mounted04.current = true;
+    } else {
+      setCardData(thumnailCards.data);
+    }
+  }, [thumnailCards.data]);
   useEffect(() => {
     //데이터 없으면 옵저버 못보게 더미 on 데이터 있으면 off
     if (dummyObserver.current && cardData.length > 0) {

@@ -4,6 +4,7 @@ import { useLocation, Outlet } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import { deleteThumnailCard } from "@/store/bucketThumnailSlice";
 import {
   setSearchModal,
   setBrowseDetailBucketModal,
@@ -16,6 +17,7 @@ import {
 
 export default function AuthPageLayOut() {
   const dispatch = useDispatch();
+
   const modals = useSelector((state) => {
     return state.modals;
   });
@@ -30,6 +32,7 @@ export default function AuthPageLayOut() {
       dispatch(setKeywordParams(["", ""]));
       dispatch(setTotalParams());
       dispatch(setPrevParams());
+      dispatch(deleteThumnailCard());
     }
   }, [location]);
 

@@ -138,7 +138,10 @@ export default function useBucketOptions() {
 
   const handleCommentDelReq = (boardId, commentId) => {
     return () => {
-      commentDelReq.mutate({ boardId, commentId });
+      const question = confirm("댓글을 삭제 하시겠습니까?");
+      if (question) {
+        commentDelReq.mutate({ boardId, commentId });
+      }
     };
   };
 

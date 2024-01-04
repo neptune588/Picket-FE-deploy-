@@ -91,8 +91,8 @@ export default function Browse() {
                     ? card.title.substring(0, titleViewLength) + "..."
                     : card.title
                 }
-                //thumnailSrc={card.filepath}
-                //avatarSrc={card.filename}
+                thumnailSrc={card.filepath}
+                avatarSrc={card.filename}
                 nickname={card.nickname}
                 likeCount={card.likeCount}
                 scrapCount={card.scrapCount}

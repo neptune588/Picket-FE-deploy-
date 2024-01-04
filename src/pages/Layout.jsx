@@ -4,6 +4,7 @@ import { useLocation, Outlet } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import { deleteThumnailCard } from "@/store/bucketThumnailSlice";
 import {
   setSearchModal,
   setBrowseDetailBucketModal,
@@ -31,9 +32,11 @@ const CenterdContainer = styled.div`
 
 export default function LayOut() {
   const dispatch = useDispatch();
+
   const modals = useSelector((state) => {
     return state.modals;
   });
+
   const { searchModal, browseDetailModal } = modals;
   const location = useLocation();
 
@@ -44,6 +47,7 @@ export default function LayOut() {
       dispatch(setKeywordParams(["", ""]));
       dispatch(setTotalParams());
       dispatch(setPrevParams());
+      dispatch(deleteThumnailCard());
     }
   }, [location]);
 

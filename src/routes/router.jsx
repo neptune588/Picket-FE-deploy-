@@ -7,6 +7,7 @@ import OnlyTest from "@/pages/OnlyTest/OnlyTest";
 import SignUp from "@/pages/SignUp";
 import SignIn from "@/pages/SignIn";
 import RegisterSuccess from "@/pages/RegisterSuccess/RegisterSuccess";
+import Main from "@/pages/Main";
 import TestMain from "../pages/TestMain/TestMain";
 import TestAlarm from "../pages/TestAlarm/TestAlarm";
 import TestMyProfile from "../pages/TestProfile/TestProfile";
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
         path: "/add",
         element: <TestAddBucket />,
         label: "add",
+      },
+      {
+        path: "/testmain",
+        element: <Main />,
       },
     ],
   },
