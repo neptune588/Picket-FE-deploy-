@@ -37,7 +37,7 @@ export default function NavBar() {
     dropdownOpen,
     userNickName,
     searchModal,
-    browseDetailModal,
+    detailModal,
     latestDetailCard,
     setSearchValue,
     handleSearchModalControl,
@@ -50,33 +50,34 @@ export default function NavBar() {
     handleDetailCardReq,
     handleDetailModalState,
     handleHeartAndScrapClick,
+    handleDetailHeartAndScrapClick,
     OnClickDropdown,
   } = useNavBarOptions();
   const nicknameViewLength = 8;
   const titleViewLength = 12;
   return (
     <>
-      {browseDetailModal && (
+      {detailModal && (
         <BucketCard
           boardId={latestDetailCard.boardId}
           nickname={latestDetailCard.nickname}
           avatar={latestDetailCard.avatar}
           title={latestDetailCard.title}
           cardImg={latestDetailCard.cardImg}
-          cardCotent={latestDetailCard.cardCotent}
+          cardContent={latestDetailCard.cardContent}
           commentList={latestDetailCard.commentList}
           cardCreated={latestDetailCard.created}
           heartCount={latestDetailCard.heartCount}
           scrapCount={latestDetailCard.scrapCount}
-          handleHeartClick={handleHeartAndScrapClick(
+          handleHeartClick={handleDetailHeartAndScrapClick(
             "heart",
             latestDetailCard.boardId
           )}
-          handleScrapClick={handleHeartAndScrapClick(
+          handleScrapClick={handleDetailHeartAndScrapClick(
             "scrap",
             latestDetailCard.boardId
           )}
-          modalHandle={handleDetailModalState}
+          modalCloseHandle={handleDetailModalState}
         />
       )}
       <NavBarWrapper>

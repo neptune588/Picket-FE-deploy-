@@ -16,8 +16,8 @@ const Container = styled.div`
 
 const AddImageWrapper = styled.div`
   display: flex;
+  width: 1135px;
   margin: 0 auto;
-  padding: 20px;
 `;
 
 export default function AddImg() {

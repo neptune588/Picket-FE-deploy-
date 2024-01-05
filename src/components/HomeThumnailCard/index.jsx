@@ -1,58 +1,88 @@
-import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
 import {
-  ContentsWrapper,
   Container,
+  ContentsWrapper,
   ThumnailImgBox,
+  CreateDateBox,
+  Title,
+  ContentBox,
   Dday,
+  ThumnailPutButton,
+  ThumnailPutModalOuter,
+  ThumnailPutModal,
+  PutOptionList,
 } from "@/components/HomeThumnailCard/style";
 
+import { setHomeThumnailPutModalState } from "@/store/bucketThumnailSlice";
+
 import ThumnailImg from "@/components/ThumnailImg/ThumnailImg";
-import CardBirthView from "@/components/CardBirthView/CardBirthView";
-import CardTitle from "@/components/CardTitle/CardTitle";
-import CardContent from "@/components/CardContent/CardContent";
 
-import { getData } from "@/services/api";
-
-export default function HomeThumnailCard({ props, onModal }) {
-  const br = 21;
-  const [cardContent, setCardContent] = useState("");
-  const ment = props.content.length > 0 ? props.content : ""; //55
-  const textRefine =
-    ment.length > br
-      ? ment.substring(0, br) + ment.substring(br, br * 2 - 1) + "..."
-      : ment;
-
-  const getDday = (dateString) => {
+export default function HomeThumnailCard({
+  boardId,
+  title,
+  content,
+  deadline,
+  thumnailSrc,
+  handleHomeDetailModal,
+  curThumnail,
+  putOptionModalState,
+  handleBucketDelete,
+  /*   avatar,
+  isFinish,
+  isProgress, */
+}) {
+  /*   const getDday = (dateString) => {
     const today = new Date();
     const targetDate = new Date(dateString);
     const timeDiff = targetDate.getTime() - today.getTime();
     const daysLeft = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
 
     return daysLeft === 0 ? "D-day" : `D-${daysLeft}`;
+  }; */
+
+  const dispatch = useDispatch();
+
+  const handlePutOptionModalState = (curThumnailNumber, curPutOptionsState) => {
+    return () => {
+      dispatch(
+        setHomeThumnailPutModalState({ curThumnailNumber, curPutOptionsState })
+      );
+    };
   };
 
-  useEffect(() => {
-    setCardContent((prev) => textRefine);
-  }, []);
-
   return (
-    <Container onClick={onModal}>
-      <ThumnailImgBox>
+    <Container>
+      {putOptionModalState && (
+        <ThumnailPutModalOuter>
+          <ThumnailPutModal>
+            <PutOptionList>버킷 달성</PutOptionList>
+            <PutOptionList onClick={handleBucketDelete}>
+              버킷 삭제
+            </PutOptionList>
+            <PutOptionList
+              onClick={handlePutOptionModalState(curThumnail, false)}
+            >
+              취소
+            </PutOptionList>
+          </ThumnailPutModal>
+        </ThumnailPutModalOuter>
+      )}
+      <ThumnailImgBox onClick={handleHomeDetailModal}>
         <ThumnailImg
-          thumnailSrc={
-            props.filepath ? props.filepath : "/images/test_thumnail.jpg"
-          }
+          thumnailSrc={thumnailSrc ? thumnailSrc : "/images/test_thumnail.jpg"}
         />
-        <Dday>{getDday(props.deadline)}</Dday>
       </ThumnailImgBox>
       <ContentsWrapper>
-        <CardBirthView margin={"0 0 20px"} content={props.deadline} />
-        <CardTitle
-          margin={"0 0 30px"}
-          isThumnail={true}
-          content={props.title.length > 0 ? props.title : "untitled"}
+        <Dday>D-5</Dday>
+        <ThumnailPutButton
+          onClick={handlePutOptionModalState(curThumnail, true)}
         />
-        <CardContent isThumnail={true} content={textRefine} />
+        <CreateDateBox onClick={handleHomeDetailModal}>
+          {deadline}
+        </CreateDateBox>
+        <Title onClick={handleHomeDetailModal}>{title}</Title>
+        <ContentBox onClick={handleHomeDetailModal}>{content}</ContentBox>
       </ContentsWrapper>
     </Container>
   );

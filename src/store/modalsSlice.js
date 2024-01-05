@@ -2,8 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   searchModal: false,
-  browseDetailModal: false,
-  homeDetailModal: false,
+  detailModal: false,
 };
 
 const modalsSlice = createSlice({
@@ -13,12 +12,11 @@ const modalsSlice = createSlice({
     setSearchModal(state) {
       state.searchModal = !state.searchModal;
     },
-    setBrowseDetailBucketModal(state) {
-      state.browseDetailModal = !state.browseDetailModal;
+    setDetailBucketModal(state) {
+      state.detailModal = !state.detailModal;
     },
   },
 });
 
-export const { setSearchModal, setBrowseDetailBucketModal } =
-  modalsSlice.actions;
+export const { setSearchModal, setDetailBucketModal } = modalsSlice.actions;
 export default modalsSlice.reducer;

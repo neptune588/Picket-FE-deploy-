@@ -39,14 +39,14 @@ export default function BucketCard({
   avatar,
   title,
   cardImg = "/images/test_thumnail.jpg",
-  cardCotent = "그동안 미뤄왔던 크로키 공책을 꺼냈다. 연필도 다시 깎아 가지런히 두었다. 하루에 하나씩 만이라도 가지런히 드로잉 해야지! 퀄리티에 상관없이 하는것에 의의를 둘것이다. 그동안 미뤄왔던 크로키 공책을 꺼냈다. 연필도 다시 깎아 가지런히 두었다. 하루에 하나씩 만이라도 가지런히 드로잉 해야지! 퀄리티에 상관없이 하는것에 의의를 둘것이다.",
+  cardContent,
   cardCreated,
   heartCount,
   scrapCount,
   commentList,
   handleHeartClick,
   handleScrapClick,
-  modalHandle,
+  modalCloseHandle,
 }) {
   const {
     commentValue,
@@ -65,7 +65,7 @@ export default function BucketCard({
           <img src={cardImg} />
         </ImgWrapper>
         <TotalContentWrapper>
-          <ModalCloseButton onClick={modalHandle} />
+          <ModalCloseButton onClick={modalCloseHandle} />
           <ProfileBox>
             <ProfileAvatar
               avatarSrc={avatar}
@@ -75,7 +75,7 @@ export default function BucketCard({
           <Title>{title}</Title>
           <CardCreatedDate>{cardCreated}</CardCreatedDate>
           <ContentBox>
-            <p>{cardCotent}</p>
+            <p>{cardContent}</p>
           </ContentBox>
           {commentList && commentList.length > 0 ? (
             <CommentListBox>
@@ -164,7 +164,7 @@ export default function BucketCard({
         </TotalContentWrapper>
       </BucketWrraper>
 
-      <ModalCloseArea onClick={modalHandle} />
+      <ModalCloseArea onClick={modalCloseHandle} />
     </Container>
   );
 }

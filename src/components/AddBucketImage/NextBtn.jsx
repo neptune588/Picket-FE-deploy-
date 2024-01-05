@@ -1,30 +1,27 @@
-import styled from "styled-components"
+import styled from "styled-components";
 
 const ButtonBox = styled.div`
-    bottom: 0;
-    padding-right: 30px;
-    float: right;
-    background: white;
+  width: 190px;
+  margin-left: auto;
 `;
 
 const NextBtn = styled.button`
-    width: 120px;
-    height: 50px;
-    margin: 10px;
-    padding: 10px;
-    background: ${({ theme: { colors } }) => {
-        return colors.primary
-    }};
-    color: white;
-    text-align: center;
-    border: none;
-    border-radius: 1em;
+  width: 100%;
+  height: 60px;
+  padding: 10px;
+  background: ${({ theme: { colors } }) => {
+    return colors.primary;
+  }};
+  color: white;
+  text-align: center;
+  border: none;
+  border-radius: 15px;
 `;
 
-export default function NextButton({onClick}){
-    return (
-        <ButtonBox>
-            <NextBtn onClick={onClick}>다음</NextBtn>
-        </ButtonBox>
-    )
-};
+export default function NextButton({ onClick }) {
+  return (
+    <ButtonBox>
+      <NextBtn onClick={onClick}>다음</NextBtn>
+    </ButtonBox>
+  );
+}

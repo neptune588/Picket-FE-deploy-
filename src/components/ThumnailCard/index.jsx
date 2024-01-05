@@ -19,13 +19,13 @@ export default function ThumnailCard({
   thumnailSrc = "/images/test_thumnail.jpg",
   likeCount,
   scrapCount,
-  handledetailView,
+  handleDetailView,
   handleHeartClick,
   handleScrapClick,
 }) {
   return (
     <Container $width={width}>
-      <ThumnailImgBox $height={height} onClick={handledetailView}>
+      <ThumnailImgBox $height={height} onClick={handleDetailView}>
         <ThumnailImg thumnailSrc={thumnailSrc} />
         <h2>{title}</h2>
       </ThumnailImgBox>

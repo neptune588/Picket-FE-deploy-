@@ -4,7 +4,6 @@ import styled from "styled-components";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 import Bucket from "../../components/Bucket/Bucket";
-import Categories from "../../components/Categories/Categories";
 import AddBucketIcon from "../../components/AddBucket/AddBucketIcon";
 import HomeThumnailCard from "../../components/HomeThumnailCard";
 import { getData } from "@/services/api";

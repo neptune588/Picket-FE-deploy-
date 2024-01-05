@@ -22,10 +22,10 @@ export default function Browse() {
     isLoading,
     dummyObserver,
     CardDetailData,
-    browseDetailModal,
+    detailModal,
     observerRef,
     handleCategoryClick,
-    handledetailView,
+    handleDetailView,
     handleDetailModalState,
     handleHeartAndScrapClick,
     handleDetailHeartAndScrapClick,
@@ -33,14 +33,14 @@ export default function Browse() {
   const titleViewLength = 15;
   return (
     <>
-      {browseDetailModal && (
+      {detailModal && (
         <BucketCard
           boardId={CardDetailData.boardId}
           nickname={CardDetailData.nickname}
           avatar={CardDetailData.avatar}
           title={CardDetailData.title}
           cardImg={CardDetailData.cardImg}
-          cardCotent={CardDetailData.cardCotent}
+          cardContent={CardDetailData.cardContent}
           cardCreated={CardDetailData.created}
           heartCount={CardDetailData.heartCount}
           commentList={CardDetailData.commentList}
@@ -53,7 +53,7 @@ export default function Browse() {
             "scrap",
             CardDetailData.boardId
           )}
-          modalHandle={handleDetailModalState}
+          modalCloseHandle={handleDetailModalState}
         />
       )}
       <SubTitle>
@@ -92,11 +92,13 @@ export default function Browse() {
                     : card.title
                 }
                 thumnailSrc={card.filepath}
-                avatarSrc={card.filename}
+                avatarSrc={
+                  card.filename ? card.filename : "/images/default_profile"
+                }
                 nickname={card.nickname}
                 likeCount={card.likeCount}
                 scrapCount={card.scrapCount}
-                handledetailView={handledetailView(card.boardId)}
+                handleDetailView={handleDetailView(card.boardId)}
                 handleHeartClick={handleHeartAndScrapClick(
                   "heart",
                   card.boardId

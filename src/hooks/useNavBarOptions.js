@@ -2,15 +2,19 @@ import { useState, useEffect, useRef } from "react";
 
 import { useNavigate } from "react-router-dom";
 
+import { useMutation } from "@tanstack/react-query";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setSearchModal,
-  setBrowseDetailBucketModal,
-} from "@/store/modalsSlice";
+
+import { setSearchModal, setDetailBucketModal } from "@/store/modalsSlice";
 import { setKeywordParams } from "@/store/parameterSlice";
 import { setDetailButcket } from "@/store/bucketDetailSlice";
-
+import {
+  setThumnailCard,
+  deleteThumnailCard,
+  deleteHomeThumnailCard,
+} from "@/store/bucketThumnailSlice";
 import { getData } from "@/services/api";
+import { postData } from "@/services/api";
 
 export default function useNavBarOptions() {
   const navigate = useNavigate();
@@ -27,8 +31,8 @@ export default function useNavBarOptions() {
     return state.bucketDetail;
   });
 
-  const { browseDetailModal, searchModal } = modals;
-  const { keyword } = params;
+  const { detailModal, searchModal } = modals;
+  const { page, keyword, categoryList, prevParams, totalParams } = params;
   const { bucketDetailData } = bucketDetailObj;
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -49,7 +53,7 @@ export default function useNavBarOptions() {
   };
 
   const handleDetailModalState = () => {
-    browseDetailModal && dispatch(setBrowseDetailBucketModal());
+    detailModal && dispatch(setDetailBucketModal());
   };
 
   const loginCheck = () => {
@@ -60,6 +64,7 @@ export default function useNavBarOptions() {
   };
 
   const handleSignOut = () => {
+    dispatch(deleteHomeThumnailCard());
     //일단은 로컬스토리지에서 지우는걸로 간단설정 보안을 생각하면 보완필요
     localStorage.removeItem("userAccessToken");
     localStorage.removeItem("userId");
@@ -161,7 +166,7 @@ export default function useNavBarOptions() {
         );
         setLatestDetailCard(bucketDetailData);
 
-        !browseDetailModal && dispatch(setBrowseDetailBucketModal());
+        !detailModal && dispatch(setDetailBucketModal());
 
         //console.log(data);
       } catch (error) {
@@ -169,6 +174,35 @@ export default function useNavBarOptions() {
       }
     };
   };
+
+  const detailLikeAndScrapReq = useMutation({
+    mutationFn: async (curData) => {
+      const token = `Bearer ${JSON.parse(
+        localStorage.getItem("userAccessToken")
+      )}`;
+      return await postData(`/board/${curData}`, null, {
+        headers: {
+          Authorization: token,
+        },
+      });
+    },
+    onSuccess: async () => {
+      handleDetailCardReq(bucketDetailData.boardId);
+      const { data } = await getData(
+        `/board/list/search?size=${page.value * 8 + 8}${
+          keyword.key + keyword.value
+        }${categoryList.key + categoryList.value}`
+      );
+      dispatch(deleteThumnailCard());
+      dispatch(deleteHomeThumnailCard());
+      dispatch(setThumnailCard(data.content));
+    },
+    onError: (error) => {
+      if (error.response.status) {
+        console.log("에러러");
+      }
+    },
+  });
 
   const handleHeartAndScrapClick = (type, curBoardId) => {
     return () => {
@@ -179,6 +213,30 @@ export default function useNavBarOptions() {
         case "scrap":
           console.log("스크랩 클릭했습니다.");
           break;
+      }
+    };
+  };
+
+  const handleDetailHeartAndScrapClick = (type, curBoardId) => {
+    return () => {
+      const condition = localStorage.getItem("userAccessToken");
+      if (!condition) {
+        const question = confirm(
+          "로그인을 하셔야 이용 가능합니다. 로그인 하시겠습니까?"
+        );
+        question && navigate("/auth/signin");
+        return;
+      } else {
+        switch (type) {
+          case "heart": {
+            detailLikeAndScrapReq.mutate(`${curBoardId}/like`);
+            break;
+          }
+          case "scrap": {
+            detailLikeAndScrapReq.mutate(`${curBoardId}/scrap`);
+            break;
+          }
+        }
       }
     };
   };
@@ -205,7 +263,7 @@ export default function useNavBarOptions() {
     dropdownOpen,
     userNickName,
     searchModal,
-    browseDetailModal,
+    detailModal,
     latestDetailCard,
     setSearchValue,
     handleSearchModalControl,
@@ -218,6 +276,7 @@ export default function useNavBarOptions() {
     handleDetailCardReq,
     handleDetailModalState,
     handleHeartAndScrapClick,
+    handleDetailHeartAndScrapClick,
     OnClickDropdown,
   };
 }

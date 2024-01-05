@@ -14,7 +14,7 @@ import {
   setThumnailCard,
   deleteThumnailCard,
 } from "@/store/bucketThumnailSlice";
-import { setBrowseDetailBucketModal } from "@/store/modalsSlice";
+import { setDetailBucketModal } from "@/store/modalsSlice";
 import { setDetailButcket, setScrollLocation } from "@/store/bucketDetailSlice";
 
 import { getData } from "@/services/api";
@@ -43,7 +43,7 @@ export default function useBrwoseGetItem() {
 
   const { page, keyword, categoryList, prevParams, totalParams } = params;
   const { thumnailCards } = cards;
-  const { browseDetailModal } = moadals;
+  const { detailModal } = moadals;
   const { bucketDetailData, curScrollLocation } = bucketDetailObj;
 
   const [dummy, setDummy] = useState([
@@ -244,7 +244,7 @@ export default function useBrwoseGetItem() {
       } else {
         localStorage.setItem("latestBucket", JSON.stringify([latestCard]));
       }
-      !browseDetailModal && dispatch(setBrowseDetailBucketModal());
+      !detailModal && dispatch(setDetailBucketModal());
 
       console.log(data);
     } catch (error) {
@@ -255,7 +255,7 @@ export default function useBrwoseGetItem() {
     }
   };
 
-  const handledetailView = (curBoardId) => {
+  const handleDetailView = (curBoardId) => {
     return () => {
       dispatch(setScrollLocation(window.scrollY));
       cardDetailReq(curBoardId);
@@ -263,12 +263,10 @@ export default function useBrwoseGetItem() {
   };
 
   const handleDetailModalState = () => {
-    if (browseDetailModal) {
-      browseDetailModal && dispatch(setBrowseDetailBucketModal());
-      setTimeout(() => {
-        window.scroll({ top: curScrollLocation, left: 0 });
-      }, 50);
-    }
+    detailModal && dispatch(setDetailBucketModal());
+    setTimeout(() => {
+      window.scroll({ top: curScrollLocation, left: 0 });
+    }, 50);
   };
 
   const likeAndScrapReq = useMutation({
@@ -314,14 +312,17 @@ export default function useBrwoseGetItem() {
     },
     onSuccess: async () => {
       cardDetailReq(bucketDetailData.boardId);
-      //페이지로 산정되지 않는 짜투리 갯수를 위해 + 8 한번더
-      const { data } = await getData(
-        `/board/list/search?size=${page.value * 8 + 8}${
-          keyword.key + keyword.value
-        }${categoryList.key + categoryList.value}`
-      );
-      dispatch(deleteThumnailCard());
-      dispatch(setThumnailCard(data.content));
+      try {
+        const { data } = await getData(
+          `/board/list/search?size=${page.value * 8 + 8}${
+            keyword.key + keyword.value
+          }${categoryList.key + categoryList.value}`
+        );
+        dispatch(deleteThumnailCard());
+        dispatch(setThumnailCard(data.content));
+      } catch (error) {
+        console.error("받아오는데서 에러 뜸");
+      }
     },
     onError: (error) => {
       if (error.response.status) {
@@ -458,11 +459,11 @@ export default function useBrwoseGetItem() {
     isLoading,
     dummyObserver,
     CardDetailData,
-    browseDetailModal,
+    detailModal,
     cardDetailReq,
     observerRef,
     handleCategoryClick,
-    handledetailView,
+    handleDetailView,
     handleDetailModalState,
     handleHeartAndScrapClick,
     handleDetailHeartAndScrapClick,

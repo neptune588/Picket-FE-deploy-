@@ -36,11 +36,11 @@ const parameterSlice = createSlice({
         categoryList.value.join(",") +
         keyword.key +
         keyword.value;
-      console.log("totalParam은", totalParams.value);
+      //console.log("totalParam은", totalParams.value);
     },
     setPrevParams(state) {
       state.prevParams.value = state.totalParams.value;
-      console.log("prevParam이 갱신되었습니다.");
+      //console.log("prevParam이 갱신되었습니다.");
     },
     setPageParams(state, action) {
       const { page } = state;

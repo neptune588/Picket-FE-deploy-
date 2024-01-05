@@ -120,7 +120,6 @@ const CloseCrossIcon = styled(Cross)`
 const AlarmBox = styled.div`
   display: flex;
   justify-content: flex-end;
-  width: 100px;
   margin-left: auto;
   align-items: center;
   user-select: none;
@@ -140,10 +139,6 @@ const AlarmIcon = styled(Alarm)`
 const Profile = styled.div`
   cursor: pointer;
   > p {
-    width: 70px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     margin-left: 5px;
   }
 `;

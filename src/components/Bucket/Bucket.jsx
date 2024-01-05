@@ -14,7 +14,7 @@ import {
 
 import LikeButton from "../LikeButton/LikeButton";
 import ScrapButton from "../ScrapButton/ScrapButton";
-import CardBirthView from "../CardBirthView/CardBirthView";
+/* import CardBirthView from "../CardBirthView/CardBirthView"; */
 
 import ThreeDot from "@/assets/icons/threedot.svg?react";
 import Reply from "@/assets/icons/reply.svg?react";
@@ -204,7 +204,7 @@ export default function Bucket({ boardId, onModal }) {
         </WriterBox>
         {openModal && <BucketHandle setOpenModal={setOpenModal} />}
         <BucketTitle>{data.title}</BucketTitle>
-        <CardBirthView margin={"0 0 20px"} content={data.deadline} />
+        {/* <CardBirthView margin={"0 0 20px"} content={data.deadline} /> */}
         <Content>{data.content}</Content>
         <ButtonBox>
           <LikeButton
