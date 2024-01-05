@@ -13,6 +13,77 @@ const Container = styled.div`
   z-index: 99999;
 `;
 
+const CardPutModalOuter = styled(Container)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 999999;
+`;
+
+const CardPutModal = styled.ul`
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 400px;
+  height: 325px;
+  background-color: ${({ theme: { colors } }) => {
+    return colors.white;
+  }};
+  border-radius: 40px;
+  z-index: 10;
+  > li {
+    padding: 10px 40px;
+    font-size: ${({ theme: { typo } }) => {
+      return typo.size.md;
+    }};
+    font-weight: ${({ theme: { typo } }) => {
+      return typo.weight.medium;
+    }};
+    transition: all 0.1s;
+    border-radius: 25px;
+    margin-bottom: 5px;
+    &:hover {
+      color: ${({ theme: { colors } }) => {
+        return colors.white;
+      }};
+      background-color: ${({ theme: { colors } }) => {
+        return colors.gray["80"];
+      }};
+    }
+    &:last-child {
+      margin-bottom: 0;
+    }
+    cursor: pointer;
+  }
+  > h2 {
+    font-size: ${({ theme: { typo } }) => {
+      return typo.size.xl;
+    }};
+    font-weight: ${({ theme: { typo } }) => {
+      return typo.weight.bold;
+    }};
+    user-select: none;
+    margin-bottom: 50px;
+  }
+`;
+
+const CardPutButton = styled(Dot)`
+  width: 20px;
+  height: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+  fill: ${({ theme: { colors } }) => {
+    return colors.gray["40"];
+  }};
+  &:hover {
+    fill: ${({ theme: { colors } }) => {
+      return colors.gray["80"];
+    }};
+  }
+`;
 const ModalCloseArea = styled.div`
   position: fixed;
   left: 0;
@@ -84,14 +155,19 @@ const ProfileBox = styled.div`
   }
 `;
 
-const Title = styled.h2`
+const TitleBox = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin: 30px 0 20px;
-  font-size: ${({ theme: { typo } }) => {
-    return typo.size.xl;
-  }};
-  font-weight: ${({ theme: { typo } }) => {
-    return typo.weight.bold;
-  }};
+  > h2 {
+    font-size: ${({ theme: { typo } }) => {
+      return typo.size.xl;
+    }};
+    font-weight: ${({ theme: { typo } }) => {
+      return typo.weight.bold;
+    }};
+  }
 `;
 
 const CardCreatedDate = styled.p`
@@ -351,6 +427,9 @@ const CrossIcon = styled(Cross)`
 `;
 
 export {
+  CardPutModalOuter,
+  CardPutModal,
+  CardPutButton,
   Container,
   ModalCloseArea,
   ModalCloseButton,
@@ -358,7 +437,7 @@ export {
   ImgWrapper,
   TotalContentWrapper,
   ProfileBox,
-  Title,
+  TitleBox,
   CardCreatedDate,
   ContentBox,
   IconsBox,

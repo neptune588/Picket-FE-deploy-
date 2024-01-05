@@ -19,6 +19,7 @@ import { setDetailButcket, setScrollLocation } from "@/store/bucketDetailSlice";
 
 import { getData } from "@/services/api";
 import { postData } from "@/services/api";
+import { delData } from "@/services/api";
 
 import { categoriesData } from "@/pages/Browse/categoryData";
 
@@ -379,6 +380,48 @@ export default function useBrwoseGetItem() {
     };
   };
 
+  const detailBucketDelete = useMutation({
+    mutationFn: async (curBoardId) => {
+      const token = `Bearer ${JSON.parse(
+        localStorage.getItem("userAccessToken")
+      )}`;
+      return await delData(`/board/${curBoardId}`, {
+        headers: {
+          Authorization: token,
+        },
+      });
+    },
+    onSuccess: async () => {
+      try {
+        const { data } = await getData(
+          `/board/list/search?size=${page.value * 8 + 8}${
+            keyword.key + keyword.value
+          }${categoryList.key + categoryList.value}`
+        );
+
+        dispatch(deleteThumnailCard());
+        dispatch(setThumnailCard(data.content));
+
+        alert("버킷이 삭제 되었습니다!");
+        dispatch(setDetailBucketModal());
+      } catch (error) {
+        console.error("Oh~ :", error);
+      }
+    },
+    onError: (error) => {
+      if (error.response.status === 401) {
+        alert("권한이 없습니다!");
+      }
+    },
+  });
+
+  const handleDetailBucketDelete = (curBoardId) => {
+    return () => {
+      confirm("버킷을 삭제하시겠습니까?") &&
+        detailBucketDelete.mutate(curBoardId);
+    };
+  };
+
   //시작시 리스트 불러옴
   useEffect(() => {
     //비워줘야지 다른 페이지갔다 다시 와서 카테구리 누를때 []이 디폴트인상태에서 됨. 즉 처음페이지에 온것처럼 됨.
@@ -467,6 +510,7 @@ export default function useBrwoseGetItem() {
     handleDetailModalState,
     handleHeartAndScrapClick,
     handleDetailHeartAndScrapClick,
+    handleDetailBucketDelete,
   };
 }
 

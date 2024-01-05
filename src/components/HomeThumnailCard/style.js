@@ -58,7 +58,7 @@ const ContentBox = styled.p`
   white-space: pre-wrap;
 `;
 
-const Dday = styled.div`
+const DdayView = styled.div`
   position: absolute;
   width: 60px;
   height: 30px;
@@ -67,10 +67,17 @@ const Dday = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.4);
-  color: white;
+  background-color: ${({ $isOverdue, theme: { colors } }) => {
+    return $isOverdue > 0 ? colors.white : "rgba(0, 0, 0, 0.4)";
+  }};
+  color: ${({ $isOverdue, theme: { colors } }) => {
+    return $isOverdue > 0 ? colors.inVaild : colors.white;
+  }};
   font-size: ${({ theme: { typo } }) => {
     return typo.size.md;
+  }};
+  font-weight: ${({ $isOverdue, theme: { typo } }) => {
+    return $isOverdue > 0 ? typo.weight.bold : typo.weight.regular;
   }};
   border-radius: 20px;
 `;
@@ -151,7 +158,7 @@ export {
   CreateDateBox,
   Title,
   ContentBox,
-  Dday,
+  DdayView,
   ThumnailPutButton,
   ThumnailPutModalOuter,
   ThumnailPutModal,

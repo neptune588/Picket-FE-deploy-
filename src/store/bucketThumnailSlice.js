@@ -27,11 +27,28 @@ const bucketThumnailSlice = createSlice({
       const { homeThumnailCards } = state;
       const { payload: curHomeThumnailCards } = action;
 
-      curHomeThumnailCards.forEach((obj) => (obj.putOptions = false));
+      curHomeThumnailCards.forEach((obj) => {
+        const date = new Date();
+        const compareDate =
+          date.getFullYear() +
+          "-" +
+          String(date.getMonth() + 1).padStart(2, 0) +
+          "-" +
+          String(date.getDate()).padStart(2, 0);
+
+        const today = new Date(compareDate); // 20240107
+        const deadlineDate = new Date(obj.deadline); // 20240106
+
+        obj.Dday = (today - deadlineDate) / (1000 * 60 * 60 * 24);
+        obj.putOptions = false;
+      });
+
       homeThumnailCards.data = [
         ...homeThumnailCards.data,
         ...curHomeThumnailCards,
       ];
+
+      console.log(homeThumnailCards.data);
     },
     deleteHomeThumnailCard(state) {
       state.homeThumnailCards.data = [];

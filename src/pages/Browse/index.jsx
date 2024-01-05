@@ -29,6 +29,7 @@ export default function Browse() {
     handleDetailModalState,
     handleHeartAndScrapClick,
     handleDetailHeartAndScrapClick,
+    handleDetailBucketDelete,
   } = useBrwoseGetItem();
   const titleViewLength = 15;
   return (
@@ -51,6 +52,9 @@ export default function Browse() {
           )}
           handleScrapClick={handleDetailHeartAndScrapClick(
             "scrap",
+            CardDetailData.boardId
+          )}
+          handleDetailBucketDelete={handleDetailBucketDelete(
             CardDetailData.boardId
           )}
           modalCloseHandle={handleDetailModalState}

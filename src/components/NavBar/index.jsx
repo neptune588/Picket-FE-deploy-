@@ -57,7 +57,7 @@ export default function NavBar() {
   const titleViewLength = 12;
   return (
     <>
-      {detailModal && (
+      {/*       {detailModal && (
         <BucketCard
           boardId={latestDetailCard.boardId}
           nickname={latestDetailCard.nickname}
@@ -79,7 +79,7 @@ export default function NavBar() {
           )}
           modalCloseHandle={handleDetailModalState}
         />
-      )}
+      )} */}
       <NavBarWrapper>
         <SymbolIcon />
         <NavLinkBox>
@@ -176,7 +176,7 @@ export default function NavBar() {
                         //thumnailSrc={card.filepath}
                         //avatarSrc={card.filename}
                         nickname={
-                          card.nickname.length > nicknameViewLength
+                          card.nickname?.length > nicknameViewLength
                             ? card.nickname.substring(0, nicknameViewLength) +
                               "..."
                             : card.nickname

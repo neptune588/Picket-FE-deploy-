@@ -7,7 +7,7 @@ import {
   CreateDateBox,
   Title,
   ContentBox,
-  Dday,
+  DdayView,
   ThumnailPutButton,
   ThumnailPutModalOuter,
   ThumnailPutModal,
@@ -28,19 +28,12 @@ export default function HomeThumnailCard({
   curThumnail,
   putOptionModalState,
   handleBucketDelete,
+  handleBucketComplete,
+  Dday,
   /*   avatar,
   isFinish,
   isProgress, */
 }) {
-  /*   const getDday = (dateString) => {
-    const today = new Date();
-    const targetDate = new Date(dateString);
-    const timeDiff = targetDate.getTime() - today.getTime();
-    const daysLeft = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-
-    return daysLeft === 0 ? "D-day" : `D-${daysLeft}`;
-  }; */
-
   const dispatch = useDispatch();
 
   const handlePutOptionModalState = (curThumnailNumber, curPutOptionsState) => {
@@ -56,7 +49,9 @@ export default function HomeThumnailCard({
       {putOptionModalState && (
         <ThumnailPutModalOuter>
           <ThumnailPutModal>
-            <PutOptionList>버킷 달성</PutOptionList>
+            <PutOptionList onClick={handleBucketComplete}>
+              버킷 달성
+            </PutOptionList>
             <PutOptionList onClick={handleBucketDelete}>
               버킷 삭제
             </PutOptionList>
@@ -74,7 +69,9 @@ export default function HomeThumnailCard({
         />
       </ThumnailImgBox>
       <ContentsWrapper>
-        <Dday>D-5</Dday>
+        <DdayView $isOverdue={Dday}>
+          {Dday > 0 ? "D+" + Dday : "D-" + Math.abs(Dday)}
+        </DdayView>
         <ThumnailPutButton
           onClick={handlePutOptionModalState(curThumnail, true)}
         />

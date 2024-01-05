@@ -25,6 +25,8 @@ export default function Main() {
     handleAddBucket,
     handleDetailHeartAndScrapClick,
     handleBucketDelete,
+    handleBucketComplete,
+    handleHomeDetailBucketDelete,
   } = useMypage();
   const contentMaxViewLength = 18;
   const titleMaxViewLength = 15;
@@ -52,6 +54,9 @@ export default function Main() {
             homeCardDetailData.boardId
           )}
           modalCloseHandle={handleHomeDetailModalClose}
+          handleDetailBucketDelete={handleHomeDetailBucketDelete(
+            homeCardDetailData.boardId
+          )}
         />
       )}
       {!localStorage.getItem("userAccessToken") ||
@@ -92,6 +97,7 @@ export default function Main() {
                         : data.content
                     }
                     deadline={data.deadline}
+                    Dday={data.Dday}
                     thumnailSrc={data.filepath}
                     avatar={data.filename}
                     isFinish={data.finishTotal}
@@ -99,6 +105,7 @@ export default function Main() {
                     putOptionModalState={data.putOptions}
                     handleHomeDetailModal={handleHomeDetailView(data.boardId)}
                     handleBucketDelete={handleBucketDelete(data.boardId)}
+                    handleBucketComplete={handleBucketComplete(data.boardId)}
                   />
                 );
               })}
