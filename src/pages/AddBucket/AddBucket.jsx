@@ -14,7 +14,7 @@ export default function TestAddBucket() {
   return (
     <>
       <NavBar />
-      <LocationBar content={"버킷추가"} />
+      <LocationBar content={"버킷 추가"} />
       <AddWrapper>
         <AddImg />
       </AddWrapper>

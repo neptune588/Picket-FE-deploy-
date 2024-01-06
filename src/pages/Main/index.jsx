@@ -27,6 +27,7 @@ export default function Main() {
     handleBucketDelete,
     handleBucketComplete,
     handleHomeDetailBucketDelete,
+    handleHomeDetailBucketComplete,
   } = useMypage();
   const contentMaxViewLength = 18;
   const titleMaxViewLength = 15;
@@ -37,7 +38,11 @@ export default function Main() {
         <BucketCard
           boardId={homeCardDetailData.boardId}
           nickname={homeCardDetailData.nickname}
-          avatar={homeCardDetailData.avatar}
+          avatar={
+            homeCardDetailData.avatar
+              ? homeCardDetailData.avatar
+              : "/images/default_profile.png"
+          }
           title={homeCardDetailData.title}
           cardImg={homeCardDetailData.cardImg}
           cardContent={homeCardDetailData.cardContent}
@@ -45,6 +50,7 @@ export default function Main() {
           cardCreated={homeCardDetailData.created}
           heartCount={homeCardDetailData.heartCount}
           scrapCount={homeCardDetailData.scrapCount}
+          isCompleted={homeCardDetailData.isCompleted}
           handleHeartClick={handleDetailHeartAndScrapClick(
             "heart",
             homeCardDetailData.boardId
@@ -55,6 +61,9 @@ export default function Main() {
           )}
           modalCloseHandle={handleHomeDetailModalClose}
           handleDetailBucketDelete={handleHomeDetailBucketDelete(
+            homeCardDetailData.boardId
+          )}
+          handleDetailBucketComplete={handleHomeDetailBucketComplete(
             homeCardDetailData.boardId
           )}
         />
@@ -101,6 +110,7 @@ export default function Main() {
                     thumnailSrc={data.filepath}
                     avatar={data.filename}
                     isFinish={data.finishTotal}
+                    isCompleted={data.isCompleted}
                     isProgress={data.progressTotal}
                     putOptionModalState={data.putOptions}
                     handleHomeDetailModal={handleHomeDetailView(data.boardId)}
@@ -115,7 +125,10 @@ export default function Main() {
           </AddBucketButton>
         </>
       )}
-      {homeCardData?.length > 0 && <div ref={homeObserver}></div>}
+      {/* 데이터 없으면 빈배열이아니라 문자열오기떄문에 배열인지 한번더확인해줘야함 */}
+      {Array.isArray(homeCardData) && homeCardData.length > 0 && (
+        <div ref={homeObserver}></div>
+      )}
     </>
   );
 }

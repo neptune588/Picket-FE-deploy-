@@ -4,6 +4,8 @@ import { useMutation } from "@tanstack/react-query";
 import { useDispatch } from "react-redux";
 import { useInView } from "react-intersection-observer";
 
+import { setProfileEditModal } from "@/store/modalsSlice";
+
 import {
   setTotalHomeParams,
   setLastBoardHomeParams,
@@ -14,6 +16,7 @@ import {
   setHomeTumnailCards,
   deleteHomeThumnailCard,
 } from "@/store/bucketThumnailSlice";
+
 import { setDetailBucketModal } from "@/store/modalsSlice";
 import { setDetailButcket, setScrollLocation } from "@/store/bucketDetailSlice";
 
@@ -24,12 +27,13 @@ import { patchData } from "@/services/api";
 
 import useSelectorList from "@/hooks/useSelectorList";
 
-export default function useMypage() {
+export default function useMyProfile() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const {
     detailModal,
+    profileEditModal,
     homePage,
     totalHomeParams,
     homeThumnailCards,
@@ -39,13 +43,17 @@ export default function useMypage() {
 
   const [lastPage, setLastPage] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [homeCardData, setHomeCardData] = useState([]);
-  const [homeCardDetailData, setHomeCardDetailData] = useState({});
+  const [completeCount, setCompleteCount] = useState(0);
+  const [scrapCardData, setScrapCardData] = useState([]);
+  const [activeNumber, setActiveNumber] = useState(0);
+  const [profileHomeCardData, setProfileHomeCardData] = useState([]);
+  const [profileHomeCardDetailData, setprofileHomeCardDetailData] = useState(
+    {}
+  );
 
-  const homeMouted01 = useRef();
-  const homeMouted02 = useRef();
-  const homeMouted03 = useRef();
-  const homeMouted04 = useRef();
+  const profileMouted01 = useRef();
+  const profileMouted02 = useRef();
+  const profileMouted03 = useRef();
 
   const pageAndBoardDataReset = () => {
     dispatch(setPageHomeParams([`page=`, 0]));
@@ -56,7 +64,8 @@ export default function useMypage() {
     //setIsLoading(true);
     setLastPage(false);
   };
-  const { ref: homeObserver } = useInView({
+
+  const { ref: profileObserver } = useInView({
     threshold: 0,
     onChange: (view) => {
       //스크롤 내렸을때 라스트페이지가 아닐때
@@ -70,7 +79,7 @@ export default function useMypage() {
         dispatch(
           setLastBoardHomeParams([
             "&lastBoardId=",
-            `${homeCardData[homeCardData.length - 1].boardId}`,
+            `${profileHomeCardData[profileHomeCardData.length - 1].boardId}`,
           ])
         );
         dispatch(setTotalHomeParams());
@@ -78,17 +87,43 @@ export default function useMypage() {
     },
   });
 
-  const handleAddBucket = () => {
-    const loginCheck = localStorage.getItem("userAccessToken");
-    if (loginCheck) {
-      navigate("/add");
-    } else {
-      confirm("로그인을 하고 나만의 버킷을 작성 해보세요!") &&
-        navigate("/auth/signin");
+  const profileCompleteCountReq = async () => {
+    try {
+      const token = `Bearer ${JSON.parse(
+        localStorage.getItem("userAccessToken")
+      )}`;
+
+      const { data } = await getData("/board/myposts/stateTotal", {
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      setCompleteCount(data.finishTotal);
+    } catch (error) {
+      console.error(error);
     }
   };
 
-  const homeCardReq = async (query = "") => {
+  const profileScrapDataReq = async () => {
+    try {
+      const token = `Bearer ${JSON.parse(
+        localStorage.getItem("userAccessToken")
+      )}`;
+
+      const { data } = await getData("/board/myposts/scraps", {
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      setScrapCardData(data.content);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const profileHomeCardReq = async (query = "") => {
     try {
       const token = `Bearer ${JSON.parse(
         localStorage.getItem("userAccessToken")
@@ -147,7 +182,7 @@ export default function useMypage() {
 
       const latestBucket = JSON.parse(localStorage.getItem("latestBucket"));
 
-      const latestCard = homeCardData.find(
+      const latestCard = profileHomeCardData.find(
         (card) => card.boardId === borardNum
       );
       if (latestBucket) {
@@ -171,6 +206,22 @@ export default function useMypage() {
     }
   };
 
+  const handleProfileEditModalState = () => {
+    dispatch(setProfileEditModal());
+  };
+
+  const handleMenuClick = (curMenuNum) => {
+    return () => {
+      setActiveNumber(curMenuNum);
+      if (curMenuNum === 0) {
+        pageAndBoardDataReset();
+        profileHomeCardReq(homePage.key + 0);
+      } /* else {
+        profileHomeCardReq();
+      } */
+    };
+  };
+
   const handleHomeDetailView = (curBoardId) => {
     return () => {
       dispatch(setScrollLocation(window.scrollY));
@@ -183,6 +234,197 @@ export default function useMypage() {
     setTimeout(() => {
       window.scroll({ top: curScrollLocation, left: 0 });
     }, 50);
+  };
+
+  const bucketDelete = useMutation({
+    mutationFn: async (curBoardId) => {
+      const token = `Bearer ${JSON.parse(
+        localStorage.getItem("userAccessToken")
+      )}`;
+      return await delData(`/board/${curBoardId}`, {
+        headers: {
+          Authorization: token,
+        },
+      });
+    },
+    onSuccess: async () => {
+      alert("버킷이 삭제 되었습니다!");
+      try {
+        const token = `Bearer ${JSON.parse(
+          localStorage.getItem("userAccessToken")
+        )}`;
+        const { data } = await getData(
+          `/board/myposts?size=${homePage.value * 8 + 8}`,
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        );
+        profileCompleteCountReq();
+        dispatch(deleteHomeThumnailCard());
+        dispatch(setHomeTumnailCards(data.content));
+      } catch (error) {
+        console.error("Oh~ :", error);
+      }
+    },
+    onError: (error) => {
+      if (error.response.status) {
+        console.log("에러러");
+      }
+    },
+  });
+
+  const handleBucketDelete = (curBoardId) => {
+    return () => {
+      confirm("버킷을 삭제하시겠습니까?") && bucketDelete.mutate(curBoardId);
+    };
+  };
+
+  const homeDetailBucketDelete = useMutation({
+    mutationFn: async (curBoardId) => {
+      const token = `Bearer ${JSON.parse(
+        localStorage.getItem("userAccessToken")
+      )}`;
+      return await delData(`/board/${curBoardId}`, {
+        headers: {
+          Authorization: token,
+        },
+      });
+    },
+    onSuccess: async () => {
+      alert("버킷이 삭제 되었습니다!");
+      dispatch(setDetailBucketModal());
+      try {
+        const token = `Bearer ${JSON.parse(
+          localStorage.getItem("userAccessToken")
+        )}`;
+        const { data } = await getData(
+          `/board/myposts?size=${homePage.value * 8 + 8}`,
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        );
+        profileCompleteCountReq();
+        dispatch(deleteHomeThumnailCard());
+        dispatch(setHomeTumnailCards(data.content));
+      } catch (error) {
+        console.error("Oh~ :", error);
+      }
+    },
+    onError: (error) => {
+      if (error.response.status === 401) {
+        alert("로그인이 만료 되었습니다!");
+      }
+    },
+  });
+
+  const handleHomeDetailBucketDelete = (curBoardId) => {
+    return () => {
+      confirm("버킷을 삭제하시겠습니까?") &&
+        homeDetailBucketDelete.mutate(curBoardId);
+    };
+  };
+
+  const bucketComplete = useMutation({
+    mutationFn: async (curData) => {
+      const token = `Bearer ${JSON.parse(
+        localStorage.getItem("userAccessToken")
+      )}`;
+      return await patchData(`/board/${curData}/complete`, null, {
+        headers: {
+          Authorization: token,
+        },
+      });
+    },
+    onSuccess: async (res) => {
+      console.log(res);
+      try {
+        const token = `Bearer ${JSON.parse(
+          localStorage.getItem("userAccessToken")
+        )}`;
+        const { data } = await getData(
+          `/board/myposts?size=${homePage.value * 8 + 8}`,
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        );
+        profileCompleteCountReq();
+        dispatch(deleteHomeThumnailCard());
+        dispatch(setHomeTumnailCards(data.content));
+
+        alert("버킷을 달성하셨습니다!");
+      } catch (error) {
+        console.error("Oh~ :", error);
+      }
+    },
+    onError: (error) => {
+      if (error.response.status === 409) {
+        alert("이미 달성한 버킷입니다!");
+      } else {
+        console.log("에러러");
+      }
+    },
+  });
+
+  const handleBucketComplete = (curBoardId) => {
+    return () => {
+      confirm("버킷을 달성하시겠습니까?") && bucketComplete.mutate(curBoardId);
+    };
+  };
+
+  const homeDetailBucketComplete = useMutation({
+    mutationFn: async (curData) => {
+      const token = `Bearer ${JSON.parse(
+        localStorage.getItem("userAccessToken")
+      )}`;
+      return await patchData(`/board/${curData}/complete`, null, {
+        headers: {
+          Authorization: token,
+        },
+      });
+    },
+    onSuccess: async () => {
+      homeCardDetailReq(bucketDetailData.boardId);
+      try {
+        const token = `Bearer ${JSON.parse(
+          localStorage.getItem("userAccessToken")
+        )}`;
+        const { data } = await getData(
+          `/board/myposts?size=${homePage.value * 8 + 8}`,
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        );
+        profileCompleteCountReq();
+        dispatch(deleteHomeThumnailCard());
+        dispatch(setHomeTumnailCards(data.content));
+
+        alert("버킷을 달성하셨습니다!");
+      } catch (error) {
+        console.error("Oh~ :", error);
+      }
+    },
+    onError: (error) => {
+      if (error.response.status === 409) {
+        alert("이미 달성한 버킷입니다!");
+      } else {
+        console.log("에러러");
+      }
+    },
+  });
+
+  const handleHomeDetailBucketComplete = (curBoardId) => {
+    return () => {
+      confirm("버킷을 달성하시겠습니까?") &&
+        homeDetailBucketComplete.mutate(curBoardId);
+    };
   };
 
   const detailLikeAndScrapReq = useMutation({
@@ -239,210 +481,22 @@ export default function useMypage() {
     };
   };
 
-  const bucketDelete = useMutation({
-    mutationFn: async (curBoardId) => {
-      const token = `Bearer ${JSON.parse(
-        localStorage.getItem("userAccessToken")
-      )}`;
-      return await delData(`/board/${curBoardId}`, {
-        headers: {
-          Authorization: token,
-        },
-      });
-    },
-    onSuccess: async () => {
-      alert("버킷이 삭제 되었습니다!");
-      try {
-        const token = `Bearer ${JSON.parse(
-          localStorage.getItem("userAccessToken")
-        )}`;
-        const { data } = await getData(
-          `/board/myposts?size=${homePage.value * 8 + 8}`,
-          {
-            headers: {
-              Authorization: token,
-            },
-          }
-        );
-        dispatch(deleteHomeThumnailCard());
-        dispatch(setHomeTumnailCards(data.content));
-      } catch (error) {
-        console.error("Oh~ :", error);
-      }
-    },
-    onError: (error) => {
-      if (error.response.status) {
-        console.log("에러러");
-      }
-    },
-  });
-
-  const handleBucketDelete = (curBoardId) => {
-    return () => {
-      confirm("버킷을 삭제하시겠습니까?") && bucketDelete.mutate(curBoardId);
-    };
-  };
-
-  const homeDetailBucketDelete = useMutation({
-    mutationFn: async (curBoardId) => {
-      const token = `Bearer ${JSON.parse(
-        localStorage.getItem("userAccessToken")
-      )}`;
-      return await delData(`/board/${curBoardId}`, {
-        headers: {
-          Authorization: token,
-        },
-      });
-    },
-    onSuccess: async () => {
-      alert("버킷이 삭제 되었습니다!");
-      dispatch(setDetailBucketModal());
-      try {
-        const token = `Bearer ${JSON.parse(
-          localStorage.getItem("userAccessToken")
-        )}`;
-        const { data } = await getData(
-          `/board/myposts?size=${homePage.value * 8 + 8}`,
-          {
-            headers: {
-              Authorization: token,
-            },
-          }
-        );
-        dispatch(deleteHomeThumnailCard());
-        dispatch(setHomeTumnailCards(data.content));
-      } catch (error) {
-        console.error("Oh~ :", error);
-      }
-    },
-    onError: (error) => {
-      if (error.response.status === 401) {
-        alert("로그인이 만료 되었습니다!");
-      }
-    },
-  });
-
-  const handleHomeDetailBucketDelete = (curBoardId) => {
-    return () => {
-      confirm("버킷을 삭제하시겠습니까?") &&
-        homeDetailBucketDelete.mutate(curBoardId);
-    };
-  };
-
-  const bucketComplete = useMutation({
-    mutationFn: async (curData) => {
-      const token = `Bearer ${JSON.parse(
-        localStorage.getItem("userAccessToken")
-      )}`;
-      return await patchData(`/board/${curData}/complete`, null, {
-        headers: {
-          Authorization: token,
-        },
-      });
-    },
-    onSuccess: async (res) => {
-      console.log(res);
-      try {
-        const token = `Bearer ${JSON.parse(
-          localStorage.getItem("userAccessToken")
-        )}`;
-        const { data } = await getData(
-          `/board/myposts?size=${homePage.value * 8 + 8}`,
-          {
-            headers: {
-              Authorization: token,
-            },
-          }
-        );
-        dispatch(deleteHomeThumnailCard());
-        dispatch(setHomeTumnailCards(data.content));
-
-        alert("버킷을 달성하셨습니다!");
-      } catch (error) {
-        console.error("Oh~ :", error);
-      }
-    },
-    onError: (error) => {
-      if (error.response.status === 409) {
-        alert("이미 달성한 버킷입니다!");
-      } else {
-        console.log("에러러");
-      }
-    },
-  });
-
-  const handleBucketComplete = (curBoardId) => {
-    return () => {
-      confirm("버킷을 달성하시겠습니까?") && bucketComplete.mutate(curBoardId);
-    };
-  };
-
-  const homeDetailBucketComplete = useMutation({
-    mutationFn: async (curData) => {
-      const token = `Bearer ${JSON.parse(
-        localStorage.getItem("userAccessToken")
-      )}`;
-      return await patchData(`/board/${curData}/complete`, null, {
-        headers: {
-          Authorization: token,
-        },
-      });
-    },
-    onSuccess: async () => {
-      homeCardDetailReq(bucketDetailData.boardId);
-      try {
-        const token = `Bearer ${JSON.parse(
-          localStorage.getItem("userAccessToken")
-        )}`;
-        const { data } = await getData(
-          `/board/myposts?size=${homePage.value * 8 + 8}`,
-          {
-            headers: {
-              Authorization: token,
-            },
-          }
-        );
-        dispatch(deleteHomeThumnailCard());
-        dispatch(setHomeTumnailCards(data.content));
-
-        alert("버킷을 달성하셨습니다!");
-      } catch (error) {
-        console.error("Oh~ :", error);
-      }
-    },
-    onError: (error) => {
-      if (error.response.status === 409) {
-        alert("이미 달성한 버킷입니다!");
-      } else {
-        console.log("에러러");
-      }
-    },
-  });
-
-  const handleHomeDetailBucketComplete = (curBoardId) => {
-    return () => {
-      confirm("버킷을 달성하시겠습니까?") &&
-        homeDetailBucketComplete.mutate(curBoardId);
-    };
-  };
-
   useEffect(() => {
-    pageAndBoardDataReset();
-    const isLogin = localStorage.getItem("userAccessToken");
-    if (isLogin) {
-      homeCardReq(`${homePage.key + 0}`);
-      //dispatch(setTotalHomeParams());
-      /*       console.log(
-        "데이터가 초기화되었고 전체 파라미터가 바뀌었습니다. totalHomeParams 의존성 배열을 실행합니다."
-      ); */
+    if (!localStorage.getItem("userAccessToken")) {
+      navigate("/");
+    } else {
+      pageAndBoardDataReset();
+      profileHomeCardReq(`${homePage.key + 0}`);
+      profileCompleteCountReq();
+      profileScrapDataReq();
     }
   }, []);
 
   useEffect(() => {
-    if (!homeMouted01.current) {
-      homeMouted01.current = true;
+    if (!profileMouted01.current) {
+      profileMouted01.current = true;
     } else {
-      homeCardReq(totalHomeParams.value);
+      profileHomeCardReq(totalHomeParams.value);
       /*       console.log(
         "totalHomeParams 의존성 배열입니다. 파라미터가 변경되어 데이터 호출 함수를 실행합니다.(데이터호출)"
       ); */
@@ -450,10 +504,10 @@ export default function useMypage() {
   }, [totalHomeParams.value]);
 
   useEffect(() => {
-    if (!homeMouted02.current) {
-      homeMouted02.current = true;
+    if (!profileMouted02.current) {
+      profileMouted02.current = true;
     } else {
-      setHomeCardData(homeThumnailCards.data);
+      setProfileHomeCardData(homeThumnailCards.data);
       /*       console.log(homeThumnailCards.data);
       console.log(
         "전역 상태에 데이터가 저장이 되었습니다. setCards를 실행합니다."
@@ -462,26 +516,30 @@ export default function useMypage() {
   }, [homeThumnailCards.data]);
 
   useEffect(() => {
-    if (!homeMouted03.current) {
-      homeMouted03.current = true;
+    if (!profileMouted03.current) {
+      profileMouted03.current = true;
     } else {
-      setHomeCardDetailData(bucketDetailData);
+      setprofileHomeCardDetailData(bucketDetailData);
     }
   }, [bucketDetailData]);
 
   return {
+    completeCount,
+    scrapCardData,
+    activeNumber,
     detailModal,
-    homeCardData,
-    homeCardDetailData,
-    isLoading,
-    homeObserver,
+    profileEditModal,
+    profileHomeCardData,
+    profileHomeCardDetailData,
+    profileObserver,
+    handleProfileEditModalState,
+    handleMenuClick,
     handleHomeDetailView,
     handleHomeDetailModalClose,
-    handleAddBucket,
-    handleHomeDetailBucketDelete,
-    handleDetailHeartAndScrapClick,
     handleBucketDelete,
     handleBucketComplete,
     handleHomeDetailBucketComplete,
+    handleHomeDetailBucketDelete,
+    handleDetailHeartAndScrapClick,
   };
 }

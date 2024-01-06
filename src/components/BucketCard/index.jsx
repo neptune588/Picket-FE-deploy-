@@ -34,6 +34,7 @@ import {
   TextInputArea,
   MentDelButton,
   CrossIcon,
+  Complete,
 } from "@/components/BucketCard/style";
 
 export default function BucketCard({
@@ -46,11 +47,13 @@ export default function BucketCard({
   cardCreated,
   heartCount,
   scrapCount,
+  isCompleted,
   commentList,
   handleHeartClick,
   handleScrapClick,
   modalCloseHandle,
   handleDetailBucketDelete,
+  handleDetailBucketComplete,
 }) {
   const {
     putModal,
@@ -70,7 +73,7 @@ export default function BucketCard({
         <CardPutModalOuter>
           <CardPutModal>
             <h2>{title}</h2>
-            <li>버킷 달성</li>
+            <li onClick={handleDetailBucketComplete}>버킷 달성</li>
             <li onClick={handleDetailBucketDelete}>버킷 삭제</li>
             <li
               onClick={() => {
@@ -89,6 +92,7 @@ export default function BucketCard({
       )}
       <Container>
         <BucketWrraper>
+          {isCompleted === 1 && <Complete />}
           <ImgWrapper>
             <img src={cardImg} />
           </ImgWrapper>
@@ -101,7 +105,7 @@ export default function BucketCard({
               ></ProfileAvatar>
             </ProfileBox>
             <TitleBox>
-              {title}
+              <h2> {title}</h2>
               {localStorage.getItem("userAccessToken") && (
                 <CardPutButton
                   onClick={() => {

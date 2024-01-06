@@ -20,7 +20,9 @@ import { setDetailButcket, setScrollLocation } from "@/store/bucketDetailSlice";
 import { getData } from "@/services/api";
 import { postData } from "@/services/api";
 import { delData } from "@/services/api";
+import { patchData } from "@/services/api";
 
+import useSelectorList from "@/hooks/useSelectorList";
 import { categoriesData } from "@/pages/Browse/categoryData";
 
 export default function useBrwoseGetItem() {
@@ -29,23 +31,17 @@ export default function useBrwoseGetItem() {
   const navigate = useNavigate();
   const { keyword: curKeyword } = useParams();
 
-  const cards = useSelector((state) => {
-    return state.bucketThumnail;
-  });
-  const moadals = useSelector((state) => {
-    return state.modals;
-  });
-  const params = useSelector((state) => {
-    return state.parameter;
-  });
-  const bucketDetailObj = useSelector((state) => {
-    return state.bucketDetail;
-  });
-
-  const { page, keyword, categoryList, prevParams, totalParams } = params;
-  const { thumnailCards } = cards;
-  const { detailModal } = moadals;
-  const { bucketDetailData, curScrollLocation } = bucketDetailObj;
+  const {
+    page,
+    keyword,
+    categoryList,
+    prevParams,
+    totalParams,
+    thumnailCards,
+    detailModal,
+    bucketDetailData,
+    curScrollLocation,
+  } = useSelectorList();
 
   const [dummy, setDummy] = useState([
     { id: "sklt01" },
@@ -184,7 +180,7 @@ export default function useBrwoseGetItem() {
       setIsLoading(true);
       const { data } = await getData(`/board/list/search?${query}`);
 
-      console.log(data);
+      //console.log(data);
 
       if (data.content?.length > 0) {
         if (data.last) {
@@ -247,7 +243,7 @@ export default function useBrwoseGetItem() {
       }
       !detailModal && dispatch(setDetailBucketModal());
 
-      console.log(data);
+      //console.log(data);
     } catch (error) {
       if (error.response.status === 401) {
         console.error("error입니다.");
@@ -422,6 +418,58 @@ export default function useBrwoseGetItem() {
     };
   };
 
+  const detailBucketComplete = useMutation({
+    mutationFn: async (curData) => {
+      const token = `Bearer ${JSON.parse(
+        localStorage.getItem("userAccessToken")
+      )}`;
+      return await patchData(`/board/${curData}/complete`, null, {
+        headers: {
+          Authorization: token,
+        },
+      });
+    },
+    onSuccess: async () => {
+      try {
+        cardDetailReq(bucketDetailData.boardId);
+
+        const token = `Bearer ${JSON.parse(
+          localStorage.getItem("userAccessToken")
+        )}`;
+        const { data } = await getData(
+          `/board/list/search?size=${page.value * 8 + 8}${
+            keyword.key + keyword.value
+          }${categoryList.key + categoryList.value}`,
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        );
+        dispatch(deleteThumnailCard());
+        dispatch(setCardData(data.content));
+
+        alert("버킷을 달성하셨습니다!");
+      } catch (error) {
+        console.error("Oh~ :", error);
+      }
+    },
+    onError: (error) => {
+      if (error.response.status === 409) {
+        alert("이미 달성한 버킷입니다!");
+      } else {
+        console.log("에러러");
+      }
+    },
+  });
+
+  const handleDetailBucketComplete = (curBoardId) => {
+    return () => {
+      confirm("버킷을 달성하시겠습니까?") &&
+        detailBucketComplete.mutate(curBoardId);
+    };
+  };
+
   //시작시 리스트 불러옴
   useEffect(() => {
     //비워줘야지 다른 페이지갔다 다시 와서 카테구리 누를때 []이 디폴트인상태에서 됨. 즉 처음페이지에 온것처럼 됨.
@@ -457,7 +505,7 @@ export default function useBrwoseGetItem() {
 
       dispatch(setTotalParams());
       dispatch(setPrevParams());
-      console.log(prevParams.value);
+      //console.log(prevParams.value);
     }
   }, [curKeyword]);
 
@@ -468,6 +516,7 @@ export default function useBrwoseGetItem() {
       setCardData(thumnailCards.data);
     }
   }, [thumnailCards.data]);
+
   useEffect(() => {
     //데이터 없으면 옵저버 못보게 더미 on 데이터 있으면 off
     if (dummyObserver.current && cardData.length > 0) {
@@ -511,6 +560,7 @@ export default function useBrwoseGetItem() {
     handleHeartAndScrapClick,
     handleDetailHeartAndScrapClick,
     handleDetailBucketDelete,
+    handleDetailBucketComplete,
   };
 }
 

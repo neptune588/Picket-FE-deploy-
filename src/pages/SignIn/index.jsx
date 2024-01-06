@@ -63,7 +63,16 @@ export default function SignIn() {
             <SubmitButton width={"400px"} value={"로그인"} />
           </InputBox>
           <InputBox>
-            <SocialLogin disabled>Google 로그인</SocialLogin>
+            <SocialLogin
+              onClick={() =>
+                window.open(
+                  "https://picket.store/oauth2/authorization/google",
+                  "_blank"
+                )
+              }
+            >
+              Google 로그인
+            </SocialLogin>
           </InputBox>
           {errors.submitErrorMsg && (
             <TotalErrorMsg>{errors.submitErrorMsg}</TotalErrorMsg>

@@ -183,9 +183,7 @@ const SearchModalWrraper = styled.div`
   position: fixed;
   width: 100%;
   height: 100vh;
-  background-color: ${({ theme: { colors } }) => {
-    return colors.gray["40"];
-  }};
+  background-color: rgba(0, 0, 0, 0.5);
   z-index: 9999;
 `;
 

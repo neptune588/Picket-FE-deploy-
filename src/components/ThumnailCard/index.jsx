@@ -8,23 +8,26 @@ import {
   ThumnailImgBox,
   ProfileWrapper,
   ButtonBox,
+  Complete,
 } from "@/components/ThumnailCard/style";
 
 export default function ThumnailCard({
   width,
   height,
   title,
-  avatarSrc = "/images/test_avatar.jpg",
+  avatarSrc,
   nickname = "빈값",
   thumnailSrc = "/images/test_thumnail.jpg",
   likeCount,
   scrapCount,
+  isCompleted,
   handleDetailView,
   handleHeartClick,
   handleScrapClick,
 }) {
   return (
     <Container $width={width}>
+      {isCompleted === 1 && <Complete />}
       <ThumnailImgBox $height={height} onClick={handleDetailView}>
         <ThumnailImg thumnailSrc={thumnailSrc} />
         <h2>{title}</h2>

@@ -6,12 +6,11 @@ import AuthPageLayOut from "@/pages/AuthPageLayOut";
 import SignUp from "@/pages/SignUp";
 import SignIn from "@/pages/SignIn";
 import RegisterSuccess from "@/pages/RegisterSuccess/RegisterSuccess";
+import PassWordResearch from "@/pages/PassWordResearch";
 import Main from "@/pages/Main";
-import TestAlarm from "../pages/TestAlarm/TestAlarm";
-import TestMyProfile from "../pages/TestProfile/TestProfile";
+import MyProfile from "@/pages/MyProfile";
 import AddBucket from "@/pages/AddBucket/AddBucket";
 import Browse from "@/pages/Browse";
-import PassWordResearch from "@/pages/PassWordResearch";
 
 const router = createBrowserRouter([
   {
@@ -27,15 +26,15 @@ const router = createBrowserRouter([
         element: <Browse />,
         label: "search",
       },
-      {
+      /*       {
         path: "/alarm",
         element: <TestAlarm />,
         label: "alarm",
-      },
+      }, */
+
       {
         path: "/profile",
-        element: <TestMyProfile />,
-        label: "profile",
+        element: <MyProfile />,
       },
     ],
   },

@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Dot from "@/assets/icons/dot.svg?react";
+import complete from "@/assets/icons/complete.svg?react";
 
 const Container = styled.li`
   position: relative;
@@ -67,17 +68,15 @@ const DdayView = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: ${({ $isOverdue, theme: { colors } }) => {
-    return $isOverdue > 0 ? colors.white : "rgba(0, 0, 0, 0.4)";
-  }};
+
   color: ${({ $isOverdue, theme: { colors } }) => {
-    return $isOverdue > 0 ? colors.inVaild : colors.white;
+    return $isOverdue > 0 ? colors.inVaild : colors.primary;
   }};
   font-size: ${({ theme: { typo } }) => {
     return typo.size.md;
   }};
-  font-weight: ${({ $isOverdue, theme: { typo } }) => {
-    return $isOverdue > 0 ? typo.weight.bold : typo.weight.regular;
+  font-weight: ${({ theme: { typo } }) => {
+    return typo.weight.bold;
   }};
   border-radius: 20px;
 `;
@@ -151,6 +150,18 @@ const PutOptionList = styled.li`
   }
 `;
 
+const Complete = styled(complete)`
+  position: absolute;
+  width: 35px;
+  height: 35px;
+  top: 20px;
+  left: 20px;
+  z-index: 1;
+  fill: ${({ theme: { colors } }) => {
+    return colors.primary;
+  }};
+`;
+
 export {
   Container,
   ContentsWrapper,
@@ -163,4 +174,5 @@ export {
   ThumnailPutModalOuter,
   ThumnailPutModal,
   PutOptionList,
+  Complete,
 };

@@ -3,18 +3,15 @@ import { useEffect } from "react";
 import { useLocation, Outlet } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-import { deleteThumnailCard } from "@/store/bucketThumnailSlice";
 import { setSearchModal, setDetailBucketModal } from "@/store/modalsSlice";
+import { deleteThumnailCard } from "@/store/bucketThumnailSlice";
 import {
   setKeywordParams,
   setPrevParams,
   setTotalParams,
 } from "@/store/parameterSlice";
-import {
-  setTotalHomeParams,
-  setPrevHomeParams,
-} from "@/store/homeParameterSlice";
+
+import useSelectorList from "@/hooks/useSelectorList";
 
 import styled from "styled-components";
 import NavBar from "@/components/NavBar";
@@ -22,24 +19,26 @@ import NavBar from "@/components/NavBar";
 const CenterdContainer = styled.div`
   position: relative;
   width: 1440px;
-  height: ${({ $isSearchModal, $isDetailModal }) => {
-    return ($isSearchModal || $isDetailModal) && "calc(100vh - 70px)";
+  height: ${({ $isSearchModal, $isDetailModal, $isProfileEditModal }) => {
+    return (
+      ($isSearchModal || $isDetailModal || $isProfileEditModal) &&
+      "calc(100vh - 70px)"
+    );
   }};
-  overflow: ${({ $isSearchModal, $isDetailModal }) => {
-    return $isSearchModal || $isDetailModal ? "hidden" : "visible";
+  overflow: ${({ $isSearchModal, $isDetailModal, $isProfileEditModal }) => {
+    return $isSearchModal || $isDetailModal || $isProfileEditModal
+      ? "hidden"
+      : "visible";
   }};
   padding: 0px 80px;
   margin: 0 auto;
 `;
 
 export default function LayOut() {
+  const { detailModal, profileEditModal, searchModal } = useSelectorList();
+
   const dispatch = useDispatch();
 
-  const modals = useSelector((state) => {
-    return state.modals;
-  });
-
-  const { searchModal, detailModal } = modals;
   const location = useLocation();
 
   useEffect(() => {
@@ -57,6 +56,7 @@ export default function LayOut() {
     <>
       <NavBar />
       <CenterdContainer
+        $isProfileEditModal={profileEditModal}
         $isSearchModal={searchModal}
         $isDetailModal={detailModal}
       >

@@ -35,11 +35,10 @@ export default function useBucketOptions() {
     setCommentValue("");
     commentCreateInput.current && commentCreateInput.current.focus();
   };
+
   const handleLoginCheck = () => {
-    return () => {
-      confirm("로그인을 하셔야 이용 가능합니다. 로그인 하시겠습니까?") &&
-        navigate("/auth/signin");
-    };
+    confirm("로그인을 하셔야 이용 가능합니다. 로그인 하시겠습니까?") &&
+      navigate("/auth/signin");
   };
 
   const createCommentReq = useMutation({

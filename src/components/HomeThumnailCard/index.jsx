@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import {
   Container,
@@ -12,6 +12,7 @@ import {
   ThumnailPutModalOuter,
   ThumnailPutModal,
   PutOptionList,
+  Complete,
 } from "@/components/HomeThumnailCard/style";
 
 import { setHomeThumnailPutModalState } from "@/store/bucketThumnailSlice";
@@ -30,6 +31,7 @@ export default function HomeThumnailCard({
   handleBucketDelete,
   handleBucketComplete,
   Dday,
+  isCompleted,
   /*   avatar,
   isFinish,
   isProgress, */
@@ -46,6 +48,7 @@ export default function HomeThumnailCard({
 
   return (
     <Container>
+      {isCompleted === 1 && <Complete />}
       {putOptionModalState && (
         <ThumnailPutModalOuter>
           <ThumnailPutModal>
@@ -69,9 +72,12 @@ export default function HomeThumnailCard({
         />
       </ThumnailImgBox>
       <ContentsWrapper>
-        <DdayView $isOverdue={Dday}>
-          {Dday > 0 ? "D+" + Dday : "D-" + Math.abs(Dday)}
-        </DdayView>
+        {isCompleted === 0 && (
+          <DdayView $isOverdue={Dday}>
+            {Dday > 0 ? "D+" + Dday : "D-" + Math.abs(Dday)}
+          </DdayView>
+        )}
+
         <ThumnailPutButton
           onClick={handlePutOptionModalState(curThumnail, true)}
         />

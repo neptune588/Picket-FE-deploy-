@@ -57,13 +57,17 @@ export default function NavBar() {
   const titleViewLength = 12;
   return (
     <>
-      {/*       {detailModal && (
+      {detailModal && (
         <BucketCard
           boardId={latestDetailCard.boardId}
           nickname={latestDetailCard.nickname}
           avatar={latestDetailCard.avatar}
           title={latestDetailCard.title}
-          cardImg={latestDetailCard.cardImg}
+          cardImg={
+            latestDetailCard.cardImg
+              ? latestDetailCard.cardImg
+              : "/images/default_profile.png"
+          }
           cardContent={latestDetailCard.cardContent}
           commentList={latestDetailCard.commentList}
           cardCreated={latestDetailCard.created}
@@ -79,7 +83,7 @@ export default function NavBar() {
           )}
           modalCloseHandle={handleDetailModalState}
         />
-      )} */}
+      )}
       <NavBarWrapper>
         <SymbolIcon />
         <NavLinkBox>
@@ -104,13 +108,15 @@ export default function NavBar() {
             maxLength={15}
           />
           <SearchIcon />
-          <CloseButton
-            onClick={() => {
-              setSearchValue("");
-            }}
-          >
-            <CloseCrossIcon />
-          </CloseButton>
+          {searchModal && (
+            <CloseButton
+              onClick={() => {
+                setSearchValue("");
+              }}
+            >
+              <CloseCrossIcon />
+            </CloseButton>
+          )}
         </SearchBarBox>
         <AlarmBox>
           <AlarmIcon
@@ -173,8 +179,10 @@ export default function NavBar() {
                             ? card.title.substring(0, titleViewLength) + "..."
                             : card.title
                         }
-                        //thumnailSrc={card.filepath}
-                        //avatarSrc={card.filename}
+                        thumnailSrc={card.filepath}
+                        avatarSrc={
+                          /* card.filename */ "/images/default_profile.png"
+                        }
                         nickname={
                           card.nickname?.length > nicknameViewLength
                             ? card.nickname.substring(0, nicknameViewLength) +
@@ -183,6 +191,7 @@ export default function NavBar() {
                         }
                         likeCount={card.likeCount}
                         scrapCount={card.scrapCount}
+                        isCompleted={card.isCompleted}
                         handledetailView={handleDetailCardReq(card.boardId)}
                         handleHeartClick={handleHeartAndScrapClick(
                           "heart",

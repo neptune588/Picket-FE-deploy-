@@ -2,6 +2,7 @@ import styled from "styled-components";
 import Comment from "@/assets/icons/commentIcon.svg?react";
 import Cross from "@/assets/icons/cross.svg?react";
 import Dot from "@/assets/icons/dot.svg?react";
+import complete from "@/assets/icons/complete.svg?react";
 
 const Container = styled.div`
   position: fixed;
@@ -17,7 +18,7 @@ const CardPutModalOuter = styled(Container)`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.5);
   z-index: 999999;
 `;
 
@@ -84,6 +85,7 @@ const CardPutButton = styled(Dot)`
     }};
   }
 `;
+
 const ModalCloseArea = styled.div`
   position: fixed;
   left: 0;
@@ -426,6 +428,18 @@ const CrossIcon = styled(Cross)`
   stroke: #e9e9ee;
 `;
 
+const Complete = styled(complete)`
+  position: absolute;
+  width: 35px;
+  height: 35px;
+  top: 20px;
+  left: 20px;
+  z-index: 1;
+  fill: ${({ theme: { colors } }) => {
+    return colors.primary;
+  }};
+`;
+
 export {
   CardPutModalOuter,
   CardPutModal,
@@ -452,4 +466,5 @@ export {
   SendIcon,
   MentDelButton,
   CrossIcon,
+  Complete,
 };

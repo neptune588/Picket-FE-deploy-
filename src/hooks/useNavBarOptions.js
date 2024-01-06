@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useMutation } from "@tanstack/react-query";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import { setSearchModal, setDetailBucketModal } from "@/store/modalsSlice";
 import { setKeywordParams } from "@/store/parameterSlice";
@@ -13,27 +13,27 @@ import {
   deleteThumnailCard,
   deleteHomeThumnailCard,
 } from "@/store/bucketThumnailSlice";
+
 import { getData } from "@/services/api";
 import { postData } from "@/services/api";
+
+import useSelectorList from "@/hooks/useSelectorList";
 
 export default function useNavBarOptions() {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
 
-  const modals = useSelector((state) => {
-    return state.modals;
-  });
-  const params = useSelector((state) => {
-    return state.parameter;
-  });
-  const bucketDetailObj = useSelector((state) => {
-    return state.bucketDetail;
-  });
-
-  const { detailModal, searchModal } = modals;
-  const { page, keyword, categoryList, prevParams, totalParams } = params;
-  const { bucketDetailData } = bucketDetailObj;
+  const {
+    detailModal,
+    searchModal,
+    page,
+    keyword,
+    categoryList,
+    prevParams,
+    totalParams,
+    bucketDetailData,
+  } = useSelectorList();
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [userNickName, setUserNickName] = useState(null);

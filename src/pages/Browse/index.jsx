@@ -30,6 +30,7 @@ export default function Browse() {
     handleHeartAndScrapClick,
     handleDetailHeartAndScrapClick,
     handleDetailBucketDelete,
+    handleDetailBucketComplete,
   } = useBrwoseGetItem();
   const titleViewLength = 15;
   return (
@@ -38,7 +39,11 @@ export default function Browse() {
         <BucketCard
           boardId={CardDetailData.boardId}
           nickname={CardDetailData.nickname}
-          avatar={CardDetailData.avatar}
+          avatar={
+            CardDetailData.avatar
+              ? CardDetailData.avatar
+              : "/images/default_profile.png"
+          }
           title={CardDetailData.title}
           cardImg={CardDetailData.cardImg}
           cardContent={CardDetailData.cardContent}
@@ -46,6 +51,7 @@ export default function Browse() {
           heartCount={CardDetailData.heartCount}
           commentList={CardDetailData.commentList}
           scrapCount={CardDetailData.scrapCount}
+          isCompleted={CardDetailData.isCompleted}
           handleHeartClick={handleDetailHeartAndScrapClick(
             "heart",
             CardDetailData.boardId
@@ -55,6 +61,9 @@ export default function Browse() {
             CardDetailData.boardId
           )}
           handleDetailBucketDelete={handleDetailBucketDelete(
+            CardDetailData.boardId
+          )}
+          handleDetailBucketComplete={handleDetailBucketComplete(
             CardDetailData.boardId
           )}
           modalCloseHandle={handleDetailModalState}
@@ -97,11 +106,12 @@ export default function Browse() {
                 }
                 thumnailSrc={card.filepath}
                 avatarSrc={
-                  card.filename ? card.filename : "/images/default_profile"
+                  /* card.filename ? card.filename :  */ "/images/default_profile.png"
                 }
                 nickname={card.nickname}
                 likeCount={card.likeCount}
                 scrapCount={card.scrapCount}
+                isCompleted={card.isCompleted}
                 handleDetailView={handleDetailView(card.boardId)}
                 handleHeartClick={handleHeartAndScrapClick(
                   "heart",

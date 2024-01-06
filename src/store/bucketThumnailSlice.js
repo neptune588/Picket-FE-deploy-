@@ -19,6 +19,7 @@ const bucketThumnailSlice = createSlice({
       const { payload: curThumnailCards } = action;
 
       thumnailCards.data = [...thumnailCards.data, ...curThumnailCards];
+      //console.log(thumnailCards.data[2].filename);
     },
     deleteThumnailCard(state) {
       state.thumnailCards.data = [];
@@ -48,7 +49,7 @@ const bucketThumnailSlice = createSlice({
         ...curHomeThumnailCards,
       ];
 
-      console.log(homeThumnailCards.data);
+      //console.log(curHomeThumnailCards);
     },
     deleteHomeThumnailCard(state) {
       state.homeThumnailCards.data = [];
