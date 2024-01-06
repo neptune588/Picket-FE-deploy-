@@ -131,7 +131,7 @@ export default function MyProfile() {
             $number={0}
             onClick={handleMenuClick(0)}
           >
-            마이 버킷{" "}
+            마이 버킷
             {Array.isArray(profileHomeCardData) && profileHomeCardData.length}
           </ActiveMenu>
           <ActiveMenu
