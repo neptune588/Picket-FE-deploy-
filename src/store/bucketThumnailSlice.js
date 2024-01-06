@@ -5,6 +5,9 @@ const initialState = {
   thumnailCards: {
     data: [],
   },
+  homeThumnailCards: {
+    data: [],
+  },
 };
 
 const bucketThumnailSlice = createSlice({
@@ -16,14 +19,60 @@ const bucketThumnailSlice = createSlice({
       const { payload: curThumnailCards } = action;
 
       thumnailCards.data = [...thumnailCards.data, ...curThumnailCards];
-      console.log(thumnailCards.data);
+      //console.log(thumnailCards.data[2].filename);
     },
     deleteThumnailCard(state) {
       state.thumnailCards.data = [];
     },
+    setHomeTumnailCards(state, action) {
+      const { homeThumnailCards } = state;
+      const { payload: curHomeThumnailCards } = action;
+
+      curHomeThumnailCards.forEach((obj) => {
+        const date = new Date();
+        const compareDate =
+          date.getFullYear() +
+          "-" +
+          String(date.getMonth() + 1).padStart(2, 0) +
+          "-" +
+          String(date.getDate()).padStart(2, 0);
+
+        const today = new Date(compareDate); // 20240107
+        const deadlineDate = new Date(obj.deadline); // 20240106
+
+        obj.Dday = (today - deadlineDate) / (1000 * 60 * 60 * 24);
+        obj.putOptions = false;
+      });
+
+      homeThumnailCards.data = [
+        ...homeThumnailCards.data,
+        ...curHomeThumnailCards,
+      ];
+
+      //console.log(curHomeThumnailCards);
+    },
+    deleteHomeThumnailCard(state) {
+      state.homeThumnailCards.data = [];
+    },
+    setHomeThumnailPutModalState(state, action) {
+      const { homeThumnailCards } = state;
+      const { payload: curThumnail } = action;
+      let { curThumnailNumber, curPutOptionsState } = curThumnail;
+
+      console.log(curThumnailNumber, curPutOptionsState);
+      homeThumnailCards.data.forEach((obj) => {
+        obj.putOptions = false;
+      });
+      homeThumnailCards.data[curThumnailNumber].putOptions = curPutOptionsState;
+    },
   },
 });
 
-export const { setThumnailCard, deleteThumnailCard } =
-  bucketThumnailSlice.actions;
+export const {
+  setThumnailCard,
+  deleteThumnailCard,
+  setHomeTumnailCards,
+  deleteHomeThumnailCard,
+  setHomeThumnailPutModalState,
+} = bucketThumnailSlice.actions;
 export default bucketThumnailSlice.reducer;

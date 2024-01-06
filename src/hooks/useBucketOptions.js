@@ -21,6 +21,8 @@ export default function useBucketOptions() {
   });
 
   const [commentValue, setCommentValue] = useState("");
+  const [putModal, setPutModal] = useState(false);
+
   const { bucketDetailData } = bucketDetailObj;
 
   const commentCreateInput = useRef();
@@ -33,14 +35,10 @@ export default function useBucketOptions() {
     setCommentValue("");
     commentCreateInput.current && commentCreateInput.current.focus();
   };
+
   const handleLoginCheck = () => {
-    const isLogin = localStorage.getItem("userAccessToken");
-    if (!isLogin) {
-      const question = confirm(
-        "로그인을 하셔야 이용 가능합니다. 로그인 하시겠습니까?"
-      );
-      question && navigate("/auth/signin");
-    }
+    confirm("로그인을 하셔야 이용 가능합니다. 로그인 하시겠습니까?") &&
+      navigate("/auth/signin");
   };
 
   const createCommentReq = useMutation({
@@ -152,8 +150,10 @@ export default function useBucketOptions() {
   };
 
   return {
+    putModal,
     commentValue,
     commentCreateInput,
+    setPutModal,
     handleChange,
     handleCurCommentDel,
     handleLoginCheck,

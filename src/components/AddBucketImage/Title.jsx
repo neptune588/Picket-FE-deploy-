@@ -1,37 +1,46 @@
-import styled from "styled-components"
+import styled from "styled-components";
+
+const Wrappar = styled.div`
+  margin-bottom: 45px;
+`;
 
 const BigTitle = styled.div`
-    margin-top: 20px;
-    color: black;
-    font-size: ${({ theme: { typo } }) => {
-        return typo.size.xl
-    }};
-    font-weight: bold;
+  color: black;
+  font-size: ${({ theme: { typo } }) => {
+    return typo.size.lg;
+  }};
+  font-weight: ${({ theme: { typo } }) => {
+    return typo.weight.bold;
+  }};
+  margin-bottom: 15px;
 `;
 
 const TitleInput = styled.input`
-    width: 400px;
-    height: 40px;
-    margin: 10px 0px;
-    padding: 15px;
-    font-size: ${({ theme: { typo } }) => {
-        return typo.size.md
+  width: 575px;
+  height: 60px;
+  padding: 15px;
+  font-size: ${({ theme: { typo } }) => {
+    return typo.size.md;
+  }};
+  border: 1px solid
+    ${({ theme: { colors } }) => {
+      return colors.gray["40"];
     }};
-    border: 1px solid  ${({ theme: { colors } }) => {
-        return colors.gray["40"];
-    }};;
-    border-radius: 1em;
+  border-radius: 15px;
 `;
 
-export default function Title({ context, updateContext }){
-    return (
-        <>
-            <BigTitle>제목</BigTitle>
-            <TitleInput 
-                placeholder="제목을 입력하세요"
-                value={context.title}
-                onChange={(e) => { updateContext("title", e.target.value) }}
-            ></TitleInput>
-        </>
-    )
-};
+export default function Title({ context, updateContext }) {
+  return (
+    <Wrappar>
+      <BigTitle>제목</BigTitle>
+      <TitleInput
+        maxLength={25}
+        placeholder="제목을 입력하세요"
+        value={context.title}
+        onChange={(e) => {
+          updateContext("title", e.target.value);
+        }}
+      ></TitleInput>
+    </Wrappar>
+  );
+}

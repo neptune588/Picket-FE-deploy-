@@ -50,4 +50,5 @@ const CategoryBox = styled.ul`
     }
   }
 `;
+
 export { Container, BucketNotContainer, CategoryBox, SubTitle };

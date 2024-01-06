@@ -9,6 +9,9 @@ import ScrapButton from "@/components/ScrapButton/ScrapButton";
 import useBucketOptions from "@/hooks/useBucketOptions";
 
 import {
+  CardPutModalOuter,
+  CardPutModal,
+  CardPutButton,
   Container,
   ModalCloseArea,
   ModalCloseButton,
@@ -16,7 +19,7 @@ import {
   ImgWrapper,
   TotalContentWrapper,
   ProfileBox,
-  Title,
+  TitleBox,
   CardCreatedDate,
   ContentBox,
   IconsBox,
@@ -31,6 +34,7 @@ import {
   TextInputArea,
   MentDelButton,
   CrossIcon,
+  Complete,
 } from "@/components/BucketCard/style";
 
 export default function BucketCard({
@@ -39,18 +43,23 @@ export default function BucketCard({
   avatar,
   title,
   cardImg = "/images/test_thumnail.jpg",
-  cardCotent = "그동안 미뤄왔던 크로키 공책을 꺼냈다. 연필도 다시 깎아 가지런히 두었다. 하루에 하나씩 만이라도 가지런히 드로잉 해야지! 퀄리티에 상관없이 하는것에 의의를 둘것이다. 그동안 미뤄왔던 크로키 공책을 꺼냈다. 연필도 다시 깎아 가지런히 두었다. 하루에 하나씩 만이라도 가지런히 드로잉 해야지! 퀄리티에 상관없이 하는것에 의의를 둘것이다.",
+  cardContent,
   cardCreated,
   heartCount,
   scrapCount,
+  isCompleted,
   commentList,
   handleHeartClick,
   handleScrapClick,
-  modalHandle,
+  modalCloseHandle,
+  handleDetailBucketDelete,
+  handleDetailBucketComplete,
 }) {
   const {
+    putModal,
     commentValue,
     commentCreateInput,
+    setPutModal,
     handleChange,
     handleCurCommentDel,
     handleLoginCheck,
@@ -59,112 +68,147 @@ export default function BucketCard({
     handleCommentDelReq,
   } = useBucketOptions();
   return (
-    <Container>
-      <BucketWrraper>
-        <ImgWrapper>
-          <img src={cardImg} />
-        </ImgWrapper>
-        <TotalContentWrapper>
-          <ModalCloseButton onClick={modalHandle} />
-          <ProfileBox>
-            <ProfileAvatar
-              avatarSrc={avatar}
-              nickname={nickname}
-            ></ProfileAvatar>
-          </ProfileBox>
-          <Title>{title}</Title>
-          <CardCreatedDate>{cardCreated}</CardCreatedDate>
-          <ContentBox>
-            <p>{cardCotent}</p>
-          </ContentBox>
-          {commentList && commentList.length > 0 ? (
-            <CommentListBox>
-              {commentList.map((comment, idx) => (
-                <Fragment key={"comment" + comment.id}>
-                  <div>
-                    <p>{comment.nickname}</p>
-                    <p>{comment.content}</p>
-                  </div>
-                  {localStorage.getItem("userAccessToken") && (
+    <>
+      {putModal && (
+        <CardPutModalOuter>
+          <CardPutModal>
+            <h2>{title}</h2>
+            <li onClick={handleDetailBucketComplete}>버킷 달성</li>
+            <li onClick={handleDetailBucketDelete}>버킷 삭제</li>
+            <li
+              onClick={() => {
+                setPutModal((prev) => !prev);
+              }}
+            >
+              취소
+            </li>
+          </CardPutModal>
+          <ModalCloseArea
+            onClick={() => {
+              setPutModal((prev) => !prev);
+            }}
+          />
+        </CardPutModalOuter>
+      )}
+      <Container>
+        <BucketWrraper>
+          {isCompleted === 1 && <Complete />}
+          <ImgWrapper>
+            <img src={cardImg} />
+          </ImgWrapper>
+          <TotalContentWrapper>
+            <ModalCloseButton onClick={modalCloseHandle} />
+            <ProfileBox>
+              <ProfileAvatar
+                avatarSrc={avatar}
+                nickname={nickname}
+              ></ProfileAvatar>
+            </ProfileBox>
+            <TitleBox>
+              <h2> {title}</h2>
+              {localStorage.getItem("userAccessToken") && (
+                <CardPutButton
+                  onClick={() => {
+                    setPutModal((prev) => !prev);
+                  }}
+                />
+              )}
+            </TitleBox>
+            <CardCreatedDate>{cardCreated}</CardCreatedDate>
+            <ContentBox>
+              <p>{cardContent}</p>
+            </ContentBox>
+            {commentList && commentList.length > 0 ? (
+              <CommentListBox>
+                {commentList.map((comment, idx) => (
+                  <Fragment key={"comment" + comment.id}>
                     <div>
-                      {comment.putOptions ? (
-                        <CommentPutArea>
-                          <li
-                            onClick={handleCommentDelReq(boardId, comment.id)}
-                          >
-                            삭제
-                          </li>
-                          <li onClick={handlePutModal(idx, false)}>취소</li>
-                        </CommentPutArea>
-                      ) : (
-                        <CommentPutButton onClick={handlePutModal(idx, true)} />
-                      )}
+                      <p>{comment.nickname}</p>
+                      <p>{comment.content}</p>
                     </div>
-                  )}
-                </Fragment>
-              ))}
-            </CommentListBox>
-          ) : (
-            <CommentListNot>코멘트가 존재하지 않아요!</CommentListNot>
-          )}
-
-          <IconsBox>
-            <div>
-              <LikeButton
-                handleHeartClick={handleHeartClick}
-                width={16}
-                height={16}
-              />
-              <span>{heartCount}</span>
-            </div>
-            <div>
-              <ScrapButton
-                handleScrapClick={handleScrapClick}
-                width={18}
-                height={18}
-              />
-              <span>{scrapCount}</span>
-            </div>
-            <div>
-              <CommentIcon />
-              <span>{commentList ? commentList?.length : 0}</span>
-            </div>
-          </IconsBox>
-          <CommentBox>
-            {localStorage.getItem("userAccessToken") ? (
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  handleCommentCreate(boardId);
-                }}
-              >
-                <CommentUserAvatar />
-                <TextInputArea
-                  ref={commentCreateInput}
-                  value={commentValue}
-                  onChange={handleChange}
-                  placeholder="댓글을 입력하세요."
-                  maxLength={150}
-                ></TextInputArea>
-                <MentDelButton onClick={handleCurCommentDel}>
-                  <CrossIcon />
-                </MentDelButton>
-                <SendIcon>
-                  <input type="submit" value="" />
-                  <FontAwesomeIcon icon={faPaperPlane} />
-                </SendIcon>
-              </form>
+                    {localStorage.getItem("userAccessToken") && (
+                      <div>
+                        {comment.putOptions ? (
+                          <CommentPutArea>
+                            <li
+                              onClick={handleCommentDelReq(boardId, comment.id)}
+                            >
+                              삭제
+                            </li>
+                            <li onClick={handlePutModal(idx, false)}>취소</li>
+                          </CommentPutArea>
+                        ) : (
+                          <CommentPutButton
+                            onClick={handlePutModal(idx, true)}
+                          />
+                        )}
+                      </div>
+                    )}
+                  </Fragment>
+                ))}
+              </CommentListBox>
             ) : (
-              <>
-                <p onClick={handleLoginCheck}>댓글달기</p>
-                <CommentIcon />
-              </>
+              <CommentListNot>코멘트가 존재하지 않아요!</CommentListNot>
             )}
-          </CommentBox>
-        </TotalContentWrapper>
-      </BucketWrraper>
 
-      <ModalCloseArea onClick={modalHandle} />
-    </Container>
+            <IconsBox>
+              <div>
+                <LikeButton
+                  handleHeartClick={handleHeartClick}
+                  width={16}
+                  height={16}
+                />
+                <span>{heartCount}</span>
+              </div>
+              <div>
+                <ScrapButton
+                  handleScrapClick={handleScrapClick}
+                  width={18}
+                  height={18}
+                />
+                <span>{scrapCount}</span>
+              </div>
+              <div>
+                <CommentIcon />
+                <span>{commentList ? commentList?.length : 0}</span>
+              </div>
+            </IconsBox>
+            <CommentBox>
+              {localStorage.getItem("userAccessToken") ? (
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleCommentCreate(boardId);
+                  }}
+                >
+                  <CommentUserAvatar />
+                  <TextInputArea
+                    ref={commentCreateInput}
+                    value={commentValue}
+                    onChange={handleChange}
+                    placeholder="댓글을 입력하세요."
+                    maxLength={150}
+                  ></TextInputArea>
+                  <MentDelButton onClick={handleCurCommentDel}>
+                    <CrossIcon />
+                  </MentDelButton>
+                  <SendIcon>
+                    <input type="submit" value="" />
+                    <FontAwesomeIcon icon={faPaperPlane} />
+                  </SendIcon>
+                </form>
+              ) : (
+                <>
+                  <p onClick={handleLoginCheck}>댓글달기</p>
+                  <CommentIcon />
+                </>
+              )}
+            </CommentBox>
+          </TotalContentWrapper>
+        </BucketWrraper>
+
+        <ModalCloseArea onClick={modalCloseHandle} />
+      </Container>
+    </>
   );
 }

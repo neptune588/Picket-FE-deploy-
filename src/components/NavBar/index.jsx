@@ -37,7 +37,7 @@ export default function NavBar() {
     dropdownOpen,
     userNickName,
     searchModal,
-    browseDetailModal,
+    detailModal,
     latestDetailCard,
     setSearchValue,
     handleSearchModalControl,
@@ -50,33 +50,38 @@ export default function NavBar() {
     handleDetailCardReq,
     handleDetailModalState,
     handleHeartAndScrapClick,
+    handleDetailHeartAndScrapClick,
     OnClickDropdown,
   } = useNavBarOptions();
   const nicknameViewLength = 8;
   const titleViewLength = 12;
   return (
     <>
-      {browseDetailModal && (
+      {detailModal && (
         <BucketCard
           boardId={latestDetailCard.boardId}
           nickname={latestDetailCard.nickname}
           avatar={latestDetailCard.avatar}
           title={latestDetailCard.title}
-          cardImg={latestDetailCard.cardImg}
-          cardCotent={latestDetailCard.cardCotent}
+          cardImg={
+            latestDetailCard.cardImg
+              ? latestDetailCard.cardImg
+              : "/images/default_profile.png"
+          }
+          cardContent={latestDetailCard.cardContent}
           commentList={latestDetailCard.commentList}
           cardCreated={latestDetailCard.created}
           heartCount={latestDetailCard.heartCount}
           scrapCount={latestDetailCard.scrapCount}
-          handleHeartClick={handleHeartAndScrapClick(
+          handleHeartClick={handleDetailHeartAndScrapClick(
             "heart",
             latestDetailCard.boardId
           )}
-          handleScrapClick={handleHeartAndScrapClick(
+          handleScrapClick={handleDetailHeartAndScrapClick(
             "scrap",
             latestDetailCard.boardId
           )}
-          modalHandle={handleDetailModalState}
+          modalCloseHandle={handleDetailModalState}
         />
       )}
       <NavBarWrapper>
@@ -103,13 +108,15 @@ export default function NavBar() {
             maxLength={15}
           />
           <SearchIcon />
-          <CloseButton
-            onClick={() => {
-              setSearchValue("");
-            }}
-          >
-            <CloseCrossIcon />
-          </CloseButton>
+          {searchModal && (
+            <CloseButton
+              onClick={() => {
+                setSearchValue("");
+              }}
+            >
+              <CloseCrossIcon />
+            </CloseButton>
+          )}
         </SearchBarBox>
         <AlarmBox>
           <AlarmIcon
@@ -172,16 +179,19 @@ export default function NavBar() {
                             ? card.title.substring(0, titleViewLength) + "..."
                             : card.title
                         }
-                        //thumnailSrc={card.filepath}
-                        //avatarSrc={card.filename}
+                        thumnailSrc={card.filepath}
+                        avatarSrc={
+                          /* card.filename */ "/images/default_profile.png"
+                        }
                         nickname={
-                          card.nickname.length > nicknameViewLength
+                          card.nickname?.length > nicknameViewLength
                             ? card.nickname.substring(0, nicknameViewLength) +
                               "..."
                             : card.nickname
                         }
                         likeCount={card.likeCount}
                         scrapCount={card.scrapCount}
+                        isCompleted={card.isCompleted}
                         handledetailView={handleDetailCardReq(card.boardId)}
                         handleHeartClick={handleHeartAndScrapClick(
                           "heart",

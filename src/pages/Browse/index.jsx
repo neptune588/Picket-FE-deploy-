@@ -22,29 +22,36 @@ export default function Browse() {
     isLoading,
     dummyObserver,
     CardDetailData,
-    browseDetailModal,
+    detailModal,
     observerRef,
     handleCategoryClick,
-    handledetailView,
+    handleDetailView,
     handleDetailModalState,
     handleHeartAndScrapClick,
     handleDetailHeartAndScrapClick,
+    handleDetailBucketDelete,
+    handleDetailBucketComplete,
   } = useBrwoseGetItem();
   const titleViewLength = 15;
   return (
     <>
-      {browseDetailModal && (
+      {detailModal && (
         <BucketCard
           boardId={CardDetailData.boardId}
           nickname={CardDetailData.nickname}
-          avatar={CardDetailData.avatar}
+          avatar={
+            CardDetailData.avatar
+              ? CardDetailData.avatar
+              : "/images/default_profile.png"
+          }
           title={CardDetailData.title}
           cardImg={CardDetailData.cardImg}
-          cardCotent={CardDetailData.cardCotent}
+          cardContent={CardDetailData.cardContent}
           cardCreated={CardDetailData.created}
           heartCount={CardDetailData.heartCount}
           commentList={CardDetailData.commentList}
           scrapCount={CardDetailData.scrapCount}
+          isCompleted={CardDetailData.isCompleted}
           handleHeartClick={handleDetailHeartAndScrapClick(
             "heart",
             CardDetailData.boardId
@@ -53,7 +60,13 @@ export default function Browse() {
             "scrap",
             CardDetailData.boardId
           )}
-          modalHandle={handleDetailModalState}
+          handleDetailBucketDelete={handleDetailBucketDelete(
+            CardDetailData.boardId
+          )}
+          handleDetailBucketComplete={handleDetailBucketComplete(
+            CardDetailData.boardId
+          )}
+          modalCloseHandle={handleDetailModalState}
         />
       )}
       <SubTitle>
@@ -92,11 +105,14 @@ export default function Browse() {
                     : card.title
                 }
                 thumnailSrc={card.filepath}
-                avatarSrc={card.filename}
+                avatarSrc={
+                  /* card.filename ? card.filename :  */ "/images/default_profile.png"
+                }
                 nickname={card.nickname}
                 likeCount={card.likeCount}
                 scrapCount={card.scrapCount}
-                handledetailView={handledetailView(card.boardId)}
+                isCompleted={card.isCompleted}
+                handleDetailView={handleDetailView(card.boardId)}
                 handleHeartClick={handleHeartAndScrapClick(
                   "heart",
                   card.boardId

@@ -14,12 +14,15 @@ import {
   setThumnailCard,
   deleteThumnailCard,
 } from "@/store/bucketThumnailSlice";
-import { setBrowseDetailBucketModal } from "@/store/modalsSlice";
+import { setDetailBucketModal } from "@/store/modalsSlice";
 import { setDetailButcket, setScrollLocation } from "@/store/bucketDetailSlice";
 
 import { getData } from "@/services/api";
 import { postData } from "@/services/api";
+import { delData } from "@/services/api";
+import { patchData } from "@/services/api";
 
+import useSelectorList from "@/hooks/useSelectorList";
 import { categoriesData } from "@/pages/Browse/categoryData";
 
 export default function useBrwoseGetItem() {
@@ -28,23 +31,17 @@ export default function useBrwoseGetItem() {
   const navigate = useNavigate();
   const { keyword: curKeyword } = useParams();
 
-  const cards = useSelector((state) => {
-    return state.bucketThumnail;
-  });
-  const moadals = useSelector((state) => {
-    return state.modals;
-  });
-  const params = useSelector((state) => {
-    return state.parameter;
-  });
-  const bucketDetailObj = useSelector((state) => {
-    return state.bucketDetail;
-  });
-
-  const { page, keyword, categoryList, prevParams, totalParams } = params;
-  const { thumnailCards } = cards;
-  const { browseDetailModal } = moadals;
-  const { bucketDetailData, curScrollLocation } = bucketDetailObj;
+  const {
+    page,
+    keyword,
+    categoryList,
+    prevParams,
+    totalParams,
+    thumnailCards,
+    detailModal,
+    bucketDetailData,
+    curScrollLocation,
+  } = useSelectorList();
 
   const [dummy, setDummy] = useState([
     { id: "sklt01" },
@@ -183,7 +180,7 @@ export default function useBrwoseGetItem() {
       setIsLoading(true);
       const { data } = await getData(`/board/list/search?${query}`);
 
-      console.log(data);
+      //console.log(data);
 
       if (data.content?.length > 0) {
         if (data.last) {
@@ -244,9 +241,9 @@ export default function useBrwoseGetItem() {
       } else {
         localStorage.setItem("latestBucket", JSON.stringify([latestCard]));
       }
-      !browseDetailModal && dispatch(setBrowseDetailBucketModal());
+      !detailModal && dispatch(setDetailBucketModal());
 
-      console.log(data);
+      //console.log(data);
     } catch (error) {
       if (error.response.status === 401) {
         console.error("error입니다.");
@@ -255,7 +252,7 @@ export default function useBrwoseGetItem() {
     }
   };
 
-  const handledetailView = (curBoardId) => {
+  const handleDetailView = (curBoardId) => {
     return () => {
       dispatch(setScrollLocation(window.scrollY));
       cardDetailReq(curBoardId);
@@ -263,12 +260,10 @@ export default function useBrwoseGetItem() {
   };
 
   const handleDetailModalState = () => {
-    if (browseDetailModal) {
-      browseDetailModal && dispatch(setBrowseDetailBucketModal());
-      setTimeout(() => {
-        window.scroll({ top: curScrollLocation, left: 0 });
-      }, 50);
-    }
+    detailModal && dispatch(setDetailBucketModal());
+    setTimeout(() => {
+      window.scroll({ top: curScrollLocation, left: 0 });
+    }, 50);
   };
 
   const likeAndScrapReq = useMutation({
@@ -314,14 +309,17 @@ export default function useBrwoseGetItem() {
     },
     onSuccess: async () => {
       cardDetailReq(bucketDetailData.boardId);
-      //페이지로 산정되지 않는 짜투리 갯수를 위해 + 8 한번더
-      const { data } = await getData(
-        `/board/list/search?size=${page.value * 8 + 8}${
-          keyword.key + keyword.value
-        }${categoryList.key + categoryList.value}`
-      );
-      dispatch(deleteThumnailCard());
-      dispatch(setThumnailCard(data.content));
+      try {
+        const { data } = await getData(
+          `/board/list/search?size=${page.value * 8 + 8}${
+            keyword.key + keyword.value
+          }${categoryList.key + categoryList.value}`
+        );
+        dispatch(deleteThumnailCard());
+        dispatch(setThumnailCard(data.content));
+      } catch (error) {
+        console.error("받아오는데서 에러 뜸");
+      }
     },
     onError: (error) => {
       if (error.response.status) {
@@ -378,6 +376,100 @@ export default function useBrwoseGetItem() {
     };
   };
 
+  const detailBucketDelete = useMutation({
+    mutationFn: async (curBoardId) => {
+      const token = `Bearer ${JSON.parse(
+        localStorage.getItem("userAccessToken")
+      )}`;
+      return await delData(`/board/${curBoardId}`, {
+        headers: {
+          Authorization: token,
+        },
+      });
+    },
+    onSuccess: async () => {
+      try {
+        const { data } = await getData(
+          `/board/list/search?size=${page.value * 8 + 8}${
+            keyword.key + keyword.value
+          }${categoryList.key + categoryList.value}`
+        );
+
+        dispatch(deleteThumnailCard());
+        dispatch(setThumnailCard(data.content));
+
+        alert("버킷이 삭제 되었습니다!");
+        dispatch(setDetailBucketModal());
+      } catch (error) {
+        console.error("Oh~ :", error);
+      }
+    },
+    onError: (error) => {
+      if (error.response.status === 401) {
+        alert("권한이 없습니다!");
+      }
+    },
+  });
+
+  const handleDetailBucketDelete = (curBoardId) => {
+    return () => {
+      confirm("버킷을 삭제하시겠습니까?") &&
+        detailBucketDelete.mutate(curBoardId);
+    };
+  };
+
+  const detailBucketComplete = useMutation({
+    mutationFn: async (curData) => {
+      const token = `Bearer ${JSON.parse(
+        localStorage.getItem("userAccessToken")
+      )}`;
+      return await patchData(`/board/${curData}/complete`, null, {
+        headers: {
+          Authorization: token,
+        },
+      });
+    },
+    onSuccess: async () => {
+      try {
+        cardDetailReq(bucketDetailData.boardId);
+
+        const token = `Bearer ${JSON.parse(
+          localStorage.getItem("userAccessToken")
+        )}`;
+        const { data } = await getData(
+          `/board/list/search?size=${page.value * 8 + 8}${
+            keyword.key + keyword.value
+          }${categoryList.key + categoryList.value}`,
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        );
+        dispatch(deleteThumnailCard());
+        dispatch(setCardData(data.content));
+
+        alert("버킷을 달성하셨습니다!");
+      } catch (error) {
+        console.error("Oh~ :", error);
+      }
+    },
+    onError: (error) => {
+      if (error.response.status === 409) {
+        alert("이미 달성한 버킷입니다!");
+      } else {
+        console.log("에러러");
+      }
+    },
+  });
+
+  const handleDetailBucketComplete = (curBoardId) => {
+    return () => {
+      confirm("버킷을 달성하시겠습니까?") &&
+        detailBucketComplete.mutate(curBoardId);
+    };
+  };
+
   //시작시 리스트 불러옴
   useEffect(() => {
     //비워줘야지 다른 페이지갔다 다시 와서 카테구리 누를때 []이 디폴트인상태에서 됨. 즉 처음페이지에 온것처럼 됨.
@@ -413,7 +505,7 @@ export default function useBrwoseGetItem() {
 
       dispatch(setTotalParams());
       dispatch(setPrevParams());
-      console.log(prevParams.value);
+      //console.log(prevParams.value);
     }
   }, [curKeyword]);
 
@@ -424,6 +516,7 @@ export default function useBrwoseGetItem() {
       setCardData(thumnailCards.data);
     }
   }, [thumnailCards.data]);
+
   useEffect(() => {
     //데이터 없으면 옵저버 못보게 더미 on 데이터 있으면 off
     if (dummyObserver.current && cardData.length > 0) {
@@ -458,14 +551,16 @@ export default function useBrwoseGetItem() {
     isLoading,
     dummyObserver,
     CardDetailData,
-    browseDetailModal,
+    detailModal,
     cardDetailReq,
     observerRef,
     handleCategoryClick,
-    handledetailView,
+    handleDetailView,
     handleDetailModalState,
     handleHeartAndScrapClick,
     handleDetailHeartAndScrapClick,
+    handleDetailBucketDelete,
+    handleDetailBucketComplete,
   };
 }
 

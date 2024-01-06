@@ -2,8 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   searchModal: false,
-  browseDetailModal: false,
-  homeDetailModal: false,
+  detailModal: false,
+  profileEditModal: false,
 };
 
 const modalsSlice = createSlice({
@@ -13,12 +13,15 @@ const modalsSlice = createSlice({
     setSearchModal(state) {
       state.searchModal = !state.searchModal;
     },
-    setBrowseDetailBucketModal(state) {
-      state.browseDetailModal = !state.browseDetailModal;
+    setDetailBucketModal(state) {
+      state.detailModal = !state.detailModal;
+    },
+    setProfileEditModal(state) {
+      state.profileEditModal = !state.profileEditModal;
     },
   },
 });
 
-export const { setSearchModal, setBrowseDetailBucketModal } =
+export const { setSearchModal, setDetailBucketModal, setProfileEditModal } =
   modalsSlice.actions;
 export default modalsSlice.reducer;

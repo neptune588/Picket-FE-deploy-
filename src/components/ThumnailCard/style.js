@@ -1,6 +1,8 @@
 import styled from "styled-components";
+import complete from "@/assets/icons/complete.svg?react";
 
 const Container = styled.li`
+  position: relative;
   width: ${({ $width }) => {
     return $width;
   }};
@@ -56,4 +58,16 @@ const ButtonBox = styled.div`
   }
 `;
 
-export { Container, ThumnailImgBox, ProfileWrapper, ButtonBox };
+const Complete = styled(complete)`
+  position: absolute;
+  width: 35px;
+  height: 35px;
+  top: 20px;
+  left: 20px;
+  z-index: 10;
+  fill: ${({ theme: { colors } }) => {
+    return colors.primary;
+  }};
+`;
+
+export { Container, ThumnailImgBox, ProfileWrapper, ButtonBox, Complete };
