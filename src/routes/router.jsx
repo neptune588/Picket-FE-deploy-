@@ -33,14 +33,14 @@ const router = createBrowserRouter([
         label: "alarm",
       }, */
 
-      {
+      /*       {
         path: "/profile",
         element: <MyProfile />,
       },
       {
         path: "/testprofile",
         element: <TestProfile />,
-      },
+      }, */
     ],
   },
   {
