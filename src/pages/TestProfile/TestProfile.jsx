@@ -5,9 +5,9 @@ import styled from "styled-components";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 import { MdModeEdit } from "react-icons/md";
-import ProfileEdit from "../../components/ProfileEditModal/ProfileEditModal";
+/* import ProfileEdit from "../../components/ProfileEditModal/ProfileEditModal";
 import HomeThumnailCard from "../../components/HomeThumnailCard";
-import Bucket from "../../components/Bucket/Bucket";
+import Bucket from "../../components/Bucket/Bucket"; */
 import { getData } from "@/services/api";
 
 const ProfileImage = styled.div`
@@ -362,7 +362,7 @@ function ScrapListTab({ bucketList, setBucketList }) {
     }
   };
 
-  const items = bucketList.map((data, idx) => {
+  /*   const items = bucketList.map((data, idx) => {
     return (
       <HomeThumnailCard
         key={idx}
@@ -373,7 +373,7 @@ function ScrapListTab({ bucketList, setBucketList }) {
         }}
       />
     );
-  });
+  }); */
 
   useEffect(() => {
     search();
@@ -381,7 +381,7 @@ function ScrapListTab({ bucketList, setBucketList }) {
 
   return (
     <>
-      <InfiniteScroll
+      {/*       <InfiniteScroll
         pageStart={page}
         next={loadMoreHandler}
         dataLength={items.length}
@@ -405,7 +405,7 @@ function ScrapListTab({ bucketList, setBucketList }) {
             }}
           />
         </ModalBg>
-      )}
+      )} */}
     </>
   );
 }

@@ -130,11 +130,11 @@ export default function NavBar() {
           )}
         </SearchBarBox>
         <AlarmBox>
-          <AlarmIcon
+          {/*           <AlarmIcon
             onClick={handleNavigate("/alarm")}
             $width={"24px"}
             $height={"24px"}
-          />
+          /> */}
           {userNickName ? (
             <Profile onClick={OnClickDropdown}>
               <p>{userNickName}</p>

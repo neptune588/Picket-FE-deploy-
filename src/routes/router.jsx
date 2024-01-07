@@ -11,6 +11,7 @@ import Main from "@/pages/Main";
 import MyProfile from "@/pages/MyProfile";
 import AddBucket from "@/pages/AddBucket/AddBucket";
 import Browse from "@/pages/Browse";
+import TestProfile from "../pages/TestProfile/TestProfile";
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
       {
         path: "/profile",
         element: <MyProfile />,
+      },
+      {
+        path: "/testprofile",
+        element: <TestProfile />,
       },
     ],
   },
