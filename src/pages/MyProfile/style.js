@@ -10,6 +10,8 @@ const ProfileViewBox = styled.section`
   padding-top: 70px;
   > div {
     &:first-child {
+      label {
+      }
       width: 150px;
       height: 150px;
       margin: 0 auto;
@@ -87,6 +89,22 @@ const EditModal = styled.div`
   z-index: 1;
 `;
 
+const DoubleCheckButton = styled.button`
+  width: 110px;
+  height: 60px;
+  font-weight: ${({ theme: { typo } }) => {
+    return typo.weight.bold;
+  }};
+  color: ${({ theme: { colors } }) => {
+    return colors.white;
+  }};
+  background-color: ${({ theme: { colors } }) => {
+    return colors.primary;
+  }};
+  border-radius: 15px;
+  margin-left: 15px;
+`;
+
 const UpLoadBox = styled.div`
   position: relative;
   width: 150px;
@@ -99,12 +117,31 @@ const UpLoadBox = styled.div`
     }};
     border-radius: 50%;
     cursor: pointer;
+    overflow: hidden;
+    > input {
+      display: none;
+    }
+    > img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   }
 `;
 
 const InputBox = styled.div`
   height: 85px;
   margin-bottom: 45px;
+  > p {
+    color: ${({ theme: { colors } }) => {
+      return colors.gray["60"];
+    }};
+    font-weight: ${({ theme: { typo } }) => {
+      return typo.weight.medium;
+    }};
+    margin-top: 10px;
+    text-align: right;
+  }
 `;
 
 const ButtonBox = styled.div`
@@ -248,6 +285,7 @@ export {
   EditModal,
   InputBox,
   ButtonBox,
+  DoubleCheckButton,
   ProfileEditCansleButton,
   UpLoadBox,
   ProfileImgUploadButton,

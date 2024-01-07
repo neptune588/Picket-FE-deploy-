@@ -10,7 +10,11 @@ const ScrapIcon = styled(Icons)`
   }};
   cursor: pointer;
 `;
-export default function ScrapButton({ width, height, handleScrapClick }) {
+export default function ScrapButton({
+  width,
+  height,
+  handleScrapClick = null,
+}) {
   return (
     <>
       <ScrapIcon width={width} height={height} onClick={handleScrapClick} />

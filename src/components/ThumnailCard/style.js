@@ -60,8 +60,8 @@ const ButtonBox = styled.div`
 
 const Complete = styled(complete)`
   position: absolute;
-  width: 35px;
-  height: 35px;
+  width: 25px;
+  height: 25px;
   top: 20px;
   left: 20px;
   z-index: 10;

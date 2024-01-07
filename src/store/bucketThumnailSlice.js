@@ -28,28 +28,35 @@ const bucketThumnailSlice = createSlice({
       const { homeThumnailCards } = state;
       const { payload: curHomeThumnailCards } = action;
 
-      curHomeThumnailCards.forEach((obj) => {
-        const date = new Date();
-        const compareDate =
-          date.getFullYear() +
-          "-" +
-          String(date.getMonth() + 1).padStart(2, 0) +
-          "-" +
-          String(date.getDate()).padStart(2, 0);
+      const condition = Array.isArray(curHomeThumnailCards);
 
-        const today = new Date(compareDate); // 20240107
-        const deadlineDate = new Date(obj.deadline); // 20240106
+      if (condition) {
+        curHomeThumnailCards.length > 0 &&
+          curHomeThumnailCards.forEach((obj) => {
+            const date = new Date();
+            const compareDate =
+              date.getFullYear() +
+              "-" +
+              String(date.getMonth() + 1).padStart(2, 0) +
+              "-" +
+              String(date.getDate()).padStart(2, 0);
 
-        obj.Dday = (today - deadlineDate) / (1000 * 60 * 60 * 24);
-        obj.putOptions = false;
-      });
+            const today = new Date(compareDate); // 20240107
+            const deadlineDate = new Date(obj.deadline); // 20240106
 
-      homeThumnailCards.data = [
-        ...homeThumnailCards.data,
-        ...curHomeThumnailCards,
-      ];
+            obj.Dday = (today - deadlineDate) / (1000 * 60 * 60 * 24);
+            obj.putOptions = false;
+          });
 
-      //console.log(curHomeThumnailCards);
+        homeThumnailCards.data = [
+          ...homeThumnailCards.data,
+          ...curHomeThumnailCards,
+        ];
+      } else {
+        homeThumnailCards.data = [];
+      }
+
+      console.log(curHomeThumnailCards);
     },
     deleteHomeThumnailCard(state) {
       state.homeThumnailCards.data = [];

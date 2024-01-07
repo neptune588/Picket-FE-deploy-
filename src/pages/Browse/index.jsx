@@ -52,6 +52,7 @@ export default function Browse() {
           commentList={CardDetailData.commentList}
           scrapCount={CardDetailData.scrapCount}
           isCompleted={CardDetailData.isCompleted}
+          putModalOptions={true}
           handleHeartClick={handleDetailHeartAndScrapClick(
             "heart",
             CardDetailData.boardId

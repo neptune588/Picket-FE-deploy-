@@ -40,6 +40,7 @@ export default function useNavBarOptions() {
   const [searchValue, setSearchValue] = useState("");
   const [keywordListData, setKeywordListData] = useState([]);
   const [latestDetailCard, setLatestDetailCard] = useState([]);
+  const [activeNum, setActiveNum] = useState(0);
 
   const searchTextBar = useRef();
   const mounted04 = useRef(false);
@@ -241,6 +242,12 @@ export default function useNavBarOptions() {
     };
   };
 
+  const handleMenuActive = (num) => {
+    return () => {
+      setActiveNum(num);
+    };
+  };
+
   useEffect(() => {
     const latestKeywordList = JSON.parse(localStorage.getItem("keywordList"));
     loginCheck();
@@ -265,6 +272,7 @@ export default function useNavBarOptions() {
     searchModal,
     detailModal,
     latestDetailCard,
+    activeNum,
     setSearchValue,
     handleSearchModalControl,
     handleChange,
@@ -277,6 +285,7 @@ export default function useNavBarOptions() {
     handleDetailModalState,
     handleHeartAndScrapClick,
     handleDetailHeartAndScrapClick,
+    handleMenuActive,
     OnClickDropdown,
   };
 }

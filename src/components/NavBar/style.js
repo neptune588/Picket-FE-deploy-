@@ -42,13 +42,13 @@ const NavStyle = styled(Link)`
   outline: none;
   border-radius: 30px;
   cursor: pointer;
+  color: ${({ $menuNum, $activeNum, theme: { colors } }) => {
+    return $activeNum === $menuNum && colors.white;
+  }};
+  background-color: ${({ $menuNum, $activeNum, theme: { colors } }) => {
+    return $activeNum === $menuNum && colors.gray["80"];
+  }};
   &:hover {
-    background-color: ${({ theme: { colors } }) => {
-      return colors.gray["80"];
-    }};
-    color: white;
-  }
-  &:active {
     background-color: ${({ theme: { colors } }) => {
       return colors.gray["80"];
     }};
