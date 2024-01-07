@@ -53,14 +53,13 @@ export default function AddImg() {
       localStorage.getItem("userAccessToken")
     )}`;
 
-    const formData = new FormData();
-
     const sendData = {
       ...context,
       deadline: convertDateToString(context.deadline),
       categoryList: Object.keys(context.categoryList).map((d) => Number(d)),
     };
 
+    const formData = new FormData();
     formData.append(
       "postBoardRequestDTO",
       new Blob([JSON.stringify(sendData)], {

@@ -51,6 +51,7 @@ export default function Main() {
           heartCount={homeCardDetailData.heartCount}
           scrapCount={homeCardDetailData.scrapCount}
           isCompleted={homeCardDetailData.isCompleted}
+          putModalOptions={true}
           handleHeartClick={handleDetailHeartAndScrapClick(
             "heart",
             homeCardDetailData.boardId
@@ -73,7 +74,7 @@ export default function Main() {
         <DefaultContainer>
           <DefaultImgWrapper>
             <DefaultImg onClick={handleAddBucket} />
-            <DefaultNotice>새로운 버킷리스트를 만들어 보세요!</DefaultNotice>
+            <DefaultNotice>새로운 버킷 리스트를 만들어 보세요!</DefaultNotice>
           </DefaultImgWrapper>
           <AddBucketButton onClick={handleAddBucket}>
             <PlusIcon />
@@ -113,6 +114,7 @@ export default function Main() {
                     isCompleted={data.isCompleted}
                     isProgress={data.progressTotal}
                     putOptionModalState={data.putOptions}
+                    putOpitonsControl={true}
                     handleHomeDetailModal={handleHomeDetailView(data.boardId)}
                     handleBucketDelete={handleBucketDelete(data.boardId)}
                     handleBucketComplete={handleBucketComplete(data.boardId)}

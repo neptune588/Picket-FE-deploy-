@@ -47,13 +47,14 @@ export default function BucketCard({
   cardCreated,
   heartCount,
   scrapCount,
+  putModalOptions = false,
   isCompleted,
   commentList,
   handleHeartClick,
-  handleScrapClick,
+  handleScrapClick = null,
   modalCloseHandle,
-  handleDetailBucketDelete,
-  handleDetailBucketComplete,
+  handleDetailBucketDelete = null,
+  handleDetailBucketComplete = null,
 }) {
   const {
     putModal,
@@ -106,7 +107,7 @@ export default function BucketCard({
             </ProfileBox>
             <TitleBox>
               <h2> {title}</h2>
-              {localStorage.getItem("userAccessToken") && (
+              {localStorage.getItem("userAccessToken") && putModalOptions && (
                 <CardPutButton
                   onClick={() => {
                     setPutModal((prev) => !prev);

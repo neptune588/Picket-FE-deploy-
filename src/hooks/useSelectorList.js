@@ -7,6 +7,9 @@ export default function useSelectorList() {
   const params = useSelector((state) => {
     return state.parameter;
   });
+  const scrapParams = useSelector((state) => {
+    return state.scrapParameter;
+  });
   const moadals = useSelector((state) => {
     return state.modals;
   });
@@ -20,6 +23,7 @@ export default function useSelectorList() {
   const { detailModal, searchModal, profileEditModal } = moadals;
   const { page: homePage, totalParams: totalHomeParams } = homeParams;
   const { page, keyword, categoryList, prevParams, totalParams } = params;
+  const { page: scrapPage, totalParams: totalScrapParams } = scrapParams;
   const { homeThumnailCards, thumnailCards } = cards;
   const { bucketDetailData, curScrollLocation } = bucketDetailObj;
 
@@ -31,6 +35,8 @@ export default function useSelectorList() {
     curScrollLocation,
     homePage,
     totalHomeParams,
+    scrapPage,
+    totalScrapParams,
     page,
     keyword,
     categoryList,

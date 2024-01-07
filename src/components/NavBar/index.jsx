@@ -39,6 +39,7 @@ export default function NavBar() {
     searchModal,
     detailModal,
     latestDetailCard,
+    activeNum,
     setSearchValue,
     handleSearchModalControl,
     handleChange,
@@ -51,13 +52,14 @@ export default function NavBar() {
     handleDetailModalState,
     handleHeartAndScrapClick,
     handleDetailHeartAndScrapClick,
+    handleMenuActive,
     OnClickDropdown,
   } = useNavBarOptions();
   const nicknameViewLength = 8;
   const titleViewLength = 12;
   return (
     <>
-      {detailModal && (
+      {/*      {detailModal && (
         <BucketCard
           boardId={latestDetailCard.boardId}
           nickname={latestDetailCard.nickname}
@@ -83,16 +85,25 @@ export default function NavBar() {
           )}
           modalCloseHandle={handleDetailModalState}
         />
-      )}
+      )} */}
       <NavBarWrapper>
         <SymbolIcon />
         <NavLinkBox>
-          <NavStyle to="/" $width={"50px"}>
+          <NavStyle
+            to="/"
+            $width={"50px"}
+            $menuNum={0}
+            $activeNum={activeNum}
+            onClick={handleMenuActive(0)}
+          >
             홈
           </NavStyle>
           <NavStyle
             to={`/search/${keyword.value ? keyword.value : "default"}`}
             $width={"60px"}
+            $menuNum={1}
+            $activeNum={activeNum}
+            onClick={handleMenuActive(1)}
           >
             탐색
           </NavStyle>
@@ -119,11 +130,11 @@ export default function NavBar() {
           )}
         </SearchBarBox>
         <AlarmBox>
-          <AlarmIcon
+          {/*           <AlarmIcon
             onClick={handleNavigate("/alarm")}
             $width={"24px"}
             $height={"24px"}
-          />
+          /> */}
           {userNickName ? (
             <Profile onClick={OnClickDropdown}>
               <p>{userNickName}</p>

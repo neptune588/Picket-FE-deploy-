@@ -14,6 +14,7 @@ import {
   InputBox,
   UpLoadBox,
   ButtonBox,
+  DoubleCheckButton,
   ProfileEditCansleButton,
   ProfileImgUploadButton,
   ModalCloseArea,
@@ -32,18 +33,29 @@ export default function MyProfile() {
     activeNumber,
     detailModal,
     profileEditModal,
-    profileHomeCardData,
-    profileHomeCardDetailData,
-    profileObserver,
+    profileMyCardData,
+    profileCardDetailData,
+    previewImg,
+    nikcnameValue,
+    errors,
+    setErrors,
+    myCardObserver,
+    scrapCardObserver,
+    setNicknameValue,
+    nicknameRef,
+    handleChange,
     handleProfileEditModalState,
     handleMenuClick,
-    handleHomeDetailView,
+    handleCardDetailView,
+    handleCardDetailModalClose,
     handleBucketDelete,
     handleBucketComplete,
-    handleHomeDetailModalClose,
-    handleHomeDetailBucketComplete,
-    handleHomeDetailBucketDelete,
-    handleDetailHeartAndScrapClick,
+    handleMyDetailBucketComplete,
+    handleMyDetailBucketDelete,
+    handleDetailHeartClick,
+    handleProfileImgChange,
+    handleNicknameRepeatCheck,
+    profileEditReq,
   } = useMyProfile();
   const contentMaxViewLength = 18;
   const titleMaxViewLength = 15;
@@ -51,67 +63,110 @@ export default function MyProfile() {
     <>
       {detailModal && (
         <BucketCard
-          boardId={profileHomeCardDetailData.boardId}
-          nickname={profileHomeCardDetailData.nickname}
+          boardId={profileCardDetailData.boardId}
+          nickname={profileCardDetailData.nickname}
           avatar={
-            profileHomeCardDetailData.avatar
-              ? profileHomeCardDetailData.avatar
+            profileCardDetailData.avatar
+              ? profileCardDetailData.avatar
               : "/images/default_profile.png"
           }
-          title={profileHomeCardDetailData.title}
-          cardImg={profileHomeCardDetailData.cardImg}
-          cardContent={profileHomeCardDetailData.cardContent}
-          commentList={profileHomeCardDetailData.commentList}
-          cardCreated={profileHomeCardDetailData.created}
-          heartCount={profileHomeCardDetailData.heartCount}
-          scrapCount={profileHomeCardDetailData.scrapCount}
-          isCompleted={profileHomeCardDetailData.isCompleted}
-          modalCloseHandle={handleHomeDetailModalClose}
-          handleHeartClick={handleDetailHeartAndScrapClick(
-            "heart",
-            profileHomeCardDetailData.boardId
-          )}
-          handleScrapClick={handleDetailHeartAndScrapClick(
-            "scrap",
-            profileHomeCardDetailData.boardId
-          )}
-          handleDetailBucketDelete={handleHomeDetailBucketDelete(
-            profileHomeCardDetailData.boardId
-          )}
-          handleDetailBucketComplete={handleHomeDetailBucketComplete(
-            profileHomeCardDetailData.boardId
-          )}
+          title={profileCardDetailData.title}
+          cardImg={profileCardDetailData.cardImg}
+          cardContent={profileCardDetailData.cardContent}
+          commentList={profileCardDetailData.commentList}
+          cardCreated={profileCardDetailData.created}
+          heartCount={profileCardDetailData.heartCount}
+          scrapCount={profileCardDetailData.scrapCount}
+          putModalOptions={activeNumber === 0 && true}
+          isCompleted={profileCardDetailData.isCompleted}
+          modalCloseHandle={handleCardDetailModalClose}
+          handleHeartClick={
+            activeNumber === 0
+              ? handleDetailHeartClick(0, profileCardDetailData.boardId)
+              : handleDetailHeartClick(1, profileCardDetailData.boardId)
+          }
+          handleDetailBucketDelete={
+            activeNumber === 0 &&
+            handleMyDetailBucketDelete(profileCardDetailData.boardId)
+          }
+          handleDetailBucketComplete={
+            activeNumber === 0 &&
+            handleMyDetailBucketComplete(profileCardDetailData.boardId)
+          }
         />
       )}
       {profileEditModal && (
         <EditModalOuter>
           <EditModal>
             <h2>프로필 편집</h2>
-            <form>
+            <form onSubmit={profileEditReq}>
               <UpLoadBox>
-                <label>
+                <label htmlFor="profileUpload">
+                  <input
+                    type="file"
+                    id="profileUpload"
+                    accept="image/*"
+                    onChange={handleProfileImgChange}
+                  />
+                  <img src={previewImg} alt={previewImg} />
                   <ProfileImgUploadButton></ProfileImgUploadButton>
                 </label>
               </UpLoadBox>
               <InputBox>
-                <Input width={"400px"} />
+                <Input
+                  maxLength={6}
+                  inputRef={nicknameRef}
+                  width={"270px"}
+                  vaildState={errors.nicknameInvaildNotice}
+                  value={nikcnameValue}
+                  onChange={handleChange}
+                  placeholder={"닉네임을 입력하세요."}
+                />
+                <DoubleCheckButton onClick={handleNicknameRepeatCheck}>
+                  중복확인
+                </DoubleCheckButton>
+                {errors.nicknameErrorMsg && <p>{errors.nicknameErrorMsg}</p>}
               </InputBox>
               <ButtonBox>
-                <ProfileEditCansleButton onClick={handleProfileEditModalState}>
+                <ProfileEditCansleButton
+                  onClick={() => {
+                    setNicknameValue("");
+                    setErrors({
+                      ...errors,
+                      nicknameInvaildNotice: "default",
+                      nicknameErrorMsg: "",
+
+                      totalErrorMsg: "",
+                    });
+                    handleProfileEditModalState();
+                  }}
+                >
                   취소
                 </ProfileEditCansleButton>
                 <SubmitButton width={"190px"} value={"확인"} />
               </ButtonBox>
             </form>
           </EditModal>
-          <ModalCloseArea onClick={handleProfileEditModalState} />
+          <ModalCloseArea
+            onClick={() => {
+              setNicknameValue("");
+              setErrors({
+                ...errors,
+                nicknameInvaildNotice: "default",
+                nicknameErrorMsg: "",
+
+                totalErrorMsg: "",
+              });
+              handleProfileEditModalState();
+            }}
+          />
         </EditModalOuter>
       )}
       <Container>
         <ProfileViewBox>
           <div></div>
           <div>
-            <h2>테스트</h2>
+            <h2>{JSON.parse(localStorage.getItem("userNickname"))}</h2>
             <EditProfileButton onClick={handleProfileEditModalState} />
           </div>
         </ProfileViewBox>
@@ -131,8 +186,9 @@ export default function MyProfile() {
             $number={0}
             onClick={handleMenuClick(0)}
           >
-            마이 버킷{" "}
-            {Array.isArray(profileHomeCardData) && profileHomeCardData.length}
+            마이 버킷
+            {Array.isArray(profileMyCardData) &&
+              "  " + profileMyCardData.length}
           </ActiveMenu>
           <ActiveMenu
             $isActiveNum={activeNumber}
@@ -143,12 +199,13 @@ export default function MyProfile() {
           </ActiveMenu>
         </BucketMenuBox>
         <CardWrppar>
-          {Array.isArray(profileHomeCardData) &&
-          profileHomeCardData.length > 0 ? (
-            profileHomeCardData.map((data, idx) => {
+          {activeNumber === 0 &&
+            Array.isArray(profileMyCardData) &&
+            profileMyCardData.length > 0 &&
+            profileMyCardData.map((data, idx) => {
               return (
                 <HomeThumnailCard
-                  key={"homeThumnail" + data.boardId}
+                  key={"profilThumnail" + data.boardId}
                   boardId={data.boardId}
                   curThumnail={idx}
                   title={
@@ -175,25 +232,59 @@ export default function MyProfile() {
                   isCompleted={data.isCompleted}
                   isProgress={data.progressTotal}
                   putOptionModalState={data.putOptions}
-                  handleHomeDetailModal={handleHomeDetailView(data.boardId)}
+                  putOpitonsControl={true}
+                  handleHomeDetailModal={handleCardDetailView(data.boardId)}
                   handleBucketDelete={handleBucketDelete(data.boardId)}
                   handleBucketComplete={handleBucketComplete(data.boardId)}
+                />
+              );
+            })}
+          {activeNumber === 1 && scrapCardData.length > 0 ? (
+            scrapCardData.map((data, idx) => {
+              return (
+                <HomeThumnailCard
+                  key={"scrapCard" + data.boardId}
+                  boardId={data.boardId}
+                  curThumnail={idx}
+                  title={
+                    data.title.length > titleMaxViewLength
+                      ? data.title.substring(0, titleMaxViewLength) + "..."
+                      : data.title
+                  }
+                  content={
+                    data.content?.length > contentMaxViewLength
+                      ? data.content.substring(0, contentMaxViewLength) +
+                        "\n" +
+                        data.content.substring(
+                          contentMaxViewLength,
+                          contentMaxViewLength * 2
+                        ) +
+                        "..."
+                      : data.content
+                  }
+                  deadline={data.deadline}
+                  DdayView={false}
+                  thumnailSrc={data.bucketImg}
+                  avatar={data.filename}
+                  isFinish={data.finishTotal}
+                  isCompleted={data.isCompleted}
+                  isProgress={data.progressTotal}
+                  handleHomeDetailModal={handleCardDetailView(data.boardId)}
                 />
               );
             })
           ) : (
             <ContentsNotBox></ContentsNotBox>
           )}
-          {activeNumber === 1 && scrapCardData.length > 0 ? (
-            "데이터"
-          ) : (
-            <ContentsNotBox></ContentsNotBox>
-          )}
         </CardWrppar>
       </Container>
-      {((Array.isArray(profileHomeCardData) &&
-        profileHomeCardData.length > 0) ||
-        scrapCardData.length > 0) && <div ref={profileObserver}></div>}
+      {/*       {Array.isArray(profileHomeCardData) &&
+        profileHomeCardData.length > 0 &&
+        activeNumber === 0 && <div ref={myCardObserver} />}
+
+      {scrapCardData.length > 0 && activeNumber === 1 && (
+        <div ref={scrapCardObserver} />
+      )} */}
     </>
   );
 }

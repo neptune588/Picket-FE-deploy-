@@ -20,17 +20,19 @@ import { setHomeThumnailPutModalState } from "@/store/bucketThumnailSlice";
 import ThumnailImg from "@/components/ThumnailImg/ThumnailImg";
 
 export default function HomeThumnailCard({
-  boardId,
+  //boardId,
   title,
   content,
   deadline,
   thumnailSrc,
   handleHomeDetailModal,
   curThumnail,
-  putOptionModalState,
-  handleBucketDelete,
-  handleBucketComplete,
-  Dday,
+  putOpitonsControl = null,
+  putOptionModalState = null,
+  handleBucketDelete = null,
+  handleBucketComplete = null,
+  Dday = null,
+  DdayView = null,
   isCompleted,
   /*   avatar,
   isFinish,
@@ -72,15 +74,18 @@ export default function HomeThumnailCard({
         />
       </ThumnailImgBox>
       <ContentsWrapper>
-        {isCompleted === 0 && (
+        {isCompleted === 0 && DdayView && (
           <DdayView $isOverdue={Dday}>
             {Dday > 0 ? "D+" + Dday : "D-" + Math.abs(Dday)}
           </DdayView>
         )}
 
-        <ThumnailPutButton
-          onClick={handlePutOptionModalState(curThumnail, true)}
-        />
+        {putOpitonsControl && (
+          <ThumnailPutButton
+            onClick={handlePutOptionModalState(curThumnail, true)}
+          />
+        )}
+
         <CreateDateBox onClick={handleHomeDetailModal}>
           {deadline}
         </CreateDateBox>
