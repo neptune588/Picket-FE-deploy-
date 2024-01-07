@@ -146,8 +146,8 @@ const Profile = styled.div`
 const Dropdown = styled.ul`
   top: 65px;
   right: 20px;
-  width: 260px;
-  height: 150px;
+  width: 160px;
+  height: 75px;
   border-radius: 2em;
   position: absolute;
   background: white;
