@@ -66,7 +66,6 @@ export default function useNavBarOptions() {
 
   const handleSignOut = () => {
     dispatch(deleteHomeThumnailCard());
-    //일단은 로컬스토리지에서 지우는걸로 간단설정 보안을 생각하면 보완필요
     localStorage.removeItem("userAccessToken");
     localStorage.removeItem("userId");
     localStorage.removeItem("userNickname");
