@@ -34,7 +34,7 @@ const CenterdContainer = styled.div`
   margin: 0 auto;
 `;
 
-export default function LayOut() {
+export default function Layout() {
   const { detailModal, profileEditModal, searchModal } = useSelectorList();
 
   const dispatch = useDispatch();
