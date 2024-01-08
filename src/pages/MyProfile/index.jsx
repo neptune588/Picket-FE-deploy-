@@ -29,22 +29,18 @@ import {
 export default function MyProfile() {
   const {
     completeCount,
-    scrapCardData,
     activeNumber,
     detailModal,
-    profileEditModal,
-    profileMyCardData,
+    profileCardData,
     profileCardDetailData,
+    profileEditModal,
     previewImg,
     nikcnameValue,
-    errors,
-    setPreviewImg,
-    setErrors,
-    myCardObserver,
-    scrapCardObserver,
-    setNicknameValue,
     nicknameRef,
+    errors,
+    profileCardObserver,
     handleChange,
+    handleEditModalClose,
     handleProfileEditModalState,
     handleMenuClick,
     handleCardDetailView,
@@ -129,38 +125,14 @@ export default function MyProfile() {
                 {errors.nicknameErrorMsg && <p>{errors.nicknameErrorMsg}</p>}
               </InputBox>
               <ButtonBox>
-                <ProfileEditCansleButton
-                  onClick={() => {
-                    setNicknameValue("");
-                    setErrors({
-                      ...errors,
-                      nicknameInvaildNotice: "default",
-                      nicknameErrorMsg: "",
-
-                      totalErrorMsg: "",
-                    });
-                    handleProfileEditModalState();
-                  }}
-                >
+                <ProfileEditCansleButton onClick={handleEditModalClose}>
                   취소
                 </ProfileEditCansleButton>
                 <SubmitButton width={"190px"} value={"확인"} />
               </ButtonBox>
             </form>
           </EditModal>
-          <ModalCloseArea
-            onClick={() => {
-              setNicknameValue("");
-              setErrors({
-                ...errors,
-                nicknameInvaildNotice: "default",
-                nicknameErrorMsg: "",
-
-                totalErrorMsg: "",
-              });
-              handleProfileEditModalState();
-            }}
-          />
+          <ModalCloseArea onClick={handleEditModalClose} />
         </EditModalOuter>
       )}
       <Container>
@@ -177,8 +149,8 @@ export default function MyProfile() {
             <span>{completeCount}</span>
           </BucketLengthBox>
           <BucketLengthBox>
-            <span>스크랩한 버킷</span>
-            <span>{scrapCardData.length}</span>
+            <span>미완료한 버킷</span>
+            <span>0</span>
           </BucketLengthBox>
         </BucketLengthWrapper>
         <BucketMenuBox>
@@ -188,25 +160,21 @@ export default function MyProfile() {
             onClick={handleMenuClick(0)}
           >
             마이 버킷
-            {Array.isArray(profileMyCardData) &&
-              "  " + profileMyCardData.length}
           </ActiveMenu>
           <ActiveMenu
             $isActiveNum={activeNumber}
             $number={1}
             onClick={handleMenuClick(1)}
           >
-            스크랩한 버킷 {scrapCardData.length}
+            스크랩한 버킷
           </ActiveMenu>
         </BucketMenuBox>
         <CardWrppar>
-          {activeNumber === 0 &&
-            Array.isArray(profileMyCardData) &&
-            profileMyCardData.length > 0 &&
-            profileMyCardData.map((data, idx) => {
+          {Array.isArray(profileCardData) && profileCardData.length > 0 ? (
+            profileCardData.map((data, idx) => {
               return (
                 <HomeThumnailCard
-                  key={"profilThumnail" + data.boardId}
+                  key={data.boardId}
                   boardId={data.boardId}
                   curThumnail={idx}
                   title={
@@ -226,66 +194,33 @@ export default function MyProfile() {
                       : data.content
                   }
                   deadline={data.deadline}
-                  Dday={data.Dday}
+                  DdayView={activeNumber === 0 && true}
+                  Dday={activeNumber === 0 && data.Dday}
                   thumnailSrc={data.filepath}
                   avatar={data.filename}
                   isFinish={data.finishTotal}
                   isCompleted={data.isCompleted}
                   isProgress={data.progressTotal}
-                  putOptionModalState={data.putOptions}
-                  putOpitonsControl={true}
                   handleHomeDetailModal={handleCardDetailView(data.boardId)}
-                  handleBucketDelete={handleBucketDelete(data.boardId)}
-                  handleBucketComplete={handleBucketComplete(data.boardId)}
-                />
-              );
-            })}
-          {activeNumber === 1 && scrapCardData.length > 0 ? (
-            scrapCardData.map((data, idx) => {
-              return (
-                <HomeThumnailCard
-                  key={"scrapCard" + data.boardId}
-                  boardId={data.boardId}
-                  curThumnail={idx}
-                  title={
-                    data.title.length > titleMaxViewLength
-                      ? data.title.substring(0, titleMaxViewLength) + "..."
-                      : data.title
+                  putOptionModalState={activeNumber === 0 && data.putOptions}
+                  putOpitonsControl={activeNumber === 0 && true}
+                  handleBucketDelete={
+                    activeNumber === 0 && handleBucketDelete(data.boardId)
                   }
-                  content={
-                    data.content?.length > contentMaxViewLength
-                      ? data.content.substring(0, contentMaxViewLength) +
-                        "\n" +
-                        data.content.substring(
-                          contentMaxViewLength,
-                          contentMaxViewLength * 2
-                        ) +
-                        "..."
-                      : data.content
+                  handleBucketComplete={
+                    activeNumber === 0 && handleBucketComplete(data.boardId)
                   }
-                  deadline={data.deadline}
-                  DdayView={false}
-                  thumnailSrc={data.bucketImg}
-                  avatar={data.filename}
-                  isFinish={data.finishTotal}
-                  isCompleted={data.isCompleted}
-                  isProgress={data.progressTotal}
-                  handleHomeDetailModal={handleCardDetailView(data.boardId)}
                 />
               );
             })
           ) : (
-            <ContentsNotBox></ContentsNotBox>
+            <ContentsNotBox>버킷을 찾을수 없습니다.</ContentsNotBox>
           )}
         </CardWrppar>
       </Container>
-      {/*       {Array.isArray(profileHomeCardData) &&
-        profileHomeCardData.length > 0 &&
-        activeNumber === 0 && <div ref={myCardObserver} />}
-
-      {scrapCardData.length > 0 && activeNumber === 1 && (
-        <div ref={scrapCardObserver} />
-      )} */}
+      {Array.isArray(profileCardData) && profileCardData.length > 0 && (
+        <div ref={profileCardObserver} />
+      )}
     </>
   );
 }
