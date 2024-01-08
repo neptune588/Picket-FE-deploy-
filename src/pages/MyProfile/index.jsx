@@ -38,6 +38,7 @@ export default function MyProfile() {
     previewImg,
     nikcnameValue,
     errors,
+    setPreviewImg,
     setErrors,
     myCardObserver,
     scrapCardObserver,

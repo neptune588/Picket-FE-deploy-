@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 
-import LayOut from "@/pages/LayOut";
-import AuthPageLayOut from "@/pages/AuthPageLayOut";
+import Layout from "@/pages/Layout";
+import AuthPageLayout from "@/pages/AuthPageLayout";
 
 import SignUp from "@/pages/SignUp";
 import SignIn from "@/pages/SignIn";
@@ -16,7 +16,7 @@ import Browse from "@/pages/Browse";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <LayOut />,
+    element: <Layout />,
     children: [
       {
         path: "/",
@@ -27,20 +27,11 @@ const router = createBrowserRouter([
         element: <Browse />,
         label: "search",
       },
-      /*       {
-        path: "/alarm",
-        element: <TestAlarm />,
-        label: "alarm",
-      }, */
 
-      /*       {
+      {
         path: "/profile",
         element: <MyProfile />,
       },
-      {
-        path: "/testprofile",
-        element: <TestProfile />,
-      }, */
     ],
   },
   {
@@ -49,7 +40,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/auth",
-    element: <AuthPageLayOut />,
+    element: <AuthPageLayout />,
     children: [
       {
         path: "/auth/signup",

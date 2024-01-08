@@ -389,29 +389,22 @@ export default function useMyProfile() {
     setSubmitLoading(true);
 
     if (errors.nicknameInvaildNotice === "vaild") {
+      const formData = new FormData();
+
+      formData.append(
+        "patchMemberRequestDTO",
+        new Blob([JSON.stringify({ nickname: nikcnameValue })], {
+          type: "application/json",
+        })
+      );
+      formData.append("file", new Blob([previewImg]));
+
       try {
         const token = `Bearer ${JSON.parse(
           localStorage.getItem("userAccessToken")
         )}`;
 
-        const formData = new FormData();
-        formData.append(
-          "patchMemberRequestDTO",
-          new Blob([JSON.stringify({ nickname: nikcnameValue })], {
-            type: "application/json",
-          })
-        );
-
-        formData.append("file", previewImg);
-
-        /*         const data = {
-          patchMemberRequestDTO: JSON.stringify({
-            nickname: nikcnameValue,
-          }),
-          file: previewImg,
-        };
- */
-        const res = await patchData(`/member/profile`, formData, {
+        const res = await postData(`/member/profile`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: token,
@@ -1009,6 +1002,7 @@ export default function useMyProfile() {
     scrapCardObserver,
     handleChange,
     setNicknameValue,
+    setPreviewImg,
     handleProfileEditModalState,
     handleMenuClick,
     handleCardDetailView,

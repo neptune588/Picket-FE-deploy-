@@ -157,9 +157,6 @@ const Dropdown = styled.ul`
     height: calc(150px / 2);
     text-align: center;
     display: flex;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
     align-items: center;
     justify-content: center;

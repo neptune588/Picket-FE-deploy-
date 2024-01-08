@@ -140,8 +140,8 @@ export default function NavBar() {
               <p>{userNickName}</p>
               {dropdownOpen && (
                 <Dropdown>
-                  {/* <li onClick={handleNavigate("/profile")}>내 프로필</li> */}
-                  <li onClick={handleSignOut}>로그아웃</li>
+                  <li onClick={handleNavigate("/profile")}>내 프로필</li>
+                  {/*                   <li onClick={handleSignOut}>로그아웃</li> */}
                 </Dropdown>
               )}
             </Profile>

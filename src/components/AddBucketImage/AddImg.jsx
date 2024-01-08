@@ -79,7 +79,7 @@ export default function AddImg() {
     console.log(response);
     if (response.status && response.status == 200) {
       alert(response.data.message);
-      navigation("/");
+      //navigation("/");
     }
   };
 
