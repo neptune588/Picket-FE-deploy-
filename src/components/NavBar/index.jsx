@@ -139,19 +139,19 @@ export default function NavBar() {
           {userNickName ? (
             <ProfileWrapper onClick={OnClickDropdown}>
               <ProfileBox>
-                {/*                 <img
+                <img
                   src={
                     localStorage.getItem("userAvatar")
                       ? localStorage.getItem("userAvatar")
                       : "/images/default_profile.png"
                   }
                   alt={"profile_avatar"}
-                ></img> */}
+                ></img>
                 <p>{JSON.parse(localStorage.getItem("userNickname"))}</p>
               </ProfileBox>
               {dropdownOpen && (
                 <Dropdown>
-                  {/* <li onClick={handleNavigate("/profile")}>내 프로필</li> */}
+                  <li onClick={handleNavigate("/profile")}>내 프로필</li>
                   <li onClick={handleSignOut}>로그아웃</li>
                 </Dropdown>
               )}

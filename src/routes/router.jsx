@@ -8,7 +8,7 @@ import SignIn from "@/pages/SignIn";
 import RegisterSuccess from "@/pages/RegisterSuccess/RegisterSuccess";
 import PassWordResearch from "@/pages/PassWordResearch";
 import Main from "@/pages/Main";
-/* import MyProfile from "@/pages/MyProfile"; */
+import MyProfile from "@/pages/MyProfile";
 import AddBucket from "@/pages/AddBucket/AddBucket";
 import Browse from "@/pages/Browse";
 
@@ -27,10 +27,10 @@ const router = createBrowserRouter([
         label: "search",
       },
 
-      /*       {
+      {
         path: "/profile",
         element: <MyProfile />,
-      }, */
+      },
     ],
   },
   {

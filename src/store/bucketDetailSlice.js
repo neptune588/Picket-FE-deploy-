@@ -44,6 +44,8 @@ const bucketDetailSlice = createSlice({
         bucketData.isCompleted === 0 || bucketData.isCompleted === 1
           ? bucketData.isCompleted
           : bucketDetailData.isCompleted;
+
+      console.log(bucketDetailData.commentList);
     },
     setScrollLocation(state, action) {
       const { payload: scrollY } = action;
