@@ -44,9 +44,11 @@ export default function useMyProfile() {
 
   const [lastPage, setLastPage] = useState(false);
 
+  const [isLoading, setIsLoading] = useState(true);
   const [submitLoading, setSubmitLoading] = useState(false);
 
   const [completeCount, setCompleteCount] = useState(0);
+  const [pregressCount, setPregressCount] = useState(0);
 
   const [activeNumber, setActiveNumber] = useState(0);
 
@@ -60,12 +62,14 @@ export default function useMyProfile() {
 
     totalErrorMsg: "",
   });
+  const [postImg, setPostImg] = useState(null);
   const [previewImg, setPreviewImg] = useState(null);
 
   const profileMouted01 = useRef();
   const profileMouted02 = useRef();
   const profileMouted03 = useRef();
   const nicknameRef = useRef();
+  const dummyObserver = useRef();
 
   const handleChange = ({ target }) => {
     setNicknameValue(target.value);
@@ -98,12 +102,14 @@ export default function useMyProfile() {
             `${parseInt(homePage.value) + 1}`,
           ])
         );
+
         dispatch(
           setLastBoardHomeParams([
             "&lastBoardId=",
-            `${setProfileCardData[profileCardData.length - 1].boardId}`,
+            profileCardData[profileCardData.length - 1].boardId,
           ])
         );
+
         dispatch(setTotalHomeParams());
       }
     },
@@ -122,6 +128,7 @@ export default function useMyProfile() {
       });
 
       setCompleteCount(data.finishTotal);
+      setPregressCount(data.progressTotal);
     } catch (error) {
       console.error(error);
     }
@@ -135,7 +142,7 @@ export default function useMyProfile() {
 
       const { data } = await getData(
         `${
-          type === "myCard" ? "/board/myposts" : "/board/myposts/scrap"
+          type === "myCard" ? "/board/myposts" : "/board/myposts/scraps"
         }?${query}`,
         {
           headers: {
@@ -143,15 +150,16 @@ export default function useMyProfile() {
           },
         }
       );
-      if (data.content?.length > 0) {
+      console.log(data);
+      if (Array.isArray(data.content) && data.content.length > 0) {
         data.last && setLastPage(true);
 
         setLastPage(false);
         dispatch(setHomeTumnailCards(data.content));
-        //setIsLoading(false);
+        setIsLoading(false);
       } else {
         setLastPage(true);
-        //setIsLoading(false);
+        setIsLoading(false);
       }
     } catch (error) {
       console.error(error);
@@ -175,9 +183,13 @@ export default function useMyProfile() {
           scrapCount: data.scrapCount,
           nickname: data.nickname,
           avatar: data.profileImg,
+          isCompleted: profileCardData.find(
+            (card) => card.boardId === borardNum
+          ).isCompleted,
         })
       );
 
+      //console.log(bucketDetailData);
       const latestBucket = JSON.parse(localStorage.getItem("latestBucket"));
 
       const latestCard = profileCardData.find(
@@ -209,13 +221,15 @@ export default function useMyProfile() {
   const handleProfileImgChange = (e) => {
     const { files } = e.target;
 
-    const fileRead = new FileReader();
+    /*     const fileRead = new FileReader();
 
     //다 읽고나면 실행되는 콜백
     fileRead.onload = ({ target }) => {
       setPreviewImg(target.result);
     };
-    fileRead.readAsDataURL(files[0]);
+    fileRead.readAsDataURL(files[0]); */
+    console.log(files[0]);
+    setPreviewImg(URL.createObjectURL(files[0]));
   };
 
   const handleNicknameRepeatCheck = async (e) => {
@@ -233,7 +247,7 @@ export default function useMyProfile() {
           localStorage.getItem("userAccessToken")
         )}`;
 
-        const result = await postData(
+        const res = await postData(
           "/member/profile/check-nickname",
           JSON.stringify({ nickname: nikcnameValue }),
           {
@@ -244,21 +258,21 @@ export default function useMyProfile() {
           }
         );
 
-        if (result.status === 200) {
+        if (res.status === 200) {
           setErrors({
             ...errors,
             nicknameInvaildNotice: "vaild",
           });
-        } else if (result.status === 409) {
-          setErrors({
-            ...errors,
-            nicknameInvaildNotice: "inVaild",
-            nicknameErrorMsg: "서버와의 연결이 끊겼습니다.",
-          });
         }
       } catch (error) {
         const { response } = error;
-
+        if (response.status === 409) {
+          setErrors({
+            ...errors,
+            nicknameInvaildNotice: "inVaild",
+            nicknameErrorMsg: "이미 존재하는 닉네임 입니다",
+          });
+        }
         console.error(response);
       }
     }
@@ -295,7 +309,7 @@ export default function useMyProfile() {
           type: "application/json",
         })
       );
-      formData.append("file", new Blob([previewImg]));
+      formData.append("file", previewImg);
 
       try {
         const token = `Bearer ${JSON.parse(
@@ -308,15 +322,21 @@ export default function useMyProfile() {
             Authorization: token,
           },
         });
-        console.log(res);
+
+        localStorage.setItem("userNickname", JSON.stringify(res.data.nickname));
+        localStorage.setItem("userAvatar", res.data.imageUrl);
+
+        handleEditModalClose();
       } catch (error) {
-        console.error(error);
+        console.error(error.data);
       }
+      setSubmitLoading(false);
     } else {
       setErrors({
         ...errors,
         nicknameErrorMsg: "닉네임이 유효한지 다시 한번 확인 해주세요!",
       });
+      setSubmitLoading(false);
     }
   };
 
@@ -324,7 +344,9 @@ export default function useMyProfile() {
     return () => {
       setActiveNumber(curMenuNum);
       pageAndBoardDataReset();
-      profileCardData(homePage.key + 0);
+      curMenuNum === 0
+        ? profileCardDataReq(homePage.key + 0, "myCard")
+        : profileCardDataReq(homePage.key + 0, "scrap");
     };
   };
 
@@ -376,9 +398,7 @@ export default function useMyProfile() {
       }
     },
     onError: (error) => {
-      if (error.response.status) {
-        console.log("에러러");
-      }
+      console.error(error);
     },
   });
 
@@ -447,8 +467,7 @@ export default function useMyProfile() {
         },
       });
     },
-    onSuccess: async (res) => {
-      console.log(res);
+    onSuccess: async () => {
       try {
         const token = `Bearer ${JSON.parse(
           localStorage.getItem("userAccessToken")
@@ -523,7 +542,7 @@ export default function useMyProfile() {
       if (error.response.status === 409) {
         alert("이미 달성한 버킷입니다!");
       } else {
-        console.log("에러러");
+        console.error(error);
       }
     },
   });
@@ -536,11 +555,11 @@ export default function useMyProfile() {
   };
 
   const MyCardDetailLikeReq = useMutation({
-    mutationFn: async (curData) => {
+    mutationFn: async (curParams) => {
       const token = `Bearer ${JSON.parse(
         localStorage.getItem("userAccessToken")
       )}`;
-      return await postData(`/board/${curData}`, null, {
+      return await postData(`/board/${curParams}`, null, {
         headers: {
           Authorization: token,
         },
@@ -567,18 +586,16 @@ export default function useMyProfile() {
       }
     },
     onError: (error) => {
-      if (error.response.status) {
-        console.log("에러러");
-      }
+      console.error(error);
     },
   });
 
   const ScrapCardDetailLikeReq = useMutation({
-    mutationFn: async (curData) => {
+    mutationFn: async (curParams) => {
       const token = `Bearer ${JSON.parse(
         localStorage.getItem("userAccessToken")
       )}`;
-      return await postData(`/board/${curData}`, null, {
+      return await postData(`/board/${curParams}`, null, {
         headers: {
           Authorization: token,
         },
@@ -592,7 +609,7 @@ export default function useMyProfile() {
           localStorage.getItem("userAccessToken")
         )}`;
         const { data } = await getData(
-          `/board/myposts/scrap?size=${homePage.value * 8 + 8}`,
+          `/board/myposts/scraps?size=${homePage.value * 8 + 8}`,
           {
             headers: {
               Authorization: token,
@@ -607,9 +624,7 @@ export default function useMyProfile() {
       }
     },
     onError: (error) => {
-      if (error.response.status) {
-        console.log("에러러");
-      }
+      console.error(error);
     },
   });
 
@@ -621,7 +636,7 @@ export default function useMyProfile() {
           break;
         }
         case 1: {
-          ScrapCardDetailLikeReq.mutate(`${curBoardId}/scrap`);
+          ScrapCardDetailLikeReq.mutate(`${curBoardId}/like`);
           break;
         }
       }
@@ -632,9 +647,8 @@ export default function useMyProfile() {
     if (!localStorage.getItem("userAccessToken")) {
       navigate("/");
     } else {
-      dispatch(deleteHomeThumnailCard());
       pageAndBoardDataReset();
-      profileCardDataReq(`${homePage.key + 0}`);
+      profileCardDataReq(`${homePage.key + 0}`, "myCard");
       profileCompleteCountReq();
     }
   }, []);
@@ -671,6 +685,7 @@ export default function useMyProfile() {
 
   return {
     completeCount,
+    pregressCount,
     activeNumber,
     detailModal,
     profileCardData,
@@ -680,6 +695,8 @@ export default function useMyProfile() {
     nikcnameValue,
     nicknameRef,
     errors,
+    isLoading,
+    dummyObserver,
     profileCardObserver,
     handleChange,
     handleEditModalClose,

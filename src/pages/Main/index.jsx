@@ -107,6 +107,7 @@ export default function Main() {
                         : data.content
                     }
                     deadline={data.deadline}
+                    DdayViewState={true}
                     Dday={data.Dday}
                     thumnailSrc={data.filepath}
                     avatar={data.filename}

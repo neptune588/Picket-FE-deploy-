@@ -198,9 +198,7 @@ export default function useNavBarOptions() {
       dispatch(setThumnailCard(data.content));
     },
     onError: (error) => {
-      if (error.response.status) {
-        console.log("에러러");
-      }
+      console.error(error);
     },
   });
 

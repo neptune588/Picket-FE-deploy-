@@ -75,7 +75,7 @@ export default function useBucketOptions() {
     },
     onError: (error) => {
       if (error.response.status) {
-        console.log("에러러");
+        console.error("error");
       }
     },
   });
@@ -113,7 +113,7 @@ export default function useBucketOptions() {
     },
     onError: (error) => {
       if (error.response.status) {
-        console.log("에러러");
+        console.error("error");
       }
     },
   });

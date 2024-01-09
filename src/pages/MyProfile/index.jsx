@@ -29,6 +29,7 @@ import {
 export default function MyProfile() {
   const {
     completeCount,
+    pregressCount,
     activeNumber,
     detailModal,
     profileCardData,
@@ -38,6 +39,8 @@ export default function MyProfile() {
     nikcnameValue,
     nicknameRef,
     errors,
+    isLoading,
+    dummyObserver,
     profileCardObserver,
     handleChange,
     handleEditModalClose,
@@ -99,13 +102,25 @@ export default function MyProfile() {
             <form onSubmit={profileEditReq}>
               <UpLoadBox>
                 <label htmlFor="profileUpload">
+                  {previewImg ? (
+                    <img src={previewImg} alt={previewImg} />
+                  ) : (
+                    <img
+                      src={
+                        localStorage.getItem("userAvatar") || previewImg
+                          ? localStorage.getItem("userAvatar")
+                          : "/images/default_preview_img.png"
+                      }
+                      alt={"profile_preview_avatar"}
+                    ></img>
+                  )}
+
                   <input
                     type="file"
                     id="profileUpload"
                     accept="image/*"
                     onChange={handleProfileImgChange}
                   />
-                  <img src={previewImg} alt={previewImg} />
                   <ProfileImgUploadButton></ProfileImgUploadButton>
                 </label>
               </UpLoadBox>
@@ -137,7 +152,16 @@ export default function MyProfile() {
       )}
       <Container>
         <ProfileViewBox>
-          <div></div>
+          <div>
+            <img
+              src={
+                localStorage.getItem("userAvatar")
+                  ? localStorage.getItem("userAvatar")
+                  : "/images/default_preview_img.png"
+              }
+              alt={"profile_preview_avatar"}
+            ></img>
+          </div>
           <div>
             <h2>{JSON.parse(localStorage.getItem("userNickname"))}</h2>
             <EditProfileButton onClick={handleProfileEditModalState} />
@@ -150,7 +174,7 @@ export default function MyProfile() {
           </BucketLengthBox>
           <BucketLengthBox>
             <span>미완료한 버킷</span>
-            <span>0</span>
+            <span>{pregressCount}</span>
           </BucketLengthBox>
         </BucketLengthWrapper>
         <BucketMenuBox>
@@ -170,7 +194,8 @@ export default function MyProfile() {
           </ActiveMenu>
         </BucketMenuBox>
         <CardWrppar>
-          {Array.isArray(profileCardData) && profileCardData.length > 0 ? (
+          {Array.isArray(profileCardData) &&
+            profileCardData.length > 0 &&
             profileCardData.map((data, idx) => {
               return (
                 <HomeThumnailCard
@@ -194,9 +219,11 @@ export default function MyProfile() {
                       : data.content
                   }
                   deadline={data.deadline}
-                  DdayView={activeNumber === 0 && true}
+                  DdayViewState={activeNumber === 0 && true}
                   Dday={activeNumber === 0 && data.Dday}
-                  thumnailSrc={data.filepath}
+                  thumnailSrc={
+                    activeNumber === 0 ? data.filepath : data.bucketImg
+                  }
                   avatar={data.filename}
                   isFinish={data.finishTotal}
                   isCompleted={data.isCompleted}
@@ -212,15 +239,21 @@ export default function MyProfile() {
                   }
                 />
               );
-            })
-          ) : (
-            <ContentsNotBox>버킷을 찾을수 없습니다.</ContentsNotBox>
-          )}
+            })}
         </CardWrppar>
+        {(profileCardData === "empty" || profileCardData.length === 0) &&
+          !isLoading && (
+            <ContentsNotBox>
+              <p>버킷을 찾을 수 없습니다.</p>
+            </ContentsNotBox>
+          )}
+        {isLoading && (
+          <div style={{ height: "2000px" }} ref={dummyObserver}></div>
+        )}
+        {Array.isArray(profileCardData) && profileCardData.length > 0 && (
+          <div ref={profileCardObserver}></div>
+        )}
       </Container>
-      {Array.isArray(profileCardData) && profileCardData.length > 0 && (
-        <div ref={profileCardObserver} />
-      )}
     </>
   );
 }

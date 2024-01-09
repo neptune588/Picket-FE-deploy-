@@ -10,17 +10,17 @@ const ProfileViewBox = styled.section`
   padding-top: 70px;
   > div {
     &:first-child {
-      label {
-      }
       width: 150px;
       height: 150px;
       margin: 0 auto;
       overflow: hidden;
       margin-bottom: 35px;
-      background-color: ${({ theme: { colors } }) => {
-        return colors.primary;
-      }};
       border-radius: 50%;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
     }
   }
 
@@ -123,7 +123,7 @@ const UpLoadBox = styled.div`
     }
     > img {
       width: 100%;
-      height: 100%;
+      height: 150px;
       object-fit: cover;
     }
   }
@@ -265,6 +265,7 @@ const CardWrppar = styled.ul`
 
 const ContentsNotBox = styled.div`
   display: flex;
+  margin-top: 80px;
   justify-content: center;
   align-items: center;
   > p {

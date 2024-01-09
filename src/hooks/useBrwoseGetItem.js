@@ -225,6 +225,8 @@ export default function useBrwoseGetItem() {
           scrapCount: data.scrapCount,
           nickname: data.nickname,
           avatar: data.profileImg,
+          isCompleted: cardData.find((card) => card.boardId === borardNum)
+            .isCompleted,
         })
       );
 
@@ -291,7 +293,7 @@ export default function useBrwoseGetItem() {
 
     onError: (error) => {
       if (error.response.status) {
-        console.log("에러러");
+        console.error("에러러");
       }
     },
   });
@@ -323,7 +325,7 @@ export default function useBrwoseGetItem() {
     },
     onError: (error) => {
       if (error.response.status) {
-        console.log("에러러");
+        console.error("에러러");
       }
     },
   });
@@ -458,7 +460,7 @@ export default function useBrwoseGetItem() {
       if (error.response.status === 409) {
         alert("이미 달성한 버킷입니다!");
       } else {
-        console.log("에러러");
+        console.error("에러러");
       }
     },
   });
