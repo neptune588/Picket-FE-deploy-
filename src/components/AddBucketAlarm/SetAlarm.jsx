@@ -81,10 +81,7 @@ export default function SetAlarm({ context, updateContext }) {
             nextMonthButtonDisabled,
           }) => (
             <DateCustomHeader>
-              <button
-                onClick={decreaseMonth}
-                disabled={prevMonthButtonDisabled}
-              >
+              <button onClick={decreaseMonth} disabled={true}>
                 {"<"}
               </button>
               <div>

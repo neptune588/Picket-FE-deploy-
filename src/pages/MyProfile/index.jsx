@@ -107,7 +107,7 @@ export default function MyProfile() {
                   ) : (
                     <img
                       src={
-                        localStorage.getItem("userAvatar") || previewImg
+                        localStorage.getItem("userAvatar")
                           ? localStorage.getItem("userAvatar")
                           : "/images/default_preview_img.png"
                       }
