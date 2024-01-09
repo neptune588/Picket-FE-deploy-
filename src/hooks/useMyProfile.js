@@ -221,15 +221,14 @@ export default function useMyProfile() {
   const handleProfileImgChange = (e) => {
     const { files } = e.target;
 
-    /*     const fileRead = new FileReader();
+    const fileRead = new FileReader();
 
     //다 읽고나면 실행되는 콜백
     fileRead.onload = ({ target }) => {
       setPreviewImg(target.result);
     };
-    fileRead.readAsDataURL(files[0]); */
-    console.log(files[0]);
-    setPreviewImg(URL.createObjectURL(files[0]));
+    fileRead.readAsDataURL(files[0]);
+    setPostImg(files[0]);
   };
 
   const handleNicknameRepeatCheck = async (e) => {
@@ -309,7 +308,7 @@ export default function useMyProfile() {
           type: "application/json",
         })
       );
-      formData.append("file", previewImg);
+      formData.append("file", postImg);
 
       try {
         const token = `Bearer ${JSON.parse(
@@ -323,6 +322,7 @@ export default function useMyProfile() {
           },
         });
 
+        console.log(res);
         localStorage.setItem("userNickname", JSON.stringify(res.data.nickname));
         localStorage.setItem("userAvatar", res.data.imageUrl);
 

@@ -230,12 +230,21 @@ const CommentListBox = styled.div`
   > div {
     position: relative;
     display: flex;
+    align-items: center;
+    > img {
+      width: 35px;
+      height: 35px;
+      overflow: hidden;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
     > p {
       color: ${({ theme: { colors } }) => {
         return colors.gray["100"];
       }};
-      &:first-child {
-        width: 90px;
+      &:nth-child(2) {
+        width: 80px;
         margin-right: 10px;
         font-weight: ${({ theme: { typo } }) => {
           return typo.weight.bold;
@@ -335,10 +344,12 @@ const CommentUserAvatar = styled.div`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: ${({ theme: { colors } }) => {
-    return colors.primary;
-  }};
   overflow: hidden;
+  > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 `;
 
 const TextInputArea = styled.textarea`

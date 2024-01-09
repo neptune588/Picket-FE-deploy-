@@ -124,6 +124,14 @@ export default function BucketCard({
                 {commentList.map((comment, idx) => (
                   <Fragment key={"comment" + comment.id}>
                     <div>
+                      <img
+                        src={
+                          localStorage.getItem("userAvatar")
+                            ? localStorage.getItem("userAvatar")
+                            : "/images/default_profile.png"
+                        }
+                        alt={"profile_avatar"}
+                      ></img>
                       <p>{comment.nickname}</p>
                       <p>{comment.content}</p>
                     </div>
@@ -149,7 +157,7 @@ export default function BucketCard({
                 ))}
               </CommentListBox>
             ) : (
-              <CommentListNot>코멘트가 존재하지 않아요!</CommentListNot>
+              <CommentListNot>댓글이 존재하지 않습니다.</CommentListNot>
             )}
 
             <IconsBox>
@@ -182,7 +190,16 @@ export default function BucketCard({
                     handleCommentCreate(boardId);
                   }}
                 >
-                  <CommentUserAvatar />
+                  <CommentUserAvatar>
+                    <img
+                      src={
+                        localStorage.getItem("userAvatar")
+                          ? localStorage.getItem("userAvatar")
+                          : "/images/default_profile.png"
+                      }
+                      alt={"profile_avatar"}
+                    ></img>
+                  </CommentUserAvatar>
                   <TextInputArea
                     ref={commentCreateInput}
                     value={commentValue}
