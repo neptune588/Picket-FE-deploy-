@@ -56,7 +56,7 @@ const bucketThumnailSlice = createSlice({
         homeThumnailCards.data = [];
       }
 
-      console.log(curHomeThumnailCards);
+      //console.log(curHomeThumnailCards);
     },
     deleteHomeThumnailCard(state) {
       state.homeThumnailCards.data = [];
@@ -66,7 +66,7 @@ const bucketThumnailSlice = createSlice({
       const { payload: curThumnail } = action;
       let { curThumnailNumber, curPutOptionsState } = curThumnail;
 
-      console.log(curThumnailNumber, curPutOptionsState);
+      //console.log(curThumnailNumber, curPutOptionsState);
       homeThumnailCards.data.forEach((obj) => {
         obj.putOptions = false;
       });

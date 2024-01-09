@@ -142,6 +142,8 @@ export default function useMypage() {
           scrapCount: data.scrapCount,
           nickname: data.nickname,
           avatar: data.profileImg,
+          isCompleted: homeCardData.find((card) => card.boardId === borardNum)
+            .isCompleted,
         })
       );
 
@@ -218,9 +220,7 @@ export default function useMypage() {
       }
     },
     onError: (error) => {
-      if (error.response.status) {
-        console.log("에러러");
-      }
+      console.error(error);
     },
   });
 
@@ -271,9 +271,7 @@ export default function useMypage() {
       }
     },
     onError: (error) => {
-      if (error.response.status) {
-        console.log("에러러");
-      }
+      console.error(error);
     },
   });
 
@@ -341,7 +339,7 @@ export default function useMypage() {
       });
     },
     onSuccess: async (res) => {
-      console.log(res);
+      //console.log(res);
       try {
         const token = `Bearer ${JSON.parse(
           localStorage.getItem("userAccessToken")
@@ -366,7 +364,7 @@ export default function useMypage() {
       if (error.response.status === 409) {
         alert("이미 달성한 버킷입니다!");
       } else {
-        console.log("에러러");
+        console.error(error);
       }
     },
   });
@@ -414,7 +412,7 @@ export default function useMypage() {
       if (error.response.status === 409) {
         alert("이미 달성한 버킷입니다!");
       } else {
-        console.log("에러러");
+        console.error(error);
       }
     },
   });

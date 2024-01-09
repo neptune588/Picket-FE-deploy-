@@ -15,7 +15,8 @@ import {
   CloseCrossIcon,
   AlarmBox,
   AlarmIcon,
-  Profile,
+  ProfileWrapper,
+  ProfileBox,
   Dropdown,
   LoginNotice,
   SubTitle,
@@ -136,15 +137,25 @@ export default function NavBar() {
             $height={"24px"}
           /> */}
           {userNickName ? (
-            <Profile onClick={OnClickDropdown}>
-              <p>{userNickName}</p>
+            <ProfileWrapper onClick={OnClickDropdown}>
+              <ProfileBox>
+                {/*                 <img
+                  src={
+                    localStorage.getItem("userAvatar")
+                      ? localStorage.getItem("userAvatar")
+                      : "/images/default_profile.png"
+                  }
+                  alt={"profile_avatar"}
+                ></img> */}
+                <p>{JSON.parse(localStorage.getItem("userNickname"))}</p>
+              </ProfileBox>
               {dropdownOpen && (
                 <Dropdown>
-                  <li onClick={handleNavigate("/profile")}>내 프로필</li>
-                  {/*                   <li onClick={handleSignOut}>로그아웃</li> */}
+                  {/* <li onClick={handleNavigate("/profile")}>내 프로필</li> */}
+                  <li onClick={handleSignOut}>로그아웃</li>
                 </Dropdown>
               )}
-            </Profile>
+            </ProfileWrapper>
           ) : (
             <LoginNotice onClick={handleNavigate("/auth/signin")}>
               로그인

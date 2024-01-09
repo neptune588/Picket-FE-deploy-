@@ -29,22 +29,21 @@ import {
 export default function MyProfile() {
   const {
     completeCount,
-    scrapCardData,
+    pregressCount,
     activeNumber,
     detailModal,
-    profileEditModal,
-    profileMyCardData,
+    profileCardData,
     profileCardDetailData,
+    profileEditModal,
     previewImg,
     nikcnameValue,
-    errors,
-    setPreviewImg,
-    setErrors,
-    myCardObserver,
-    scrapCardObserver,
-    setNicknameValue,
     nicknameRef,
+    errors,
+    isLoading,
+    dummyObserver,
+    profileCardObserver,
     handleChange,
+    handleEditModalClose,
     handleProfileEditModalState,
     handleMenuClick,
     handleCardDetailView,
@@ -103,13 +102,25 @@ export default function MyProfile() {
             <form onSubmit={profileEditReq}>
               <UpLoadBox>
                 <label htmlFor="profileUpload">
+                  {previewImg ? (
+                    <img src={previewImg} alt={previewImg} />
+                  ) : (
+                    <img
+                      src={
+                        localStorage.getItem("userAvatar") || previewImg
+                          ? localStorage.getItem("userAvatar")
+                          : "/images/default_preview_img.png"
+                      }
+                      alt={"profile_preview_avatar"}
+                    ></img>
+                  )}
+
                   <input
                     type="file"
                     id="profileUpload"
                     accept="image/*"
                     onChange={handleProfileImgChange}
                   />
-                  <img src={previewImg} alt={previewImg} />
                   <ProfileImgUploadButton></ProfileImgUploadButton>
                 </label>
               </UpLoadBox>
@@ -129,43 +140,28 @@ export default function MyProfile() {
                 {errors.nicknameErrorMsg && <p>{errors.nicknameErrorMsg}</p>}
               </InputBox>
               <ButtonBox>
-                <ProfileEditCansleButton
-                  onClick={() => {
-                    setNicknameValue("");
-                    setErrors({
-                      ...errors,
-                      nicknameInvaildNotice: "default",
-                      nicknameErrorMsg: "",
-
-                      totalErrorMsg: "",
-                    });
-                    handleProfileEditModalState();
-                  }}
-                >
+                <ProfileEditCansleButton onClick={handleEditModalClose}>
                   취소
                 </ProfileEditCansleButton>
                 <SubmitButton width={"190px"} value={"확인"} />
               </ButtonBox>
             </form>
           </EditModal>
-          <ModalCloseArea
-            onClick={() => {
-              setNicknameValue("");
-              setErrors({
-                ...errors,
-                nicknameInvaildNotice: "default",
-                nicknameErrorMsg: "",
-
-                totalErrorMsg: "",
-              });
-              handleProfileEditModalState();
-            }}
-          />
+          <ModalCloseArea onClick={handleEditModalClose} />
         </EditModalOuter>
       )}
       <Container>
         <ProfileViewBox>
-          <div></div>
+          <div>
+            <img
+              src={
+                localStorage.getItem("userAvatar")
+                  ? localStorage.getItem("userAvatar")
+                  : "/images/default_preview_img.png"
+              }
+              alt={"profile_preview_avatar"}
+            ></img>
+          </div>
           <div>
             <h2>{JSON.parse(localStorage.getItem("userNickname"))}</h2>
             <EditProfileButton onClick={handleProfileEditModalState} />
@@ -177,8 +173,8 @@ export default function MyProfile() {
             <span>{completeCount}</span>
           </BucketLengthBox>
           <BucketLengthBox>
-            <span>스크랩한 버킷</span>
-            <span>{scrapCardData.length}</span>
+            <span>미완료한 버킷</span>
+            <span>{pregressCount}</span>
           </BucketLengthBox>
         </BucketLengthWrapper>
         <BucketMenuBox>
@@ -188,25 +184,22 @@ export default function MyProfile() {
             onClick={handleMenuClick(0)}
           >
             마이 버킷
-            {Array.isArray(profileMyCardData) &&
-              "  " + profileMyCardData.length}
           </ActiveMenu>
           <ActiveMenu
             $isActiveNum={activeNumber}
             $number={1}
             onClick={handleMenuClick(1)}
           >
-            스크랩한 버킷 {scrapCardData.length}
+            스크랩한 버킷
           </ActiveMenu>
         </BucketMenuBox>
         <CardWrppar>
-          {activeNumber === 0 &&
-            Array.isArray(profileMyCardData) &&
-            profileMyCardData.length > 0 &&
-            profileMyCardData.map((data, idx) => {
+          {Array.isArray(profileCardData) &&
+            profileCardData.length > 0 &&
+            profileCardData.map((data, idx) => {
               return (
                 <HomeThumnailCard
-                  key={"profilThumnail" + data.boardId}
+                  key={data.boardId}
                   boardId={data.boardId}
                   curThumnail={idx}
                   title={
@@ -226,66 +219,41 @@ export default function MyProfile() {
                       : data.content
                   }
                   deadline={data.deadline}
-                  Dday={data.Dday}
-                  thumnailSrc={data.filepath}
+                  DdayViewState={activeNumber === 0 && true}
+                  Dday={activeNumber === 0 && data.Dday}
+                  thumnailSrc={
+                    activeNumber === 0 ? data.filepath : data.bucketImg
+                  }
                   avatar={data.filename}
                   isFinish={data.finishTotal}
                   isCompleted={data.isCompleted}
                   isProgress={data.progressTotal}
-                  putOptionModalState={data.putOptions}
-                  putOpitonsControl={true}
                   handleHomeDetailModal={handleCardDetailView(data.boardId)}
-                  handleBucketDelete={handleBucketDelete(data.boardId)}
-                  handleBucketComplete={handleBucketComplete(data.boardId)}
+                  putOptionModalState={activeNumber === 0 && data.putOptions}
+                  putOpitonsControl={activeNumber === 0 && true}
+                  handleBucketDelete={
+                    activeNumber === 0 && handleBucketDelete(data.boardId)
+                  }
+                  handleBucketComplete={
+                    activeNumber === 0 && handleBucketComplete(data.boardId)
+                  }
                 />
               );
             })}
-          {activeNumber === 1 && scrapCardData.length > 0 ? (
-            scrapCardData.map((data, idx) => {
-              return (
-                <HomeThumnailCard
-                  key={"scrapCard" + data.boardId}
-                  boardId={data.boardId}
-                  curThumnail={idx}
-                  title={
-                    data.title.length > titleMaxViewLength
-                      ? data.title.substring(0, titleMaxViewLength) + "..."
-                      : data.title
-                  }
-                  content={
-                    data.content?.length > contentMaxViewLength
-                      ? data.content.substring(0, contentMaxViewLength) +
-                        "\n" +
-                        data.content.substring(
-                          contentMaxViewLength,
-                          contentMaxViewLength * 2
-                        ) +
-                        "..."
-                      : data.content
-                  }
-                  deadline={data.deadline}
-                  DdayView={false}
-                  thumnailSrc={data.bucketImg}
-                  avatar={data.filename}
-                  isFinish={data.finishTotal}
-                  isCompleted={data.isCompleted}
-                  isProgress={data.progressTotal}
-                  handleHomeDetailModal={handleCardDetailView(data.boardId)}
-                />
-              );
-            })
-          ) : (
-            <ContentsNotBox></ContentsNotBox>
-          )}
         </CardWrppar>
+        {(profileCardData === "empty" || profileCardData.length === 0) &&
+          !isLoading && (
+            <ContentsNotBox>
+              <p>버킷을 찾을 수 없습니다.</p>
+            </ContentsNotBox>
+          )}
+        {isLoading && (
+          <div style={{ height: "2000px" }} ref={dummyObserver}></div>
+        )}
+        {Array.isArray(profileCardData) && profileCardData.length > 0 && (
+          <div ref={profileCardObserver}></div>
+        )}
       </Container>
-      {/*       {Array.isArray(profileHomeCardData) &&
-        profileHomeCardData.length > 0 &&
-        activeNumber === 0 && <div ref={myCardObserver} />}
-
-      {scrapCardData.length > 0 && activeNumber === 1 && (
-        <div ref={scrapCardObserver} />
-      )} */}
     </>
   );
 }

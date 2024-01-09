@@ -20,7 +20,7 @@ import { setHomeThumnailPutModalState } from "@/store/bucketThumnailSlice";
 import ThumnailImg from "@/components/ThumnailImg/ThumnailImg";
 
 export default function HomeThumnailCard({
-  //boardId,
+  boardId,
   title,
   content,
   deadline,
@@ -32,7 +32,7 @@ export default function HomeThumnailCard({
   handleBucketDelete = null,
   handleBucketComplete = null,
   Dday = null,
-  DdayView = null,
+  DdayViewState = null,
   isCompleted,
   /*   avatar,
   isFinish,
@@ -54,10 +54,10 @@ export default function HomeThumnailCard({
       {putOptionModalState && (
         <ThumnailPutModalOuter>
           <ThumnailPutModal>
-            <PutOptionList onClick={handleBucketComplete}>
+            <PutOptionList onClick={handleBucketComplete || undefined}>
               버킷 달성
             </PutOptionList>
-            <PutOptionList onClick={handleBucketDelete}>
+            <PutOptionList onClick={handleBucketDelete || undefined}>
               버킷 삭제
             </PutOptionList>
             <PutOptionList
@@ -74,7 +74,7 @@ export default function HomeThumnailCard({
         />
       </ThumnailImgBox>
       <ContentsWrapper>
-        {isCompleted === 0 && DdayView && (
+        {isCompleted === 0 && DdayViewState && (
           <DdayView $isOverdue={Dday}>
             {Dday > 0 ? "D+" + Dday : "D-" + Math.abs(Dday)}
           </DdayView>

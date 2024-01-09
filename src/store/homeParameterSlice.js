@@ -37,6 +37,7 @@ const homeParameterSlice = createSlice({
 
       lastBoardId.key = queryData[0];
       lastBoardId.value = queryData[1];
+      //console.log(lastBoardId.key, lastBoardId.value);
     },
   },
 });

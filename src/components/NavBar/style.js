@@ -136,8 +136,19 @@ const AlarmIcon = styled(Alarm)`
   cursor: pointer;
 `;
 
-const Profile = styled.div`
+const ProfileWrapper = styled.div`
   cursor: pointer;
+`;
+
+const ProfileBox = styled.div`
+  display: flex;
+  align-items: center;
+  > img {
+    width: 24px;
+    height: 24px;
+    overflow: hidden;
+    border-radius: 50%;
+  }
   > p {
     margin-left: 5px;
   }
@@ -285,7 +296,8 @@ export {
   CloseCrossIcon,
   AlarmBox,
   AlarmIcon,
-  Profile,
+  ProfileWrapper,
+  ProfileBox,
   Dropdown,
   LoginNotice,
   SubTitle,
