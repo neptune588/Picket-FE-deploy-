@@ -19,7 +19,7 @@ import {
 import Input from "@/components/Input/Input";
 import SubmitButton from "@/components/SubmitButton/SubmitButton";
 import SiteLoading from "@/components/SiteLoading/SiteLoading";
-import { emailDefaultData, pwDefaultData } from "@/pages/Signin/InputData";
+import { emailDefaultData, pwDefaultData } from "@/pages/SignIn/inputData";
 
 export default function SignIn() {
   const navigate = useNavigate();
