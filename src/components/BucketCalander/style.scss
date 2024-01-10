@@ -1,0 +1,114 @@
+.react-calendar {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  padding: 45px 40px 40px 40px;
+  transform: translate(-50%, -50%);
+  border: none;
+  border-radius: 25px;
+  width: 480px;
+  height: 550px;
+  cursor: default;
+  > div {
+    background-color: white;
+  }
+
+  .react-calendar__navigation {
+    width: 320px;
+    height: 20px;
+    margin: 0 auto 30px;
+    justify-content: center;
+    .react-calendar__navigation__label,
+    .react-calendar__navigation__arrow {
+      height: 20px;
+      background-color: transparent !important;
+    }
+    .react-calendar__navigation__label {
+      flex-grow: 0 !important;
+      margin: 0 15px;
+      > span {
+        display: inline-block;
+        font-size: 24px;
+        font-weight: 500;
+      }
+    }
+    .react-calendar__navigation__arrow {
+      font-size: 40px;
+      transform: translateY(-3.5px);
+    }
+  }
+
+  .react-calendar__viewContainer {
+    width: 320px;
+    margin: 0 auto;
+    //요일 container
+    .react-calendar__month-view__weekdays {
+      color: #626273;
+      font-size: 1rem;
+      font-weight: normal;
+      justify-content: center;
+      align-items: center;
+      .react-calendar__month-view__weekdays__weekday {
+        flex: 0 0 auto !important;
+        width: 35px !important;
+        height: 35px;
+        line-height: 35px;
+        margin-right: 10px !important;
+        margin-bottom: 15px;
+        padding: 0;
+        &:nth-child(7n) {
+          margin-right: 0 !important;
+        }
+        > abbr {
+          text-decoration: none;
+        }
+      }
+    }
+    //day container
+    .react-calendar__month-view__days {
+      justify-content: center;
+      > button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 auto !important;
+        padding: 0;
+        width: 35px !important;
+        height: 35px;
+        border-radius: 50%;
+        color: #212121;
+        font-size: 1rem;
+        margin-right: 10px !important;
+        margin-bottom: 15px;
+        &:nth-child(7n) {
+          margin-right: 0 !important;
+        }
+        &:hover {
+          background-color: #6edcc8 !important;
+          color: white !important;
+          font-weight: bold;
+        }
+        //공휴일
+        &.react-calendar__month-view__days__day--weekend {
+          color: #d10000;
+        }
+        //클릭시
+        &.react-calendar__tile--active {
+          background-color: #6edcc8 !important;
+          color: white !important;
+          font-weight: bold;
+        }
+        //오늘
+        &.react-calendar__tile--now {
+          background-color: transparent;
+          color: #212121;
+        }
+        //저번달 마지막일
+        &.react-calendar__month-view__days__day--neighboringMonth {
+          background-color: transparent;
+          color: gray;
+        }
+      }
+    }
+  }
+}

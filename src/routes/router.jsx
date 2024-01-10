@@ -11,6 +11,7 @@ import Main from "@/pages/Main";
 import MyProfile from "@/pages/MyProfile";
 import AddBucket from "@/pages/AddBucket/AddBucket";
 import Browse from "@/pages/Browse";
+import AddBucketPage from "@/pages/AddBucketPage";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
         element: <MyProfile />,
       },
     ],
+  },
+  {
+    path: "/testAdd",
+    element: <AddBucketPage />,
   },
   {
     path: "/add",
