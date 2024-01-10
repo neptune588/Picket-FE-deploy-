@@ -12,7 +12,7 @@ const __dirname = dirname(__filename);
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [svgr(), react()],
-  /*   server: {
+  server: {
     proxy: {
       // 경로가 "/api" 로 시작하는 요청을 대상으로 proxy 설정
       "/api": {
@@ -29,7 +29,7 @@ export default defineConfig({
         ws: true,
       },
     },
-  }, */
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
