@@ -147,7 +147,7 @@ export default function useNavBarOptions() {
   const handleDetailCardReq = (boardNum) => {
     return async () => {
       try {
-        const { data } = await getData(`/board/${boardNum}`);
+        const { data } = await getData(`board/${boardNum}`);
         data.commentList.forEach((obj) => (obj.putOptions = false));
         dispatch(
           setDetailButcket({
@@ -180,7 +180,7 @@ export default function useNavBarOptions() {
       const token = `Bearer ${JSON.parse(
         localStorage.getItem("userAccessToken")
       )}`;
-      return await postData(`/board/${curData}`, null, {
+      return await postData(`board/${curData}`, null, {
         headers: {
           Authorization: token,
         },
@@ -189,7 +189,7 @@ export default function useNavBarOptions() {
     onSuccess: async () => {
       handleDetailCardReq(bucketDetailData.boardId);
       const { data } = await getData(
-        `/board/list/search?size=${page.value * 8 + 8}${
+        `board/list/search?size=${page.value * 8 + 8}${
           keyword.key + keyword.value
         }${categoryList.key + categoryList.value}`
       );

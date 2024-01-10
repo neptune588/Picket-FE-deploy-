@@ -121,7 +121,7 @@ export default function useMyProfile() {
         localStorage.getItem("userAccessToken")
       )}`;
 
-      const { data } = await getData("/board/myposts/stateTotal", {
+      const { data } = await getData("board/myposts/stateTotal", {
         headers: {
           Authorization: token,
         },
@@ -142,7 +142,7 @@ export default function useMyProfile() {
 
       const { data } = await getData(
         `${
-          type === "myCard" ? "/board/myposts" : "/board/myposts/scraps"
+          type === "myCard" ? "board/myposts" : "board/myposts/scraps"
         }?${query}`,
         {
           headers: {
@@ -168,7 +168,7 @@ export default function useMyProfile() {
 
   const cardDetailReq = async (borardNum) => {
     try {
-      const { data } = await getData(`/board/${borardNum}`);
+      const { data } = await getData(`board/${borardNum}`);
       data.commentList.forEach((obj) => (obj.putOptions = false));
       dispatch(
         setDetailButcket({
@@ -247,7 +247,7 @@ export default function useMyProfile() {
         )}`;
 
         const res = await postData(
-          "/member/profile/check-nickname",
+          "member/profile/check-nickname",
           JSON.stringify({ nickname: nikcnameValue }),
           {
             headers: {
@@ -315,7 +315,7 @@ export default function useMyProfile() {
           localStorage.getItem("userAccessToken")
         )}`;
 
-        const res = await postData(`/member/profile`, formData, {
+        const res = await postData(`member/profile`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: token,
@@ -369,7 +369,7 @@ export default function useMyProfile() {
       const token = `Bearer ${JSON.parse(
         localStorage.getItem("userAccessToken")
       )}`;
-      return await delData(`/board/${curBoardId}`, {
+      return await delData(`board/${curBoardId}`, {
         headers: {
           Authorization: token,
         },
@@ -382,7 +382,7 @@ export default function useMyProfile() {
           localStorage.getItem("userAccessToken")
         )}`;
         const { data } = await getData(
-          `/board/myposts?size=${homePage.value * 8 + 8}`,
+          `board/myposts?size=${homePage.value * 8 + 8}`,
           {
             headers: {
               Authorization: token,
@@ -413,7 +413,7 @@ export default function useMyProfile() {
       const token = `Bearer ${JSON.parse(
         localStorage.getItem("userAccessToken")
       )}`;
-      return await delData(`/board/${curBoardId}`, {
+      return await delData(`board/${curBoardId}`, {
         headers: {
           Authorization: token,
         },
@@ -427,7 +427,7 @@ export default function useMyProfile() {
           localStorage.getItem("userAccessToken")
         )}`;
         const { data } = await getData(
-          `/board/myposts?size=${homePage.value * 8 + 8}`,
+          `board/myposts?size=${homePage.value * 8 + 8}`,
           {
             headers: {
               Authorization: token,
@@ -461,7 +461,7 @@ export default function useMyProfile() {
       const token = `Bearer ${JSON.parse(
         localStorage.getItem("userAccessToken")
       )}`;
-      return await patchData(`/board/${curData}/complete`, null, {
+      return await patchData(`board/${curData}/complete`, null, {
         headers: {
           Authorization: token,
         },
@@ -473,7 +473,7 @@ export default function useMyProfile() {
           localStorage.getItem("userAccessToken")
         )}`;
         const { data } = await getData(
-          `/board/myposts?size=${homePage.value * 8 + 8}`,
+          `board/myposts?size=${homePage.value * 8 + 8}`,
           {
             headers: {
               Authorization: token,
@@ -509,7 +509,7 @@ export default function useMyProfile() {
       const token = `Bearer ${JSON.parse(
         localStorage.getItem("userAccessToken")
       )}`;
-      return await patchData(`/board/${curData}/complete`, null, {
+      return await patchData(`board/${curData}/complete`, null, {
         headers: {
           Authorization: token,
         },
@@ -522,7 +522,7 @@ export default function useMyProfile() {
           localStorage.getItem("userAccessToken")
         )}`;
         const { data } = await getData(
-          `/board/myposts?size=${homePage.value * 8 + 8}`,
+          `board/myposts?size=${homePage.value * 8 + 8}`,
           {
             headers: {
               Authorization: token,
@@ -559,7 +559,7 @@ export default function useMyProfile() {
       const token = `Bearer ${JSON.parse(
         localStorage.getItem("userAccessToken")
       )}`;
-      return await postData(`/board/${curParams}`, null, {
+      return await postData(`board/${curParams}`, null, {
         headers: {
           Authorization: token,
         },
@@ -572,7 +572,7 @@ export default function useMyProfile() {
           localStorage.getItem("userAccessToken")
         )}`;
         const { data } = await getData(
-          `/board/myposts?size=${homePage.value * 8 + 8}`,
+          `board/myposts?size=${homePage.value * 8 + 8}`,
           {
             headers: {
               Authorization: token,
@@ -595,7 +595,7 @@ export default function useMyProfile() {
       const token = `Bearer ${JSON.parse(
         localStorage.getItem("userAccessToken")
       )}`;
-      return await postData(`/board/${curParams}`, null, {
+      return await postData(`board/${curParams}`, null, {
         headers: {
           Authorization: token,
         },
@@ -609,7 +609,7 @@ export default function useMyProfile() {
           localStorage.getItem("userAccessToken")
         )}`;
         const { data } = await getData(
-          `/board/myposts/scraps?size=${homePage.value * 8 + 8}`,
+          `board/myposts/scraps?size=${homePage.value * 8 + 8}`,
           {
             headers: {
               Authorization: token,

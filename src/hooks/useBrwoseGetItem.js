@@ -178,7 +178,7 @@ export default function useBrwoseGetItem() {
   const cardReq = async (query = "") => {
     try {
       setIsLoading(true);
-      const { data } = await getData(`/board/list/search?${query}`);
+      const { data } = await getData(`board/list/search?${query}`);
 
       //console.log(data);
 
@@ -209,7 +209,7 @@ export default function useBrwoseGetItem() {
 
   const cardDetailReq = async (borardNum) => {
     try {
-      const { data } = await getData(`/board/${borardNum}`);
+      const { data } = await getData(`board/${borardNum}`);
       data.commentList.forEach((obj) => (obj.putOptions = false));
 
       dispatch(
@@ -273,7 +273,7 @@ export default function useBrwoseGetItem() {
       const token = `Bearer ${JSON.parse(
         localStorage.getItem("userAccessToken")
       )}`;
-      return await postData(`/board/${curData}`, null, {
+      return await postData(`board/${curData}`, null, {
         headers: {
           Authorization: token,
         },
@@ -282,7 +282,7 @@ export default function useBrwoseGetItem() {
     onSuccess: async (res) => {
       //페이지로 산정되지 않는 짜투리 갯수를 위해 + 8 한번더
       const { data } = await getData(
-        `/board/list/search?size=${page.value * 8 + 8}${
+        `board/list/search?size=${page.value * 8 + 8}${
           keyword.key + keyword.value
         }${categoryList.key + categoryList.value}`
       );
@@ -303,7 +303,7 @@ export default function useBrwoseGetItem() {
       const token = `Bearer ${JSON.parse(
         localStorage.getItem("userAccessToken")
       )}`;
-      return await postData(`/board/${curData}`, null, {
+      return await postData(`board/${curData}`, null, {
         headers: {
           Authorization: token,
         },
@@ -313,7 +313,7 @@ export default function useBrwoseGetItem() {
       cardDetailReq(bucketDetailData.boardId);
       try {
         const { data } = await getData(
-          `/board/list/search?size=${page.value * 8 + 8}${
+          `board/list/search?size=${page.value * 8 + 8}${
             keyword.key + keyword.value
           }${categoryList.key + categoryList.value}`
         );
@@ -383,7 +383,7 @@ export default function useBrwoseGetItem() {
       const token = `Bearer ${JSON.parse(
         localStorage.getItem("userAccessToken")
       )}`;
-      return await delData(`/board/${curBoardId}`, {
+      return await delData(`board/${curBoardId}`, {
         headers: {
           Authorization: token,
         },
@@ -392,7 +392,7 @@ export default function useBrwoseGetItem() {
     onSuccess: async () => {
       try {
         const { data } = await getData(
-          `/board/list/search?size=${page.value * 8 + 8}${
+          `board/list/search?size=${page.value * 8 + 8}${
             keyword.key + keyword.value
           }${categoryList.key + categoryList.value}`
         );
@@ -425,7 +425,7 @@ export default function useBrwoseGetItem() {
       const token = `Bearer ${JSON.parse(
         localStorage.getItem("userAccessToken")
       )}`;
-      return await patchData(`/board/${curData}/complete`, null, {
+      return await patchData(`board/${curData}/complete`, null, {
         headers: {
           Authorization: token,
         },
@@ -439,7 +439,7 @@ export default function useBrwoseGetItem() {
           localStorage.getItem("userAccessToken")
         )}`;
         const { data } = await getData(
-          `/board/list/search?size=${page.value * 8 + 8}${
+          `board/list/search?size=${page.value * 8 + 8}${
             keyword.key + keyword.value
           }${categoryList.key + categoryList.value}`,
           {

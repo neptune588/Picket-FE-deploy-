@@ -94,7 +94,7 @@ export default function useMypage() {
         localStorage.getItem("userAccessToken")
       )}`;
       setIsLoading(true);
-      const { data } = await getData(`/board/myposts?${query}`, {
+      const { data } = await getData(`board/myposts?${query}`, {
         headers: {
           Authorization: token,
         },
@@ -126,7 +126,7 @@ export default function useMypage() {
 
   const homeCardDetailReq = async (borardNum) => {
     try {
-      const { data } = await getData(`/board/${borardNum}`);
+      const { data } = await getData(`board/${borardNum}`);
       data.commentList.forEach((obj) => (obj.putOptions = false));
 
       dispatch(
@@ -192,7 +192,7 @@ export default function useMypage() {
       const token = `Bearer ${JSON.parse(
         localStorage.getItem("userAccessToken")
       )}`;
-      return await postData(`/board/${curData}`, null, {
+      return await postData(`board/${curData}`, null, {
         headers: {
           Authorization: token,
         },
@@ -206,7 +206,7 @@ export default function useMypage() {
           localStorage.getItem("userAccessToken")
         )}`;
         const { data } = await getData(
-          `/board/myposts?size=${homePage.value * 8 + 8}`,
+          `board/myposts?size=${homePage.value * 8 + 8}`,
           {
             headers: {
               Authorization: token,
@@ -244,7 +244,7 @@ export default function useMypage() {
       const token = `Bearer ${JSON.parse(
         localStorage.getItem("userAccessToken")
       )}`;
-      return await delData(`/board/${curBoardId}`, {
+      return await delData(`board/${curBoardId}`, {
         headers: {
           Authorization: token,
         },
@@ -257,7 +257,7 @@ export default function useMypage() {
           localStorage.getItem("userAccessToken")
         )}`;
         const { data } = await getData(
-          `/board/myposts?size=${homePage.value * 8 + 8}`,
+          `board/myposts?size=${homePage.value * 8 + 8}`,
           {
             headers: {
               Authorization: token,
@@ -286,7 +286,7 @@ export default function useMypage() {
       const token = `Bearer ${JSON.parse(
         localStorage.getItem("userAccessToken")
       )}`;
-      return await delData(`/board/${curBoardId}`, {
+      return await delData(`board/${curBoardId}`, {
         headers: {
           Authorization: token,
         },
@@ -300,7 +300,7 @@ export default function useMypage() {
           localStorage.getItem("userAccessToken")
         )}`;
         const { data } = await getData(
-          `/board/myposts?size=${homePage.value * 8 + 8}`,
+          `board/myposts?size=${homePage.value * 8 + 8}`,
           {
             headers: {
               Authorization: token,
@@ -332,7 +332,7 @@ export default function useMypage() {
       const token = `Bearer ${JSON.parse(
         localStorage.getItem("userAccessToken")
       )}`;
-      return await patchData(`/board/${curData}/complete`, null, {
+      return await patchData(`board/${curData}/complete`, null, {
         headers: {
           Authorization: token,
         },
@@ -345,7 +345,7 @@ export default function useMypage() {
           localStorage.getItem("userAccessToken")
         )}`;
         const { data } = await getData(
-          `/board/myposts?size=${homePage.value * 8 + 8}`,
+          `board/myposts?size=${homePage.value * 8 + 8}`,
           {
             headers: {
               Authorization: token,
@@ -380,7 +380,7 @@ export default function useMypage() {
       const token = `Bearer ${JSON.parse(
         localStorage.getItem("userAccessToken")
       )}`;
-      return await patchData(`/board/${curData}/complete`, null, {
+      return await patchData(`board/${curData}/complete`, null, {
         headers: {
           Authorization: token,
         },
@@ -393,7 +393,7 @@ export default function useMypage() {
           localStorage.getItem("userAccessToken")
         )}`;
         const { data } = await getData(
-          `/board/myposts?size=${homePage.value * 8 + 8}`,
+          `board/myposts?size=${homePage.value * 8 + 8}`,
           {
             headers: {
               Authorization: token,
