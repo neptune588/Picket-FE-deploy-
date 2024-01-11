@@ -23,7 +23,7 @@ import { delData } from "@/services/api";
 import { patchData } from "@/services/api";
 
 import useSelectorList from "@/hooks/useSelectorList";
-import { categoriesData } from "@/pages/Browse/categoryData";
+import { categoriesData } from "@/utils/categoryData";
 
 export default function useBrwoseGetItem() {
   const dispatch = useDispatch();

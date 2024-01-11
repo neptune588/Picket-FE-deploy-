@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,6 +22,7 @@ export default function useBucketOptions() {
 
   const [commentValue, setCommentValue] = useState("");
   const [putModal, setPutModal] = useState(false);
+  const [commentDeleteButton, setCommentDeleteButton] = useState(false);
 
   const { bucketDetailData } = bucketDetailObj;
 
@@ -153,7 +154,9 @@ export default function useBucketOptions() {
     putModal,
     commentValue,
     commentCreateInput,
+    commentDeleteButton,
     setPutModal,
+    setCommentDeleteButton,
     handleChange,
     handleCurCommentDel,
     handleLoginCheck,

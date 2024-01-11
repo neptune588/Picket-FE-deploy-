@@ -9,7 +9,6 @@ import RegisterSuccess from "@/pages/RegisterSuccess/RegisterSuccess";
 import PassWordResearch from "@/pages/PassWordResearch";
 import Main from "@/pages/Main";
 import MyProfile from "@/pages/MyProfile";
-import AddBucket from "@/pages/AddBucket/AddBucket";
 import Browse from "@/pages/Browse";
 import AddBucketPage from "@/pages/AddBucketPage";
 
@@ -25,7 +24,6 @@ const router = createBrowserRouter([
       {
         path: `/search/:keyword`,
         element: <Browse />,
-        label: "search",
       },
 
       {
@@ -35,12 +33,8 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/testAdd",
-    element: <AddBucketPage />,
-  },
-  {
     path: "/add",
-    element: <AddBucket />,
+    element: <AddBucketPage />,
   },
   {
     path: "/auth",

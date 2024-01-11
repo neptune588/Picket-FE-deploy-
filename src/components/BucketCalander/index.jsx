@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import moment from "moment";
 import Calendar from "react-calendar";
 
@@ -13,6 +13,7 @@ const ModalOuter = styled.div`
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);
   cursor: pointer;
+  z-index: 10;
 `;
 
 const Container = styled.div`
@@ -63,9 +64,8 @@ const ConfirmButton = styled(CansleButton)`
     return colors.primary;
   }};
 `;
-export default function BucketCalander() {
-  const [curdate, setCurDate] = useState(new Date());
-  const [selectDate, setSelectDate] = useState(null);
+export default function BucketCalander({ curdate, setCurDate, modalClose }) {
+  //const [selectDate, setSelectDate] = useState(null);
 
   const minDateFnc = () => {
     const date = new Date();
@@ -77,6 +77,10 @@ export default function BucketCalander() {
     //ex 2024 01 01 <- 2023 12 31 됨
     return new Date(date.getFullYear() + 5, 11, 0);
   };
+
+  useEffect(() => {
+    console.log(curdate);
+  }, [curdate]);
   return (
     <ModalOuter>
       <Container>
@@ -110,8 +114,8 @@ export default function BucketCalander() {
           }} */
         />
         <ButtonBox>
-          <CansleButton>취소</CansleButton>
-          <ConfirmButton>확인</ConfirmButton>
+          <CansleButton onClick={modalClose}>취소</CansleButton>
+          <ConfirmButton onClick={modalClose}>확인</ConfirmButton>
         </ButtonBox>
       </Container>
     </ModalOuter>
