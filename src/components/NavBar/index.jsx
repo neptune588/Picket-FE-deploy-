@@ -139,14 +139,6 @@ export default function NavBar() {
           {userNickName ? (
             <ProfileWrapper onClick={OnClickDropdown}>
               <ProfileBox>
-                <img
-                  src={
-                    localStorage.getItem("userAvatar")
-                      ? localStorage.getItem("userAvatar")
-                      : "/images/default_profile.png"
-                  }
-                  alt={"profile_avatar"}
-                ></img>
                 <p>{JSON.parse(localStorage.getItem("userNickname"))}</p>
               </ProfileBox>
               {dropdownOpen && (

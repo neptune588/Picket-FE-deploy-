@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,6 +22,7 @@ export default function useBucketOptions() {
 
   const [commentValue, setCommentValue] = useState("");
   const [putModal, setPutModal] = useState(false);
+  const [commentDeleteButton, setCommentDeleteButton] = useState(false);
 
   const { bucketDetailData } = bucketDetailObj;
 
@@ -46,7 +47,7 @@ export default function useBucketOptions() {
       const token = `Bearer ${JSON.parse(
         localStorage.getItem("userAccessToken")
       )}`;
-      return await postData(`/board/${boardId}/comments`, content, {
+      return await postData(`board/${boardId}/comments`, content, {
         headers: {
           "Content-Type": "application/json",
           Authorization: token,
@@ -55,7 +56,7 @@ export default function useBucketOptions() {
     },
     onSuccess: async (res) => {
       alert(res.data.message);
-      const { data } = await getData(`/board/${bucketDetailData.boardId}`);
+      const { data } = await getData(`board/${bucketDetailData.boardId}`);
       data.commentList.forEach((obj) => (obj.putOptions = false));
       dispatch(
         setDetailButcket({
@@ -85,7 +86,7 @@ export default function useBucketOptions() {
       const token = `Bearer ${JSON.parse(
         localStorage.getItem("userAccessToken")
       )}`;
-      return await delData(`/board/${boardId}/comments/${commentId}`, {
+      return await delData(`board/${boardId}/comments/${commentId}`, {
         headers: {
           Authorization: token,
         },
@@ -93,7 +94,7 @@ export default function useBucketOptions() {
     },
     onSuccess: async (res) => {
       alert(res.data.message);
-      const { data } = await getData(`/board/${bucketDetailData.boardId}`);
+      const { data } = await getData(`board/${bucketDetailData.boardId}`);
       data.commentList.forEach((obj) => (obj.putOptions = false));
       dispatch(
         setDetailButcket({
@@ -153,7 +154,9 @@ export default function useBucketOptions() {
     putModal,
     commentValue,
     commentCreateInput,
+    commentDeleteButton,
     setPutModal,
+    setCommentDeleteButton,
     handleChange,
     handleCurCommentDel,
     handleLoginCheck,

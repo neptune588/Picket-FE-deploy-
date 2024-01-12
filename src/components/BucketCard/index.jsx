@@ -60,7 +60,9 @@ export default function BucketCard({
     putModal,
     commentValue,
     commentCreateInput,
+    commentDeleteButton,
     setPutModal,
+    setCommentDeleteButton,
     handleChange,
     handleCurCommentDel,
     handleLoginCheck,
@@ -204,12 +206,21 @@ export default function BucketCard({
                     ref={commentCreateInput}
                     value={commentValue}
                     onChange={handleChange}
+                    onFocus={() => {
+                      setCommentDeleteButton(true);
+                    }}
+                    onBlur={() => {
+                      setCommentDeleteButton(false);
+                    }}
                     placeholder="댓글을 입력하세요."
                     maxLength={150}
                   ></TextInputArea>
-                  <MentDelButton onClick={handleCurCommentDel}>
-                    <CrossIcon />
-                  </MentDelButton>
+                  {commentDeleteButton && (
+                    <MentDelButton onClick={handleCurCommentDel}>
+                      <CrossIcon />
+                    </MentDelButton>
+                  )}
+
                   <SendIcon>
                     <input type="submit" value="" />
                     <FontAwesomeIcon icon={faPaperPlane} />

@@ -12,7 +12,7 @@ import {
   setTotalParams,
 } from "@/store/parameterSlice";
 
-export default function AuthPageLayout() {
+export default function AuthLayoutPage() {
   const dispatch = useDispatch();
 
   const modals = useSelector((state) => {

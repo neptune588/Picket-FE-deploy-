@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 
 import Layout from "@/pages/Layout";
-import AuthPageLayout from "@/pages/AuthPageLayout";
+import AuthLayoutPage from "@/pages/AuthLayoutPage";
 
 import SignUp from "@/pages/SignUp";
 import SignIn from "@/pages/SignIn";
@@ -9,8 +9,8 @@ import RegisterSuccess from "@/pages/RegisterSuccess/RegisterSuccess";
 import PassWordResearch from "@/pages/PassWordResearch";
 import Main from "@/pages/Main";
 import MyProfile from "@/pages/MyProfile";
-import AddBucket from "@/pages/AddBucket/AddBucket";
 import Browse from "@/pages/Browse";
+import AddBucketPage from "@/pages/AddBucketPage";
 
 const router = createBrowserRouter([
   {
@@ -24,7 +24,6 @@ const router = createBrowserRouter([
       {
         path: `/search/:keyword`,
         element: <Browse />,
-        label: "search",
       },
 
       {
@@ -35,11 +34,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/add",
-    element: <AddBucket />,
+    element: <AddBucketPage />,
   },
   {
     path: "/auth",
-    element: <AuthPageLayout />,
+    element: <AuthLayoutPage />,
     children: [
       {
         path: "/auth/signup",
