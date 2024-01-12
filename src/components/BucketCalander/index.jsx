@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import moment from "moment";
 import Calendar from "react-calendar";
 
@@ -8,12 +7,15 @@ import "@/components/BucketCalander/style.scss";
 import styled from "styled-components";
 
 const ModalOuter = styled.div`
-  position: fixed;
+  position: absolute;
   width: 100%;
   height: 100vh;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   background-color: rgba(0, 0, 0, 0.5);
   cursor: pointer;
-  z-index: 10;
+  z-index: 9999999999;
 `;
 
 const Container = styled.div`
@@ -78,9 +80,6 @@ export default function BucketCalander({ curdate, setCurDate, modalClose }) {
     return new Date(date.getFullYear() + 5, 11, 0);
   };
 
-  useEffect(() => {
-    console.log(curdate);
-  }, [curdate]);
   return (
     <ModalOuter>
       <Container>

@@ -158,6 +158,7 @@ export default function useAddBucket() {
     categoryData,
     step,
     calanderModalState,
+    submitLoading,
     handleImageUpload,
     handleChange,
     handleCategoryClick,
@@ -166,5 +167,6 @@ export default function useAddBucket() {
     setDate,
     setStep,
     setCalanderModalState,
+    setSubmitLoading,
   };
 }

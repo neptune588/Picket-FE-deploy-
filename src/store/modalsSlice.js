@@ -4,6 +4,7 @@ const initialState = {
   searchModal: false,
   detailModal: false,
   profileEditModal: false,
+  bucketChangeModal: false,
 };
 
 const modalsSlice = createSlice({
@@ -19,9 +20,16 @@ const modalsSlice = createSlice({
     setProfileEditModal(state) {
       state.profileEditModal = !state.profileEditModal;
     },
+    setBucketChangeModal(state) {
+      state.bucketChangeModal = !state.bucketChangeModal;
+    },
   },
 });
 
-export const { setSearchModal, setDetailBucketModal, setProfileEditModal } =
-  modalsSlice.actions;
+export const {
+  setSearchModal,
+  setDetailBucketModal,
+  setProfileEditModal,
+  setBucketChangeModal,
+} = modalsSlice.actions;
 export default modalsSlice.reducer;

@@ -328,7 +328,7 @@ export default function useMyProfile() {
 
         handleEditModalClose();
       } catch (error) {
-        console.error(error.data);
+        console.error(error.status);
       }
       setSubmitLoading(false);
     } else {

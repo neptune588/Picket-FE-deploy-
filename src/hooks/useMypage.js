@@ -45,7 +45,6 @@ export default function useMypage() {
   const homeMouted01 = useRef();
   const homeMouted02 = useRef();
   const homeMouted03 = useRef();
-  const homeMouted04 = useRef();
 
   const pageAndBoardDataReset = () => {
     dispatch(setPageHomeParams([`page=`, 0]));

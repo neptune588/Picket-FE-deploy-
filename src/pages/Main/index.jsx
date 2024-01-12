@@ -1,5 +1,4 @@
 import useMypage from "@/hooks/useMypage";
-
 import HomeThumnailCard from "@/components/HomeThumnailCard";
 import BucketCard from "@/components/BucketCard";
 
